@@ -6,10 +6,10 @@ Install
 
 Based on http://tracpath.com/works/devops/how-to-install-the-kubernetes-kubeadm/
 
-kube-master: 172.27.138.55, OptiPlex 7040(Core i5, 8GB)
-kube-host01: 172.27.138.90, OptiPlex 7020(Core i5, 16GB)
+- kube-master: 172.27.138.55, OptiPlex 7040(Core i5, 8GB)
+- kube-host01: 172.27.138.90, OptiPlex 7020(Core i5, 16GB)
 
-Operate the following installation on both kube-master and kube-host01.
+Operate the following installation on both kube-master and kube-host01::
 
  $ sudo su -
  # apt-get update && apt-get install -y apt-transport-https
@@ -24,6 +24,8 @@ Operate the following installation on both kube-master and kube-host01.
 Initialization of kube-master
 -----------------------------
 
+Operate the following commands::
+
  # kubeadm init
  [..]
  Your Kubernetes master has initialized successfully!
@@ -36,11 +38,13 @@ Initialization of kube-master
 
 The above output needs to be operated on kube-host01 to join into the cluster.
 
+Operate the following commands::
+
  $ sudo cp /etc/kubernetes/admin.conf $HOME/
  $ sudo chown $(id -u):$(id -g) $HOME/admin.conf
  $ export KUBECONFIG=$HOME/admin.conf
 
-Check the valid installation:
+Check the valid installation::
 
  $ kubectl get nodes
  NAME           STATUS     AGE       VERSION
@@ -62,11 +66,11 @@ Check the valid installation:
 Add a node into k8s cluster
 ---------------------------
 
-Operate the following command on a node (not manager)
+Operate the following command on a node (not manager)::
 
  # kubeadm join --token 22ac74.4d061109507a992b 172.27.138.55:6443
 
-Check the node joins into the cluster with the command on the manager:
+Check the node joins into the cluster with the command on the manager::
 
  $ kubectl get nodes
  NAME           STATUS    AGE       VERSION
@@ -77,7 +81,7 @@ Check the node joins into the cluster with the command on the manager:
 How to see REST API operation on kubectl command
 ------------------------------------------------
 
-Just specify '--v=8' option on kubectl command like
+Just specify '--v=8' option on kubectl command like::
 
  $ kubectl --v=8 get nodes
  [..] GET https://172.27.138.55:6443/api/v1/nodes
