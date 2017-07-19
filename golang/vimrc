@@ -2,7 +2,6 @@ set number
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
 autocmd FileType python setl tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
-
 " for Neobundle {{{
 if has('win32')
     let s:vim_home=expand('~/vimfiles')
@@ -20,7 +19,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'dgryski/vim-godef'
 NeoBundle 'vim-jp/vim-go-extra'
@@ -39,6 +37,7 @@ let g:gofmt_command = 'goimports'
 au BufWritePre *.go Fmt
 au BufNewFile,BufRead *.go set sw=4 noexpandtab ts=4 completeopt=menu,preview
 au FileType go compiler go
+au FileType go VimFilerTree
 " }}}
 
 " VimFilerTree {{{
