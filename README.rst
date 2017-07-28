@@ -1,6 +1,21 @@
 Try kurbernetes
 ===============
 
+Prepare
+-------
+
+Need to install golang 1.8 which is not provided from ubuntu 16.04 as the
+default. So we need to do the following process for that::
+
+ $ sudo add-apt-repository ppa:longsleep/golang-backports
+ $ sudo apt-get update
+ $ sudo apt-get install golang-1.8
+
+The binary is installed under /usr/lib/go-1.8/bin/go, so we need to make
+a link::
+
+ $ sudo ln -s /usr/lib/go-1.8/bin/go /usr/local/bin/go
+
 Install
 -------
 
