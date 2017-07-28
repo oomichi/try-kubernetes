@@ -15,6 +15,7 @@ The binary is installed under /usr/lib/go-1.8/bin/go, so we need to make
 a link::
 
  $ sudo ln -s /usr/lib/go-1.8/bin/go /usr/local/bin/go
+ $ sudo ln -s /usr/lib/go-1.8/bin/gofmt /usr/local/bin/gofmt
 
 Run e2e test
 ------------
@@ -24,25 +25,7 @@ Run::
  $ git clone https://github.com/kubernetes/kubernetes
  $ cd kubernetes
  $ sudo PATH=$PATH hack/local-up-cluster.sh
- [..]
- ~/kubernetes ~/kubernetes/test/e2e/generated
- ../../../hack/generate-bindata.sh: line 53: gofmt: command not found
- ../../../../../../test/e2e/generated/gobindata_util.go:19: running "../../../hack/generate-bindata.sh": exit status 127
- !!! [0728 15:46:58] Call tree:
- !!! [0728 15:46:58]  1: hack/make-rules/build.sh:27 kube::golang::build_binaries(...)
- !!! [0728 15:46:58] Call tree:
- !!! [0728 15:46:58]  1: hack/make-rules/build.sh:27 kube::golang::build_binaries(...)
- Makefile.generated_files:302: recipe for target '_output/bin/deepcopy-gen' failed
- make[1]: *** [_output/bin/deepcopy-gen] Error 1
- make[1]: Leaving directory '/home/oomichi/kubernetes'
- Makefile:480: recipe for target 'generated_files' failed
- make: *** [generated_files] Error 2
- make: Leaving directory '/home/oomichi/kubernetes'
- !!! Error in hack/local-up-cluster.sh:171
-   Error in hack/local-up-cluster.sh:171. 'make -C "${KUBE_ROOT}" WHAT="cmd/kubectl cmd/hyperkube"' exited with status 2
-   Call stack:
-     1: hack/local-up-cluster.sh:171 main(...)
-     Exiting with status 1
+ [..] Take much time..
  $
 
 Install
