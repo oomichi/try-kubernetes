@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
+// Standard HTTP methods: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#path-item-object
 func isHttpMethod(method string) bool {
-	// Standard HTTP methods: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#path-item-object
 	methods := []string{"get", "put", "post", "delete", "options", "head", "patch"}
 	for _, valid_method := range methods {
 		if method == valid_method {
@@ -18,7 +18,7 @@ func isHttpMethod(method string) bool {
 	return false
 }
 
-func main() {
+func parseOpenAPI() {
 	var decode_data interface{}
 
 	bytes, err := ioutil.ReadFile("swagger.json")
@@ -40,6 +40,9 @@ func main() {
 				fmt.Printf("%s: %s\n", api_url, api_method)
 			}
 		}
-		break
 	}
+}
+
+func main() {
+	parseOpenAPI()
 }
