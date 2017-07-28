@@ -44,6 +44,11 @@ Run::
 
  You can use 'hack/install-etcd.sh' to install a copy in third_party/.
  $
+ $ etcd --version
+ etcd Version: 2.2.5
+ Git SHA: Not provided (use ./build instead of go build)
+ Go Version: go1.6.2
+ Go OS/Arch: linux/amd64
 
 Install
 -------
