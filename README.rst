@@ -26,6 +26,16 @@ Run::
  $ cd kubernetes
  $ sudo PATH=$PATH hack/local-up-cluster.sh
  [..] Take much time..
+ ~/kubernetes ~/kubernetes/test/e2e/generated
+ ~/kubernetes/test/e2e/generated
+ +++ [0728 15:51:03] Building go targets for linux/amd64:
+    cmd/kubectl
+        cmd/hyperkube
+        make: Leaving directory '/home/oomichi/kubernetes'
+        hack/local-up-cluster.sh: line 238: docker: command not found
+        Kubelet cgroup driver defaulted to use:
+
+        etcd must be in your PATH
  $
 
 Install
