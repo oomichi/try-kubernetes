@@ -4,9 +4,10 @@ Try kurbernetes
 Prepare
 -------
 
-Need to install docker.io::
+Need to install docker.io and etcd::
 
  $ sudo apt-get install docker.io
+ $ sudo apt-get install etcd
 
 Need to install golang 1.8 which is not provided from ubuntu 16.04 as the
 default. So we need to do the following process for that::
@@ -24,6 +25,10 @@ a link::
 Run e2e test
 ------------
 
+Stop etcd service::
+
+ $ service etcd stop
+
 Run::
 
  $ git clone https://github.com/kubernetes/kubernetes
@@ -32,9 +37,12 @@ Run::
  [..] Take much time..
  make: Leaving directory '/home/oomichi/kubernetes'
  WARNING: No swap limit support
- Kubelet cgroup driver defaulted to use:
+ Kubelet cgroup driver defaulted to use: cgroupfs
+ /home/oomichi/kubernetes/third_party/etcd:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
- etcd must be in your PATH
+ etcd version 3.0.17 or greater required.
+
+ You can use 'hack/install-etcd.sh' to install a copy in third_party/.
  $
 
 Install
