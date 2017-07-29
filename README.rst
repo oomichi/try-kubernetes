@@ -38,7 +38,7 @@ a link::
 Run e2e test
 ------------
 
-Run::
+Run k8s cluster::
 
  $ git clone https://github.com/kubernetes/kubernetes
  $ cd kubernetes
@@ -67,6 +67,25 @@ Run::
   cluster/kubectl.sh config set-context local --cluster=local --user=myself
   cluster/kubectl.sh config use-context local
   cluster/kubectl.sh
+
+Run e2e test::
+
+ $ export KUBECONFIG=/var/run/kubernetes/admin.kubeconfig
+ $ export KUBE_MASTER_IP="127.0.0.1"
+ $ export KUBE_MASTER=local
+ $ cd kubernetes/
+ s$ go run hack/e2e.go -- -v --test
+ e2e.go:146: Updating kubetest binary...
+ e2e.go:76: Calling kubetest -v --test...
+ util.go:198: Running: ./cluster/kubectl.sh --match-server-version=false version
+ util.go:200: Step './cluster/kubectl.sh --match-server-version=false version' finished in 216.073976ms
+ util.go:129: Running: ./hack/e2e-internal/e2e-status.sh
+ ./hack/e2e-internal/../../cluster/../cluster/gce/util.sh: line 138: gcloud: command not found
+ util.go:131: Step './hack/e2e-internal/e2e-status.sh' finished in 35.952315ms
+ main.go:233: Something went wrong: encountered 1 errors: [error during ./hack/e2e-internal/e2e-status.sh: exit status 127]
+ e2e.go:78: err: exit status 1
+ exit status 1
+ $
 
 Install
 -------
