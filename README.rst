@@ -4,10 +4,23 @@ Try kurbernetes
 Prepare
 -------
 
-Need to install docker.io and etcd::
+Need to install docker.io::
 
  $ sudo apt-get install docker.io
- $ sudo apt-get install etcd
+
+Need to install the latest etcd from a tar file.
+(ubuntu etcd package(v2.2.5) is too old, 3.0.17+ is required)::
+
+ $ sudo mkdir /opt/bin
+ $ wget https://github.com/coreos/etcd/releases/download/v3.2.4/etcd-v3.2.4-linux-amd64.tar.gz
+ $ tar -zxvf etcd-v3.2.4-linux-amd64.tar.gz
+ $ cd etcd-v3.2.4-linux-amd64/
+ $ sudo mv etcd    /opt/bin
+ $ sudo mv etcdctl /opt/bin
+ $ sudo ln -s /opt/bin/etcd    /usr/local/bin/etcd
+ $ sudo ln -s /opt/bin/etcdctl /usr/local/bin/etcdctl
+ $ sudo chmod 755 /opt/bin/etcd
+ $ sudo chmod 755 /opt/bin/etcdctl
 
 Need to install golang 1.8 which is not provided from ubuntu 16.04 as the
 default. So we need to do the following process for that::
@@ -25,30 +38,35 @@ a link::
 Run e2e test
 ------------
 
-Stop etcd service::
-
- $ service etcd stop
-
 Run::
 
  $ git clone https://github.com/kubernetes/kubernetes
  $ cd kubernetes
  $ sudo PATH=$PATH hack/local-up-cluster.sh
  [..] Take much time..
- make: Leaving directory '/home/oomichi/kubernetes'
- WARNING: No swap limit support
- Kubelet cgroup driver defaulted to use: cgroupfs
- /home/oomichi/kubernetes/third_party/etcd:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+ Local Kubernetes cluster is running. Press Ctrl-C to shut it down.
 
- etcd version 3.0.17 or greater required.
+ Logs:
+  /tmp/kube-apiserver.log
+  /tmp/kube-controller-manager.log
+  /tmp/kube-proxy.log
+  /tmp/kube-scheduler.log
+  /tmp/kubelet.log
 
- You can use 'hack/install-etcd.sh' to install a copy in third_party/.
- $
- $ etcd --version
- etcd Version: 2.2.5
- Git SHA: Not provided (use ./build instead of go build)
- Go Version: go1.6.2
- Go OS/Arch: linux/amd64
+ To start using your cluster, you can open up another terminal/tab and run:
+
+  export KUBECONFIG=/var/run/kubernetes/admin.kubeconfig
+  cluster/kubectl.sh
+
+ Alternatively, you can write to the default kubeconfig:
+
+  export KUBERNETES_PROVIDER=local
+
+  cluster/kubectl.sh config set-cluster local --server=https://localhost:6443 --certificate-authority=/var/run/kubernetes/server-ca.crt
+  cluster/kubectl.sh config set-credentials myself --client-key=/var/run/kubernetes/client-admin.key --client-certificate=/var/run/kubernetes/client-admin.crt
+  cluster/kubectl.sh config set-context local --cluster=local --user=myself
+  cluster/kubectl.sh config use-context local
+  cluster/kubectl.sh
 
 Install
 -------
