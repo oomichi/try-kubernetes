@@ -1,5 +1,7 @@
-Try kurbernetes
-===============
+Try local k8s cluster on laptop PC
+==================================
+
+https://github.com/kubernetes/community/blob/master/contributors/devel/e2e-tests.md#local-clusters
 
 Prepare
 -------
@@ -86,6 +88,9 @@ Run e2e test::
  e2e.go:78: err: exit status 1
  exit status 1
  $
+
+Try Kubernetes on separated physical machines
+=============================================
 
 Install
 -------
