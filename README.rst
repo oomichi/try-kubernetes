@@ -72,35 +72,41 @@ Run k8s cluster::
 
 Run e2e test::
 
+ $ sudo go get github.com/onsi/ginkgo/ginkgo
+ $ sudo go get github.com/onsi/gomega
  $ export KUBECONFIG=/var/run/kubernetes/admin.kubeconfig
  $ export KUBE_MASTER_IP="127.0.0.1"
  $ export KUBE_MASTER=local
  $ export KUBERNETES_PROVIDER=local
  $ cd kubernetes/
+
  $ go run hack/e2e.go -- -v --test
- 2017/07/31 13:34:51 e2e.go:76: Calling kubetest -v --test...
- 2017/07/31 13:34:51 util.go:317: Please use kubetest --provider=local (instead of deprecated KUBERNETES_PROVIDER=local)
- 2017/07/31 13:34:51 util.go:198: Running: ./cluster/kubectl.sh --match-server-version=false version
- 2017/07/31 13:34:51 util.go:200: Step './cluster/kubectl.sh --match-server-version=false version' finished in 384.198317ms
- 2017/07/31 13:34:51 util.go:129: Running: ./hack/e2e-internal/e2e-status.sh
+ 2017/08/01 11:03:04 e2e.go:76: Calling kubetest -v --test...
+ 2017/08/01 11:03:04 util.go:317: Please use kubetest --provider=local (instead of deprecated KUBERNETES_PROVIDER=local)
+ 2017/08/01 11:03:04 util.go:198: Running: ./cluster/kubectl.sh --match-server-version=false version
+ 2017/08/01 11:03:04 util.go:200: Step './cluster/kubectl.sh --match-server-version=false version' finished in 180.223826ms
+ 2017/08/01 11:03:04 util.go:129: Running: ./hack/e2e-internal/e2e-status.sh
  Local doesn't need special preparations for e2e tests
  Client Version: version.Info{Major:"1", Minor:"8+", GitVersion:"v1.8.0-alpha.2.1006+60007128032869", GitCommit:"60007128032869eadb44a831e53834384716db80", GitTreeState:"clean", BuildDate:"2017-07-28T22:51:02Z", GoVersion:"go1.8.3", Compiler:"gc", Platform:"linux/amd64"}
  Server Version: version.Info{Major:"1", Minor:"8+", GitVersion:"v1.8.0-alpha.2.1006+60007128032869", GitCommit:"60007128032869eadb44a831e53834384716db80", GitTreeState:"clean", BuildDate:"2017-07-28T22:51:02Z", GoVersion:"go1.8.3", Compiler:"gc", Platform:"linux/amd64"}
- 2017/07/31 13:34:51 util.go:131: Step './hack/e2e-internal/e2e-status.sh' finished in 152.311451ms
- 2017/07/31 13:34:51 util.go:129: Running: ./hack/ginkgo-e2e.sh
+ 2017/08/01 11:03:04 util.go:131: Step './hack/e2e-internal/e2e-status.sh' finished in 149.585523ms
+ 2017/08/01 11:03:04 util.go:129: Running: ./hack/ginkgo-e2e.sh
  Setting up for KUBERNETES_PROVIDER="local".
  Local doesn't need special preparations for e2e tests
- ./hack/ginkgo-e2e.sh: line 132: : command not found
- !!! Error in ./hack/ginkgo-e2e.sh:132
-  Error in ./hack/ginkgo-e2e.sh:132. '"${ginkgo}" "${ginkgo_args[@]:+${ginkgo_args[@]}}" "${e2e_test}" -- "${auth_config[@]:+${auth_config[@]}}" --ginkgo.flakeAttempts="${FLAKE_ATTEMPTS}" --host="${KUBE_MASTER_URL}" --provider="${KUBERNETES_PROVIDER}" --gce-project="${PROJECT:-}" --gce-zone="${ZONE:-}" --gce-multizone="${MULTIZONE:-false}" --gke-cluster="${CLUSTER_NAME:-}" --kube-master="${KUBE_MASTER:-}" --cluster-tag="${CLUSTER_ID:-}" --cloud-config-file="${CLOUD_CONFIG:-}" --repo-root="${KUBE_ROOT}" --node-instance-group="${NODE_INSTANCE_GROUP:-}" --prefix="${KUBE_GCE_INSTANCE_PREFIX:-e2e}" --network="${KUBE_GCE_NETWORK:-${KUBE_GKE_NETWORK:-e2e}}" --node-tag="${NODE_TAG:-}" --master-tag="${MASTER_TAG:-}" --federated-kube-context="${FEDERATION_KUBE_CONTEXT:-e2e-federation}" ${KUBE_CONTAINER_RUNTIME:+"--container-runtime=${KUBE_CONTAINER_RUNTIME}"} ${MASTER_OS_DISTRIBUTION:+"--master-os-distro=${MASTER_OS_DISTRIBUTION}"} ${NODE_OS_DISTRIBUTION:+"--node-os-distro=${NODE_OS_DISTRIBUTION}"} ${NUM_NODES:+"--num-nodes=${NUM_NODES}"} ${E2E_REPORT_DIR:+"--report-dir=${E2E_REPORT_DIR}"} ${E2E_REPORT_PREFIX:+"--report-prefix=${E2E_REPORT_PREFIX}"} "${@:-}"' exited with status 127
- Call stack:
-  1: ./hack/ginkgo-e2e.sh:132 main(...)
-  Exiting with status 1
- 2017/07/31 13:34:51 util.go:131: Step './hack/ginkgo-e2e.sh' finished in 69.321129ms
- 2017/07/31 13:34:51 main.go:233: Something went wrong: encountered 1 errors: [error during ./hack/ginkgo-e2e.sh: exit status 1]
- 2017/07/31 13:34:51 e2e.go:78: err: exit status 1
+ Found no test suites
+ For usage instructions:
+        ginkgo help
+        !!! Error in ./hack/ginkgo-e2e.sh:134
+          Error in ./hack/ginkgo-e2e.sh:134. '"${ginkgo}" "${ginkgo_args[@]:+${ginkgo_args[@]}}" "${e2e_test}" -- "${auth_config[@]:+${auth_config[@]}}" --ginkgo.flakeAttempts="${FLAKE_ATTEMPTS}" --host="${KUBE_MASTER_URL}" --provider="${KUBERNETES_PROVIDER}" --gce-project="${PROJECT:-}" --gce-zone="${ZONE:-}" --gce-multizone="${MULTIZONE:-false}" --gke-cluster="${CLUSTER_NAME:-}" --kube-master="${KUBE_MASTER:-}" --cluster-tag="${CLUSTER_ID:-}" --cloud-config-file="${CLOUD_CONFIG:-}" --repo-root="${KUBE_ROOT}" --node-instance-group="${NODE_INSTANCE_GROUP:-}" --prefix="${KUBE_GCE_INSTANCE_PREFIX:-e2e}" --network="${KUBE_GCE_NETWORK:-${KUBE_GKE_NETWORK:-e2e}}" --node-tag="${NODE_TAG:-}" --master-tag="${MASTER_TAG:-}" --federated-kube-context="${FEDERATION_KUBE_CONTEXT:-e2e-federation}" ${KUBE_CONTAINER_RUNTIME:+"--container-runtime=${KUBE_CONTAINER_RUNTIME}"} ${MASTER_OS_DISTRIBUTION:+"--master-os-distro=${MASTER_OS_DISTRIBUTION}"} ${NODE_OS_DISTRIBUTION:+"--node-os-distro=${NODE_OS_DISTRIBUTION}"} ${NUM_NODES:+"--num-nodes=${NUM_NODES}"} ${E2E_REPORT_DIR:+"--report-dir=${E2E_REPORT_DIR}"} ${E2E_REPORT_PREFIX:+"--report-prefix=${E2E_REPORT_PREFIX}"} "${@:-}"' exited with status 1
+   Call stack:
+   1: ./hack/ginkgo-e2e.sh:134 main(...)
+ Exiting with status 1
+ 2017/08/01 11:03:04 util.go:131: Step './hack/ginkgo-e2e.sh' finished in 82.048503ms
+ 2017/08/01 11:03:04 main.go:233: Something went wrong: encountered 1 errors: [error during ./hack/ginkgo-e2e.sh: exit status 1]
+ 2017/08/01 11:03:04 e2e.go:78: err: exit status 1
  exit status 1
- $
+
+This is due to e2e_test is empty because the binary e2e.test cannot be found on ginkgo-e2e.sh.
 
 Try Kubernetes on separated physical machines
 =============================================
