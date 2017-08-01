@@ -70,6 +70,18 @@ Run k8s cluster::
   cluster/kubectl.sh config use-context local
   cluster/kubectl.sh
 
+Build e2e test binary::
+
+ $ export GOPATH=/home/oomichi/kubernetes/_output/local/go/
+ $ go run hack/e2e.go -- -v --build
+ 2017/08/01 11:31:46 e2e.go:76: Calling kubetest -v --build...
+ 2017/08/01 11:31:46 util.go:129: Running: make -C /home/oomichi/kubernetes/_output/local/go/src/k8s.io/kubernetes quick-release
+ make: Entering directory '/home/oomichi/kubernetes'
+ +++ [0801 11:31:46] Verifying Prerequisites....
+ Can't connect to 'docker' daemon.  please fix and retry.
+ [..]
+ $
+
 Run e2e test::
 
  $ sudo go get github.com/onsi/ginkgo/ginkgo
