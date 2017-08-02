@@ -9,6 +9,7 @@ Prepare
 Need to install docker.io::
 
  $ sudo apt-get install docker.io
+ $ sudo gpasswd -a $USER docker
 
 Need to install the latest etcd from a tar file.
 (ubuntu etcd package(v2.2.5) is too old, 3.0.17+ is required)::
@@ -56,7 +57,6 @@ Build e2e test binary::
  $ cd $GOPATH/src/k8s.io/kubernetes
 
 Run the above command with another terminal.
-We need to run the above command as a root user, because the root user is required for accessing to the docker service.
 
 Run e2e test::
 
