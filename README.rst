@@ -48,10 +48,8 @@ Run k8s cluster
 Run k8s cluster::
 
  $ go get k8s.io/kubernetes
- $ cd $GOPATH/src/k8s.io/kubernetes
- $ sudo PATH=$PATH hack/local-up-cluster.sh
- [..] Take much time..
- Local Kubernetes cluster is running. Press Ctrl-C to shut it down.
+ package k8s.io/kubernetes: no buildable Go source files in /home/oomichi/go/src/k8s.io/kubernetes
+ $
 
 Build e2e test binary::
 
