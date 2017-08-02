@@ -37,54 +37,31 @@ a link::
  $ sudo ln -s /usr/lib/go-1.8/bin/go /usr/local/bin/go
  $ sudo ln -s /usr/lib/go-1.8/bin/gofmt /usr/local/bin/gofmt
 
-Run e2e test
-------------
+Set GOPATH as parmanent setting::
+
+ $ mkdir ${HOME}/go
+ $ echo "export GOPATH=${HOME}/go" >> ${HOME}/.bashrc
+
+Run k8s cluster
+---------------
 
 Run k8s cluster::
 
- $ git clone https://github.com/kubernetes/kubernetes
- $ cd kubernetes
+ $ go get k8s.io/kubernetes
+ $ cd $GOPATH/src/k8s.io/kubernetes
  $ sudo PATH=$PATH hack/local-up-cluster.sh
  [..] Take much time..
  Local Kubernetes cluster is running. Press Ctrl-C to shut it down.
 
- Logs:
-  /tmp/kube-apiserver.log
-  /tmp/kube-controller-manager.log
-  /tmp/kube-proxy.log
-  /tmp/kube-scheduler.log
-  /tmp/kubelet.log
-
- To start using your cluster, you can open up another terminal/tab and run:
-
-  export KUBECONFIG=/var/run/kubernetes/admin.kubeconfig
-  cluster/kubectl.sh
-
- Alternatively, you can write to the default kubeconfig:
-
-  export KUBERNETES_PROVIDER=local
-
-  cluster/kubectl.sh config set-cluster local --server=https://localhost:6443 --certificate-authority=/var/run/kubernetes/server-ca.crt
-  cluster/kubectl.sh config set-credentials myself --client-key=/var/run/kubernetes/client-admin.key --client-certificate=/var/run/kubernetes/client-admin.crt
-  cluster/kubectl.sh config set-context local --cluster=local --user=myself
-  cluster/kubectl.sh config use-context local
-  cluster/kubectl.sh
-
 Build e2e test binary::
 
- $ sudo GOPATH=/home/oomichi/kubernetes/_output/local/go/ go run hack/e2e.go -- -v --build
- [..]
- make: Leaving directory '/home/oomichi/kubernetes'
- 2017/08/01 14:27:46 util.go:133: Step 'make -C /home/oomichi/kubernetes/_output/local/go/src/k8s.io/kubernetes quick-release' finished in 46m40.690746832s
- 2017/08/01 14:27:46 e2e.go:80: Done
- $
+ $ cd $GOPATH/src/k8s.io/kubernetes
 
+Run the above command with another terminal.
 We need to run the above command as a root user, because the root user is required for accessing to the docker service.
 
 Run e2e test::
 
- $ sudo go get github.com/onsi/ginkgo/ginkgo   (This might be removed)
- $ sudo go get github.com/onsi/gomega          (This might be removed)
  $ export KUBECONFIG=/var/run/kubernetes/admin.kubeconfig
  $ export KUBE_MASTER_IP="127.0.0.1"
  $ export KUBE_MASTER=local
