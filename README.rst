@@ -74,6 +74,7 @@ Run e2e test
 Build e2e test binary::
 
  $ cd $GOPATH/src/k8s.io/kubernetes
+ $ # Need to chown due to the above `sudo PATH=$PATH hack/local-up-cluster.sh`
  $ sudo chown -R $USER .
  $ make quick-release
  $ make ginkgo
