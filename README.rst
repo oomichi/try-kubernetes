@@ -46,17 +46,29 @@ Set GOPATH as parmanent setting::
 Run k8s cluster
 ---------------
 
-Run k8s cluster::
+Download k8s source code::
 
  $ go get k8s.io/kubernetes
  package k8s.io/kubernetes: no buildable Go source files in /home/oomichi/go/src/k8s.io/kubernetes
  $
 
+The above should install k8s cluster code, but now we face the error.
+TODO: This should be fixed later.
+
+Run k8s cluster::
+
+ $ cd $GOPATH/src/k8s.io/kubernetes
+ $ sudo PATH=$PATH hack/local-up-cluster.sh
+ [..] Take much time..
+ Local Kubernetes cluster is running. Press Ctrl-C to shut it down.
+ $
+
+Run e2e test
+------------
+
 Build e2e test binary::
 
  $ cd $GOPATH/src/k8s.io/kubernetes
-
-Run the above command with another terminal.
 
 Run e2e test::
 
