@@ -117,16 +117,35 @@ Run e2e test::
  2017/08/07 23:39:08 e2e.go:78: err: exit status 1
  exit status 1
 
-Try Kubernetes on separated physical machines
-=============================================
+Try Kubernetes on separated machines
+====================================
 
 Install
 -------
 
 Based on http://tracpath.com/works/devops/how-to-install-the-kubernetes-kubeadm/
 
-- kube-master: 172.27.138.55, OptiPlex 7040(Core i5, 8GB)
-- kube-host01: 172.27.138.90, OptiPlex 7020(Core i5, 16GB)
+- Distro: ubuntu 16.04 LTS
+
+(VirtualBox) Add an internal network between VMs::
+
+ http://qiita.com/areaz_/items/c9075f7a0b3e147e92f2#%E3%82%B2%E3%82%B9%E3%83%88os%E3%81%AE%E5%8B%95%E4%BD%9C%E7%A2%BA%E8%AA%8D
+ Shutdown a VM
+
+ Setting -> Network -> Adapter 2
+   Check "Enable Network Adapter"
+   Attached to: "Internal Network"
+
+ Reboot the VM
+
+ SSH into the VM (kube-host01 should be 172.168.0.2)
+   $ sudo vi /etc/network/interfaces
+   + auto enp0s8
+   + iface enp0s8 inet static
+   + address 172.168.0.1
+   + netmask 255.255.255.0
+
+ Reboot the VM
 
 Operate the following installation on both kube-master and kube-host01::
 
