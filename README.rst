@@ -74,19 +74,8 @@ Run e2e test
 Build e2e test binary::
 
  $ cd $GOPATH/src/k8s.io/kubernetes
+ $ sudo chown -R $USER .
  $ make quick-release
- +++ [0807 21:31:45] Building go targets for linux/amd64:
-     cmd/kubemark
-         vendor/github.com/onsi/ginkgo/ginkgo
-             test/e2e_node/e2e_node.test
-             +++ [0807 21:33:27] Syncing out of container
-             rsync: chgrp "/home/oomichi/go/src/k8s.io/kubernetes/pkg/generated/openapi/zz_generated.openapi.go" failed: Operation not permitted (1)
-             rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1655) [generator=3.1.1]
-             !!! [0807 21:34:04] Call tree:
-             !!! [0807 21:34:04]  1: build/../build/common.sh:714 kube::build::rsync(...)
-             !!! [0807 21:34:04]  2: build/release.sh:43 kube::build::copy_output(...)
-             Makefile:404: recipe for target 'quick-release' failed
-             make: *** [quick-release] Error 1
  $ make ginkgo
  $ make generated_files
 
