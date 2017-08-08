@@ -43,6 +43,11 @@ Set GOPATH as parmanent setting::
  $ mkdir ${HOME}/go
  $ echo "export GOPATH=${HOME}/go" >> ${HOME}/.bashrc
 
+Install some building packages::
+
+ $ sudo apt-get install gcc
+ $ sudo apt-get install make
+
 Run k8s cluster
 ---------------
 
