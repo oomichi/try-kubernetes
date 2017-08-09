@@ -154,8 +154,8 @@ Install some building packages::
  $ sudo apt-get install gcc
  $ sudo apt-get install make
 
-Run e2e test
-------------
+Build e2e test binary
+---------------------
 
 Download k8s source code::
 
@@ -174,6 +174,9 @@ Build e2e test binary::
  $ make quick-release
  $ make ginkgo
  $ make generated_files
+
+Run e2e test
+------------
 
 Run e2e test::
 
