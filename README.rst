@@ -118,6 +118,18 @@ Check the node joins into the cluster with the command on the manager::
  kube-manager   Ready     1h        v1.6.6
  $
 
+TODO: Need to enable a node on virtualbox env. Current issue::
+
+ $ kubectl get nodes
+ NAME         STATUS     AGE       VERSION
+ k8s-master   Ready      10m       v1.7.3
+ k8s-node     NotReady   8m        v1.7.3
+ $
+ $ kubectl describe node k8s-node
+ Name:                   k8s-node
+ [..]
+ reason:NetworkPluginNotReady message:docker: network plugin is not ready: cni config uninitialized
+
 How to see REST API operation on kubectl command
 ------------------------------------------------
 
