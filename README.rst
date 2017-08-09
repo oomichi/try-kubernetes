@@ -87,6 +87,22 @@ Check the valid installation::
  kube-system   weave-net-cjf25                        2/2       Running             0          51s
  $
 
+Confirm the STATUS becomes Ready::
+
+ $ kubectl get nodes
+ NAME         STATUS    AGE       VERSION
+ k8s-master   Ready     1m        v1.7.3
+
+Make the manager schedulable::
+
+ $ kubectl describe nodes | grep Tain
+ Taints:                 node-role.kubernetes.io/master:NoSchedule
+ $ kubectl taint nodes <master nodename: k8s-master> node-role.kubernetes.io/master:NoSchedule-
+ node "k8s-master" untainted
+ $ kubectl describe nodes | grep Tain
+ Taints:                 <none>
+ $
+
 Add a node into k8s cluster
 ---------------------------
 
