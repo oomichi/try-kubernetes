@@ -176,6 +176,10 @@ Operate the following commands::
 
 The above output needs to be operated on kube-host01 to join into the cluster.
 
+If using VirtualBox, need to specify the internal ip address like::
+
+ # kubeadm init --apiserver-advertise-address 172.168.0.1
+
 Operate the following commands::
 
  $ sudo cp /etc/kubernetes/admin.conf $HOME/
