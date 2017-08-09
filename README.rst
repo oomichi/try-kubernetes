@@ -169,9 +169,9 @@ TODO: This should be fixed later.
 Build e2e test binary::
 
  $ cd $GOPATH/src/k8s.io/kubernetes
- $ # Need to chown due to the above `sudo PATH=$PATH hack/local-up-cluster.sh`
- $ sudo chown -R $USER .
- $ make quick-release
+ # The docker daemon runs as root user, not docker user. So it is necessary to specify `su`
+ $ sudo make quick-release
+ $ sudo chown oomichi -R .
  $ make ginkgo
  $ make generated_files
 
@@ -180,7 +180,7 @@ Run e2e test
 
 Run e2e test::
 
- $ export KUBECONFIG=/var/run/kubernetes/admin.kubeconfig
+ $ export KUBECONFIG=$HOME/admin.conf
  $ export KUBE_MASTER_IP="127.0.0.1"
  $ export KUBE_MASTER=local
  $ export KUBERNETES_PROVIDER=local
