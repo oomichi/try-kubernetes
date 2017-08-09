@@ -185,33 +185,34 @@ Run e2e test::
  $ export KUBE_MASTER=local
  $ export KUBERNETES_PROVIDER=local
  $ go run hack/e2e.go -- -v --test --test_args="--ginkgo.focus=(\[sig\-network\]\sDNS\sshould\sprovide\sDNS\sfor\sservices\s\[Conformance\])|(\[sig\-apps\]\sReplicaSet\sshould\sserve\sa\sbasic\simage\son\seach\sreplica\swith\sa\spublic\simage\s\[Conformance\])|(\[k8s\.io\]\sServiceAccounts\sshould\smount\san\sAPI\stoken\sinto\spods\s\[Conformance\])|(\[k8s\.io\]\sProjected\sshould\sbe\sconsumable\sfrom\spods\sin\svolume\s\[Conformance\]\s\[sig\-storage\])|(\[k8s\.io\]\sNetworking\s\[k8s\.io\]\sGranular\sChecks:\sPods\sshould\sfunction\sfor\sintra\-pod\scommunication)|(\[k8s\.io\]\sEmptyDir\svolumes\sshould\ssupport)"
- [..]
- Failure [901.857 seconds]
+ 2017/08/08 18:32:34 e2e.go:76: Calling kubetest -v --test --test_args=--ginkgo.focus=(\[sig\-network\]\sDNS\sshould\sprovide\sDNS\sfor\sservices\s\[Conformance\])|(\[sig\-apps\]\sReplicaSet\sshould\sserve\sa\sbasic\simage\son\seach\sreplica\swith\sa\spublic\simage\s\[Conformance\])|(\[k8s\.io\]\sServiceAccounts\sshould\smount\san\sAPI\stoken\sinto\spods\s\[Conformance\])|(\[k8s\.io\]\sProjected\sshould\sbe\sconsumable\sfrom\spods\sin\svolume\s\[Conformance\]\s\[sig\-storage\])|(\[k8s\.io\]\sNetworking\s\[k8s\.io\]\sGranular\sChecks:\sPods\sshould\sfunction\sfor\sintra\-pod\scommunication)|(\[k8s\.io\]\sEmptyDir\svolumes\sshould\ssupport)...
+ 2017/08/08 18:32:34 util.go:262: Please use kubetest --provider=local (instead of deprecated KUBERNETES_PROVIDER=local)
+ 2017/08/08 18:32:34 util.go:131: Running: ./cluster/kubectl.sh --match-server-version=false version
+ 2017/08/08 18:32:35 util.go:133: Step './cluster/kubectl.sh --match-server-version=false version' finished in 165.455139ms
+ 2017/08/08 18:32:35 util.go:131: Running: ./hack/e2e-internal/e2e-status.sh
+ Local doesn't need special preparations for e2e tests
+ Client Version: version.Info{Major:"1", Minor:"8+", GitVersion:"v1.8.0-alpha.2.1535+5793be779be25d", GitCommit:"5793be779be25d43a397acc164b326977cd0129f", GitTreeState:"clean", BuildDate:"2017-08-09T01:03:05Z", GoVersion:"go1.8.3", Compiler:"gc", Platform:"linux/amd64"}
+ Server Version: version.Info{Major:"1", Minor:"7", GitVersion:"v1.7.3", GitCommit:"2c2fe6e8278a5db2d15a013987b53968c743f2a1", GitTreeState:"clean", BuildDate:"2017-08-03T06:43:48Z", GoVersion:"go1.8.3", Compiler:"gc", Platform:"linux/amd64"}
+ 2017/08/08 18:32:35 util.go:133: Step './hack/e2e-internal/e2e-status.sh' finished in 194.908616ms
+ 2017/08/08 18:32:35 util.go:131: Running: ./hack/ginkgo-e2e.sh --ginkgo.focus=(\[sig\-network\]\sDNS\sshould\sprovide\sDNS\sfor\sservices\s\[Conformance\])|(\[sig\-apps\]\sReplicaSet\sshould\sserve\sa\sbasic\simage\son\seach\sreplica\swith\sa\spublic\simage\s\[Conformance\])|(\[k8s\.io\]\sServiceAccounts\sshould\smount\san\sAPI\stoken\sinto\spods\s\[Conformance\])|(\[k8s\.io\]\sProjected\sshould\sbe\sconsumable\sfrom\spods\sin\svolume\s\[Conformance\]\s\[sig\-storage\])|(\[k8s\.io\]\sNetworking\s\[k8s\.io\]\sGranular\sChecks:\sPods\sshould\sfunction\sfor\sintra\-pod\scommunication)|(\[k8s\.io\]\sEmptyDir\svolumes\sshould\ssupport)
+ Setting up for KUBERNETES_PROVIDER="local".
+ Local doesn't need special preparations for e2e tests
+ 2017/08/08 18:32:35 proto: duplicate proto type registered: google.protobuf.Any
+ 2017/08/08 18:32:35 proto: duplicate proto type registered: google.protobuf.Duration
+ 2017/08/08 18:32:35 proto: duplicate proto type registered: google.protobuf.Timestamp
+ Aug  8 18:32:35.700: INFO: Overriding default scale value of zero to 1
+ Aug  8 18:32:35.701: INFO: Overriding default milliseconds value of zero to 5000
+ I0808 18:32:35.843815   17035 e2e.go:354] Starting e2e run "9f37be89-7ca2-11e7-9031-080027b1b50a" on Ginkgo node 1
+ Running Suite: Kubernetes e2e suite
+ ===================================
+ Random Seed: 1502242355 - Will randomize all specs
+ Will run 19 of 652 specs
+
+ Aug  8 18:32:36.056: INFO: >>> kubeConfig: /home/oomichi/admin.conf
+ Aug  8 18:32:36.059: INFO: Waiting up to 4h0m0s for all (but 0) nodes to be schedulable
+ Aug  8 18:32:36.061: INFO: Unexpected error listing nodes: Get http://127.0.0.1:8080/api/v1/nodes?fieldSelector=spec.unschedulable%3Dfalse&resourceVersion=0: dial tcp 127.0.0.1:8080: getsockopt: connection refused
+ Aug  8 18:32:36.061: INFO: Unexpected error occurred: Get http://127.0.0.1:8080/api/v1/nodes?fieldSelector=spec.unschedulable%3Dfalse&resourceVersion=0: dial tcp 127.0.0.1:8080: getsockopt: connection refused
+ Failure [0.008 seconds]
  [BeforeSuite] BeforeSuite
  /go/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/test/e2e/e2e.go:231
-
- Aug  7 23:39:08.187: Error waiting for all pods to be running and ready: 1 / 1 pods in namespace "kube-system" are NOT in RUNNING and READY state in 10m0s
- POD                       NODE PHASE   GRACE CONDITIONS
- kube-dns-4124969034-wptwh      Pending       [{Type:PodScheduled Status:False LastProbeTime:0001-01-01 00:00:00 +0000 UTC LastTransitionTime:2017-08-07 21:07:52 -0700 PDT Reason:Unschedulable Message:no nodes available to schedule pods}]
-
- /go/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/test/e2e/e2e.go:182
- ------------------------------
- Aug  7 23:39:08.190: INFO: Running AfterSuite actions on all node
- Aug  7 23:39:08.190: INFO: Running AfterSuite actions on node 1
-
- Ran 19 of 0 Specs in 901.859 seconds
- FAIL! -- 0 Passed | 19 Failed | 0 Pending | 0 Skipped --- FAIL: TestE2E (902.09s)
- FAIL
-
- Ginkgo ran 1 suite in 15m2.670899727s
- Test Suite Failed
- !!! Error in ./hack/ginkgo-e2e.sh:132
-   Error in ./hack/ginkgo-e2e.sh:132. '"${ginkgo}" "${ginkgo_args[@]:+${ginkgo_args[@]}}" "${e2e_test}" -- "${auth_config[@]:+${auth_config[@]}}" --ginkgo.flakeAttempts="${FLAKE_ATTEMPTS}" --host="${KUBE_MASTER_URL}" --provider="${KUBERNETES_PROVIDER}" --gce-project="${PROJECT:-}" --gce-zone="${ZONE:-}" --gce-region="${REGION:-}" --gce-multizone="${MULTIZONE:-false}" --gke-cluster="${CLUSTER_NAME:-}" --kube-master="${KUBE_MASTER:-}" --cluster-tag="${CLUSTER_ID:-}" --cloud-config-file="${CLOUD_CONFIG:-}" --repo-root="${KUBE_ROOT}" --node-instance-group="${NODE_INSTANCE_GROUP:-}" --prefix="${KUBE_GCE_INSTANCE_PREFIX:-e2e}" --network="${KUBE_GCE_NETWORK:-${KUBE_GKE_NETWORK:-e2e}}" --node-tag="${NODE_TAG:-}" --master-tag="${MASTER_TAG:-}" --federated-kube-context="${FEDERATION_KUBE_CONTEXT:-e2e-federation}" ${KUBE_CONTAINER_RUNTIME:+"--container-runtime=${KUBE_CONTAINER_RUNTIME}"} ${MASTER_OS_DISTRIBUTION:+"--master-os-distro=${MASTER_OS_DISTRIBUTION}"} ${NODE_OS_DISTRIBUTION:+"--node-os-distro=${NODE_OS_DISTRIBUTION}"} ${NUM_NODES:+"--num-nodes=${NUM_NODES}"} ${E2E_REPORT_DIR:+"--report-dir=${E2E_REPORT_DIR}"} ${E2E_REPORT_PREFIX:+"--report-prefix=${E2E_REPORT_PREFIX}"} "${@:-}"' exited with status 1
- Call stack:
-   1: ./hack/ginkgo-e2e.sh:132 main(...)
- Exiting with status 1
- 2017/08/07 23:39:08 util.go:133: Step './hack/ginkgo-e2e.sh --ginkgo.focus=(\[sig\-network\]\sDNS\sshould\sprovide\sDNS\sfor\sservices\s\[Conformance\])|(\[sig\-apps\]\sReplicaSet\sshould\sserve\sa\sbasic\simage\son\seach\sreplica\swith\sa\spublic\simage\s\[Conformance\])|(\[k8s\.io\]\sServiceAccounts\sshould\smount\san\sAPI\stoken\sinto\spods\s\[Conformance\])|(\[k8s\.io\]\sProjected\sshould\sbe\sconsumable\sfrom\spods\sin\svolume\s\[Conformance\]\s\[sig\-storage\])|(\[k8s\.io\]\sNetworking\s\[k8s\.io\]\sGranular\sChecks:\sPods\sshould\sfunction\sfor\sintra\-pod\scommunication)|(\[k8s\.io\]\sEmptyDir\svolumes\sshould\ssupport)' finished in 15m2.74495882s
- 2017/08/07 23:39:08 main.go:241: Something went wrong: encountered 1 errors: [error during ./hack/ginkgo-e2e.sh --ginkgo.focus=(\[sig\-network\]\sDNS\sshould\sprovide\sDNS\sfor\sservices\s\[Conformance\])|(\[sig\-apps\]\sReplicaSet\sshould\sserve\sa\sbasic\simage\son\seach\sreplica\swith\sa\spublic\simage\s\[Conformance\])|(\[k8s\.io\]\sServiceAccounts\sshould\smount\san\sAPI\stoken\sinto\spods\s\[Conformance\])|(\[k8s\.io\]\sProjected\sshould\sbe\sconsumable\sfrom\spods\sin\svolume\s\[Conformance\]\s\[sig\-storage\])|(\[k8s\.io\]\sNetworking\s\[k8s\.io\]\sGranular\sChecks:\sPods\sshould\sfunction\sfor\sintra\-pod\scommunication)|(\[k8s\.io\]\sEmptyDir\svolumes\sshould\ssupport): exit status 1]
- 2017/08/07 23:39:08 e2e.go:78: err: exit status 1
- exit status 1
 
