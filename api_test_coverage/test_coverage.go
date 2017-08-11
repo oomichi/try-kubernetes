@@ -45,7 +45,6 @@ func parseOpenAPI() {
 				if !isHttpMethod(api_method) {
 					continue
 				}
-				//fmt.Printf("%s: %s\n", api_method, api_url)
 				api := API {
 					Method: api_method,
 					Url: api_url,
