@@ -18,8 +18,16 @@ func isHttpMethod(method string) bool {
 	return false
 }
 
+type API struct {
+	Method string
+	Url string
+}
+
+type Apis []API
+
 func parseOpenAPI() {
 	var decode_data interface{}
+	var apis_openapi Apis
 
 	bytes, err := ioutil.ReadFile("swagger.json")
 	if err != nil {
@@ -37,10 +45,16 @@ func parseOpenAPI() {
 				if !isHttpMethod(api_method) {
 					continue
 				}
-				fmt.Printf("%s: %s\n", api_url, api_method)
+				//fmt.Printf("%s: %s\n", api_method, api_url)
+				api := API {
+					Method: api_method,
+					Url: api_url,
+				}
+				apis_openapi = append(apis_openapi, api)
 			}
 		}
 	}
+	fmt.Printf("%s", apis_openapi)
 }
 
 func main() {
