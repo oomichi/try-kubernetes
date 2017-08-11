@@ -66,7 +66,7 @@ Operate the following commands::
  $ sudo cp /etc/kubernetes/admin.conf $HOME/
  $ sudo chown $(id -u):$(id -g) $HOME/admin.conf
  $ export KUBECONFIG=$HOME/admin.conf
- $ echo "export KUBECONFIG=$HOME/admin.conf" >> /home/oomichi/.bashrc
+ $ echo "export KUBECONFIG=$HOME/admin.conf" >> $HOME/.bashrc
 
 Check the valid installation::
 
@@ -199,7 +199,7 @@ Build e2e test binary::
  $ cd $GOPATH/src/k8s.io/kubernetes
  # The docker daemon runs as root user, not docker user. So it is necessary to specify `su`
  $ sudo make quick-release
- $ sudo chown oomichi -R .
+ $ sudo chown $USER -R .
  $ make ginkgo
  $ make generated_files
 
@@ -228,3 +228,35 @@ Run e2e test::
  2017/08/09 13:41:10 main.go:245: Something went wrong: encountered 1 errors: [error during ./hack/ginkgo-e2e.sh --ginkgo.focus=\[Conformance\]: exit status 1]
  2017/08/09 13:41:10 e2e.go:78: err: exit status 1
  exit status 1
+
+Confirm which tests will run without actual tests::
+
+ $ go run hack/e2e.go -- -v --test --test_args="--ginkgo.dryRun=true --ginkgo.focus=\[Conformance\]"
+ [..]
+ [k8s.io] Docker Containers
+   should use the image defaults if command and args are blank [Conformance]
+   /go/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/test/e2e/common/docker_containers.go:35
+ ~SS
+ ------------------------------
+ [k8s.io] EmptyDir volumes
+   should support (non-root,0644,tmpfs) [Conformance] [sig-storage]
+   /go/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/test/e2e/common/empty_dir.go:85
+ ~SS
+ ------------------------------
+ [sig-apps] ReplicaSet
+   should serve a basic image on each replica with a public image [Conformance]
+   /go/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/test/e2e/apps/replica_set.go:82
+ ~S
+ ------------------------------
+ [sig-network] Services
+   should provide secure master service [Conformance]
+   /go/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/test/e2e/network/service.go:71
+ ~
+ Ran 149 of 652 Specs in 0.072 seconds
+ SUCCESS! -- 0 Passed | 0 Failed | 0 Pending | 503 Skipped PASS
+
+ Ginkgo ran 1 suite in 519.123083ms
+ Test Suite Passed
+ 2017/08/09 15:38:12 util.go:133: Step './hack/ginkgo-e2e.sh --ginkgo.dryRun=true --ginkgo.focus=\[Conformance\]' finished in 937.615925ms
+ 2017/08/09 15:38:12 e2e.go:80: Done
+ $
