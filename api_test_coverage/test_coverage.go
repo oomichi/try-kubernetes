@@ -103,10 +103,14 @@ func parseApiLog() Apis {
 
 func main() {
 	var found bool
+	var num_found int
+	var num_not_found int
 
 	apis_openapi := parseOpenAPI()
 	apis_logs := parseApiLog()
 
+	num_found = 0
+	num_not_found = 0
 	for _, openapi := range apis_openapi {
 		reg := regexp.MustCompile(openapi.Url)
 		found = false
@@ -117,11 +121,15 @@ func main() {
 			if reg.MatchString(log.Url) {
 				//fmt.Printf("found: %s %s\n", openapi.Method, openapi.Url)
 				found = true
+				num_found++
 				break
 			}
 		}
 		if found == false {
 			fmt.Printf("The API(%s %s) is not found in e2e operation log.\n", openapi.Method, openapi.Url)
+			num_not_found++
 		}
 	}
+	fmt.Printf("num_found: %d\n", num_found)
+	fmt.Printf("num_not_found: %d\n", num_not_found)
 }
