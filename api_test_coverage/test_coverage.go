@@ -54,7 +54,6 @@ func parseOpenAPI() Apis {
 					continue
 				}
 				api_method := strings.ToUpper(api_method)
-				api_url = re_openapi.ReplaceAllLiteralString(api_url, `\S+`)
 				api := API {
 					Method: api_method,
 					Url: api_url,
@@ -112,7 +111,8 @@ func main() {
 	num_found = 0
 	num_not_found = 0
 	for _, openapi := range apis_openapi {
-		reg := regexp.MustCompile(openapi.Url)
+		reg_url := re_openapi.ReplaceAllLiteralString(openapi.Url, `\S+`)
+		reg := regexp.MustCompile(reg_url)
 		found = false
 		for _, log := range apis_logs {
 			if openapi.Method != log.Method {
@@ -130,6 +130,7 @@ func main() {
 			num_not_found++
 		}
 	}
+	fmt.Printf("All APIs: %d\n", len(apis_openapi))
 	fmt.Printf("num_found: %d\n", num_found)
 	fmt.Printf("num_not_found: %d\n", num_not_found)
 }
