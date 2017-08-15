@@ -260,3 +260,9 @@ Confirm which tests will run without actual tests::
  2017/08/09 15:38:12 util.go:133: Step './hack/ginkgo-e2e.sh --ginkgo.dryRun=true --ginkgo.focus=\[Conformance\]' finished in 937.615925ms
  2017/08/09 15:38:12 e2e.go:80: Done
  $
+
+Setup dev env
+-------------
+
+* http://qiita.com/lucy/items/e4f21c507d3fd2c0ffe9
+
