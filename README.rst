@@ -264,5 +264,18 @@ Confirm which tests will run without actual tests::
 Setup dev env
 -------------
 
+Install bazel::
+
+ $ sudo apt-get install openjdk-8-jdk    (Don't install openjdk-9-jdk which is not supported on bazel now)
+ $ sudo vi /etc/apt/sources.list.d/bazel.list
+ $ cat /etc/apt/sources.list.d/bazel.list
+ deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8
+ $ sudo apt-get install bazel
+
+Run unit tests on kubernetes/test-infra::
+
+ $ bazel test //..
+
+* https://github.com/kubernetes/test-infra#building-and-testing-the-test-infra
 * http://qiita.com/lucy/items/e4f21c507d3fd2c0ffe9
 
