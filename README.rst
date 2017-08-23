@@ -279,3 +279,14 @@ Run unit tests on kubernetes/test-infra::
 * https://github.com/kubernetes/test-infra#building-and-testing-the-test-infra
 * http://qiita.com/lucy/items/e4f21c507d3fd2c0ffe9
 
+Run unit test
+-------------
+
+with make::
+
+ $ make test
+
+with bazel::
+
+ $ bazel test //...
+
