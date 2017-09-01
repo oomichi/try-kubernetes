@@ -70,4 +70,41 @@ The log has been output like::
 
 So the count is never changed to 2 from 1.
 
+I need to reproduce this problem by hands without e2e test to verify what is lack of feature or something.
+
+The test is::
+
+ 116 func (scaleTest *HPAScaleTest) run(name, kind string, rc *common.ResourceConsumer, f *framework.Framework) {
+ 117         const timeToWait = 15 * time.Minute
+ 118         rc = common.NewDynamicResourceConsumer(name, kind, int(scaleTest.initPods), int(scaleTest.totalInitialCPUUsage), 0, 0, scaleTest.perPodCPURequest, 200, f)
+ 119         defer rc.CleanUp()
+ 120         hpa := common.CreateCPUHorizontalPodAutoscaler(rc, scaleTest.targetCPUUtilizationPercent, scaleTest.minPods, scaleTest.maxPods)
+ 121         defer common.DeleteHorizontalPodAutoscaler(rc, hpa.Name)
+ 122         rc.WaitForReplicas(int(scaleTest.firstScale), timeToWait)
+ 123         if scaleTest.firstScaleStasis > 0 {
+ 124                 rc.EnsureDesiredReplicas(int(scaleTest.firstScale), scaleTest.firstScaleStasis)
+ 125         }
+ 126         if scaleTest.cpuBurst > 0 && scaleTest.secondScale > 0 {
+ 127                 rc.ConsumeCPU(scaleTest.cpuBurst)
+ 128                 rc.WaitForReplicas(int(scaleTest.secondScale), timeToWait)
+ 129         }
+ 130 }
+
+and the operations are::
+
+ common.NewDynamicResourceConsumer()
+ common.CreateCPUHorizontalPodAutoscaler()
+ rc.ConsumeCPU()
+ rc.WaitForReplicas()
+
+and the timeout happens at rc.WaitForReplicas() call.
+
+common.NewDynamicResourceConsumer() is::
+
+ 102 func NewDynamicResourceConsumer(name, kind string, replicas, initCPUTotal, initMemoryTotal, initCustomMetric int, cpuLimit, memLimit int64, f *framework.Framework) *ResourceConsumer {
+ 103         return newResourceConsumer(name, kind, replicas, initCPUTotal, initMemoryTotal, initCustomMetric, dynamicConsumptionTimeInSeconds,
+ 104                 dynamicRequestSizeInMillicores, dynamicRequestSizeInMegabytes, dynamicRequestSizeCustomMetric, cpuLimit, memLimit, f)
+ 105 }
+
+
 
