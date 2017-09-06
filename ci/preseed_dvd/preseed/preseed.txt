@@ -471,6 +471,8 @@ d-i finish-install/reboot_in_progress note
 # preseeding is read.
 #d-i preseed/early_command string anna-install some-udeb
 
+# Fix stop of "Partition disks"
+#  https://bugs.launchpad.net/ubuntu/+source/debian-installer/+bug/1347726
 d-i preseed/early_command string umount /media || true
 
 # This command is run immediately before the partitioner starts. It may be
