@@ -13,9 +13,9 @@ fi
 
 
 
-rm -f hosts
-echo "[targets]"  >  ./inventory/hosts
-echo ${IPADDRESS} >> ./inventory/hosts
+rm -f ./hosts
+echo "[targets]"  >  ./hosts
+echo ${IPADDRESS} >> ./hosts
 
 rm -f ./hostname.yaml
 echo "- hosts: targets"                           >  ./hostname.yaml
@@ -41,5 +41,7 @@ echo "    async: 1"                          >> ./hostname.yaml
 echo "    poll: 0"                           >> ./hostname.yaml
 echo "    ignore_errors: true"               >> ./hostname.yaml
 
-ansible-playbook -i inventory/hosts --ask-become-pass hostname.yaml
+ansible-playbook -i ./hosts --ask-become-pass hostname.yaml
+
+rm -f ./hosts ./hostname.yaml
 
