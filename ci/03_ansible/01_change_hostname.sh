@@ -35,6 +35,11 @@ echo "      dest: /etc/hosts"                       >> ./hostname.yaml
 
 echo "      line: '127.0.0.1 localhost ${NEW_HOSTNAME}'"    >> ./hostname.yaml
 echo "      state: present"                                 >> ./hostname.yaml
+echo "  - name: reboot"                      >> ./hostname.yaml
+echo "    shell: sleep 2 && shutdown -r now" >> ./hostname.yaml
+echo "    async: 1"                          >> ./hostname.yaml
+echo "    poll: 0"                           >> ./hostname.yaml
+echo "    ignore_errors: true"               >> ./hostname.yaml
 
 ansible-playbook -i inventory/hosts --ask-become-pass hostname.yaml
 
