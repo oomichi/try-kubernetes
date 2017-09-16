@@ -19,7 +19,8 @@ echo ${IPADDRESS} >> ./inventory/hosts
 
 rm -f ./hostname.yaml
 echo "- hosts: targets"                           >  ./hostname.yaml
-echo "  sudo: yes"                                >> ./hostname.yaml
+echo "  become: true"                             >> ./hostname.yaml
+echo "  become_user: root"                        >> ./hostname.yaml
 echo "  user: ubuntu"                             >> ./hostname.yaml
 echo "  tasks:"                                   >> ./hostname.yaml
 echo "  - name: change hostname to ${NEW_HOSTNAME}" >> ./hostname.yaml
@@ -34,4 +35,6 @@ echo "      dest: /etc/hosts"                       >> ./hostname.yaml
 
 echo "      line: '127.0.0.1 localhost ${NEW_HOSTNAME}'"    >> ./hostname.yaml
 echo "      state: present"                                 >> ./hostname.yaml
+
+ansible-playbook -i inventory/hosts --ask-become-pass hostname.yaml
 
