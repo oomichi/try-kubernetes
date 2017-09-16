@@ -1,0 +1,22 @@
+- hosts: all
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install apt-transport-https
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - curl
+      - apt-transport-https 
+  - name: Add apt-key
+    shell: curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+  - name: Add kubernetes.list
+    shell: echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
+  - name: Install basic packages for k8s
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - docker-engine
+      - kubelet
+      - kubeadm
+      - kubectl
+      - kubernetes-cni
