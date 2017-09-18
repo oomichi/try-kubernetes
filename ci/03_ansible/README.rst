@@ -1,9 +1,17 @@
 Ansible
 =======
 
-Change hostname with `01_change_hostname.sh <IP address> <hostname>`::
+Create hosts file::
 
- $ ./01_change_hostname.sh 192.168.0.1 k8s-master
+ $ cat hosts
+ [master]
+ 192.168.0.1
+ [node]
+ 192.168.0.2
+
+Change hostname::
+
+ $ ansible-playbook -i ./hosts --ask-become-pass 01_change_hostname.yaml
 
 Install basic packages::
 
