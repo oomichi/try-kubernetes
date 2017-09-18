@@ -1,0 +1,37 @@
+- hosts: master
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: change hostname to k8s-master
+    hostname:
+      name: k8s-master
+  - name: add myself to /etc/hosts
+    lineinfile:
+      dest: /etc/hosts
+      regexp: '^127\.0\.0\.1[ \t]+localhost'
+      line: '127.0.0.1 localhost k8s-master'
+      state: present
+- hosts: node
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: change hostname to k8s-node
+    hostname:
+      name: k8s-node
+  - name: add myself to /etc/hosts
+    lineinfile:
+      dest: /etc/hosts
+      regexp: '^127\.0\.0\.1[ \t]+localhost'
+      line: '127.0.0.1 localhost k8s-node'
+- hosts: all
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: reboot
+    shell: sleep 2 && shutdown -r now
+    async: 1
+    poll: 0
+    ignore_errors: true
