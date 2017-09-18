@@ -9,3 +9,7 @@ Install basic packages::
 
  $ ansible-playbook -i ./hosts --ask-become-pass 02_install_packages.yaml
 
+Initialize kube-master node::
+
+ $ ansible-playbook -i ./hosts --ask-become-pass 03_initialize_k8s_master.yaml
+
