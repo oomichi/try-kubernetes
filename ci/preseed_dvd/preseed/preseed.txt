@@ -1,1 +1,0 @@
-ci/01_preseed_dvd/preseed/preseed.txt
