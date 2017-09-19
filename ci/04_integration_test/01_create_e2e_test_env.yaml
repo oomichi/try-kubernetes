@@ -31,9 +31,9 @@
       path: ${HOME}/go
       state: directory
   - name: Set GOPATH
-    shell: grep -v GOPATH $HOME/.bashrc > /tmp/bashrc; mv /tmp/bashrc $HOME/.bashrc; echo "export GOPATH=${HOME}/go" >> $HOME/.bashrc
+    shell: grep -v GOPATH ${HOME}/.bashrc > /tmp/bashrc; mv /tmp/bashrc ${HOME}/.bashrc; echo "export GOPATH=${HOME}/go" >> ${HOME}/.bashrc
   - name: Set KUBERNETES_CONFORMANCE_TEST
-    shell: grep -v KUBERNETES_CONFORMANCE_TEST $HOME/.bashrc > /tmp/bashrc; mv /tmp/bashrc $HOME/.bashrc; echo "export KUBERNETES_CONFORMANCE_TEST=true" >> $HOME/.bashrc
+    shell: grep -v KUBERNETES_CONFORMANCE_TEST ${HOME}/.bashrc > /tmp/bashrc; mv /tmp/bashrc ${HOME}/.bashrc; echo "export KUBERNETES_CONFORMANCE_TEST=true" >> ${HOME}/.bashrc
   - name: Download k8s code
     shell: go get k8s.io/kubernetes; echo "Ignore no buildable error"
 - hosts: master
