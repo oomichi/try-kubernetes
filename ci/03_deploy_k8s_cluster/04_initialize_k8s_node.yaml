@@ -11,4 +11,13 @@
   - name: kubeadm reset
     shell: kubeadm reset; sleep 3
   - name: kubeadm init
-    shell: /tmp/kubeadm_join.sh
+    shell: /tmp/kubeadm_join.sh; sleep 3
+- hosts: master
+  user: ubuntu
+  tasks:
+  - name: check to join node to cluster
+    shell: export KUBECONFIG=/etc/kubernetes/admin.conf; kubectl get nodes
+    register: result
+    until: result.stdout.find("NotReady") == -1
+    retries: 12
+    delay: 10
