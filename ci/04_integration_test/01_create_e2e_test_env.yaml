@@ -1,0 +1,48 @@
+- hosts: master
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages for add-apt-repository
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - software-properties-common
+  - name: Add apt repo
+    shell: add-apt-repository -y ppa:longsleep/golang-backports
+  - name: Install packages for e2e tests
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - golang-1.8
+      - gcc
+      - make
+  - name: Add links for golang
+    file:
+      src: /usr/lib/go-1.8/bin/{{item}}
+      dest: /usr/local/bin/{{item}}
+      state: link
+    with_items:
+      - go
+      - gofmt
+- hosts: master
+  user: ubuntu
+  tasks:
+  - name: Make dir of GOPATH
+    file:
+      path: ${HOME}/go
+      state: directory
+  - name: Set GOPATH
+    shell: grep -v GOPATH $HOME/.bashrc > /tmp/bashrc; mv /tmp/bashrc $HOME/.bashrc; echo "export GOPATH=${HOME}/go" >> $HOME/.bashrc
+  - name: Download k8s code
+    shell: go get k8s.io/kubernetes; echo "Ignore no buildable error"
+- hosts: master
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Build e2e binary
+    shell: cd /home/ubuntu/go/src/k8s.io/kubernetes; make quick-release; chown ubuntu -R .
+- hosts: master
+  user: ubuntu
+  tasks:
+  - name: Make another e2e binaries
+    shell: cd ${HOME}/go/src/k8s.io/kubernetes; make ginkgo; make generated_files
