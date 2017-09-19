@@ -4,7 +4,12 @@
   user: ubuntu
   tasks:
   - name: kubeadm init
-    shell: kubeadm reset; sleep 3; kubeadm init
+    shell: kubeadm reset; sleep 3; kubeadm init | grep "kubeadm join" > /tmp/kubeadm_join.sh
+  - name: scp kubeadm_join.sh
+    fetch:
+      src: /tmp/kubeadm_join.sh
+      dest: /tmp/kubeadm_join.sh
+      flat: yes
   - name: change admin.conf
     file:
       path: /etc/kubernetes/admin.conf

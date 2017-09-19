@@ -21,3 +21,7 @@ Initialize kube-master node::
 
  $ ansible-playbook -i ./hosts --ask-become-pass 03_initialize_k8s_master.yaml
 
+Initialize kube-node node::
+
+ $ ansible-playbook -i ./hosts --ask-become-pass 04_initialize_k8s_node.yaml
+

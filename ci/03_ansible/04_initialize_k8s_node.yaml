@@ -1,0 +1,14 @@
+- hosts: node
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: copy kubeadm_init shell
+    template:
+      src: /tmp/kubeadm_join.sh
+      dest: /tmp/kubeadm_join.sh
+      mode: 0755
+  - name: kubeadm reset
+    shell: kubeadm reset; sleep 3
+  - name: kubeadm init
+    shell: /tmp/kubeadm_join.sh
