@@ -15,16 +15,13 @@ NOTE: The initial login username/password = ubuntu/ubuntu
 Connect the pi to internet via WIFI
 -----------------------------------
 
-Upgrade to the latest ubuntu for avoiding kernel issues like [1]::
+Upgrade to the latest ubuntu for avoiding kernel issues like [1].
+Necessary to rename the existing brcm binary for raspi2 package for passing upgrade[2]::
 
  $ sudo apt-get update
+ $ sudo dpkg-divert --divert /lib/firmware/brcm/brcmfmac43430-sdio-2.bin --package linux-firmware-raspi2 --rename --add /lib/firmware/brcm/brcmfmac43430-sdio.bin
+ Adding diversion of /lib/firmware/brcm/brcmfmac4340-sdio.bin to /lib/firmware/brcm/brcmfmac4340-sdio-2.bin by linux-firmware-raspi2
  $ sudo apt-get upgrade
- [..]
- dpdk: error processing archive /var/cache/apt/archives/linux-firmware_1.157.12_all.deb (--unpack)
-  trying to oeverwrite /lib/firmware/brcm/brcmfmac4340-sdio.bin, which is also in package linux-firmware-raspi2 1.20161020-Oubuntu1~0.2~rpi3
- dpdk-deb: error: subprocess paste was killed by signal (Broken pipe)
- Errors were encountered while processing:
-  /var/cache/apt/archvies/linux-firmware_1.157.12_all.deb
 
 For example, the sample kernel version at this time is::
 
@@ -84,4 +81,4 @@ Configure SNAT between internet and local network
 -------------------------------------------------
 
 [1]: https://github.com/raspberrypi/firmware/issues/620
-
+[2]: https://bugs.launchpad.net/ubuntu/+source/linux-firmware-raspi2/+bug/1691729/comments/4
