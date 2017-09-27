@@ -22,10 +22,19 @@ Necessary to rename the existing brcm binary for raspi2 package for passing upgr
  $ sudo dpkg-divert --divert /lib/firmware/brcm/brcmfmac43430-sdio-2.bin --package linux-firmware-raspi2 --rename --add /lib/firmware/brcm/brcmfmac43430-sdio.bin
  Adding diversion of /lib/firmware/brcm/brcmfmac4340-sdio.bin to /lib/firmware/brcm/brcmfmac4340-sdio-2.bin by linux-firmware-raspi2
  $ sudo apt-get upgrade
+ $ sudo reboot
 
-For example, the sample kernel version at this time is::
+After that, another issue is faced::
 
- $ uname -a
+ Filename 'boot.src.uimg'.
+ Load address :0x20000000
+ Loading:
+ TFTP error:'illegal (unrecognized) tftp operation' (4)
+ Starting again
+
+ U-Boot>
+
+So I gave up to use raspberry pi to avoid wasting time anymore.
 
 Install necessary network tools and setup::
 
