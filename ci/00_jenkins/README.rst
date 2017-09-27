@@ -4,14 +4,14 @@ TODO
 Configure a gate machine (raspberry pi)
 ---------------------------------------
 
-1. Install ubuntu 16.04LTS for ARM[1]::
+1. Install ubuntu 16.04LTS for ARM[1].
 
- $ xz -dv ubuntu-16.04-preinstalled-server-armhf+raspi3.img.xz
-
- Copy ubuntu-16.04-preinstalled-server-armhf to Windows PC
- Copy ubuntu-16.04-preinstalled-server-armhf+raspi3.img to a micro SD card with Win32DiskImager on Windows PC
- Insert the micro SD card into the raspberry pi
- Boot the raspberry pi
+1.1. Download ubuntu-16.04-preinstalled-server-armhf+raspi3.img.xz
+1.2. $ xz -dv ubuntu-16.04-preinstalled-server-armhf+raspi3.img.xz
+1.3. Copy ubuntu-16.04-preinstalled-server-armhf to Windows PC
+1.4. Copy ubuntu-16.04-preinstalled-server-armhf+raspi3.img to a micro SD card with Win32DiskImager on Windows PC
+1.5. Insert the micro SD card into the raspberry pi
+1.6. Boot the raspberry pi
 
 2. Connect the pi to internet via WIFI[2]::
 
