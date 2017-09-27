@@ -10,13 +10,28 @@ Install ubuntu 16.04LTS for Raspberry PI 3(ARM)
 * Copy ubuntu-16.04-preinstalled-server-armhf+raspi3.img to a micro SD card with Win32DiskImager on Windows PC
 * Insert the micro SD card into the raspberry pi
 * Boot the raspberry pi
+NOTE: The initial login username/password = ubuntu/ubuntu
 
 Connect the pi to internet via WIFI
 -----------------------------------
 
-Install necessary network tools and setup::
+Upgrade to the latest ubuntu for avoiding kernel issues like [1]::
 
  $ sudo apt-get update
+ $ sudo apt-get upgrade
+ [..]
+ dpdk: error processing archive /var/cache/apt/archives/linux-firmware_1.157.12_all.deb (--unpack)
+  trying to oeverwrite /lib/firmware/brcm/brcmfmac4340-sdio.bin, which is also in package linux-firmware-raspi2 1.20161020-Oubuntu1~0.2~rpi3
+ dpdk-deb: error: subprocess paste was killed by signal (Broken pipe)
+ Errors were encountered while processing:
+  /var/cache/apt/archvies/linux-firmware_1.157.12_all.deb
+
+For example, the sample kernel version at this time is::
+
+ $ uname -a
+
+Install necessary network tools and setup::
+
  $ sudo apt-get install -y openssh-server wireless-tools wpasupplicant
  $ sudo reboot
  $ iwconfig
@@ -68,6 +83,5 @@ TODO: Add static address configuration for eth0
 Configure SNAT between internet and local network
 -------------------------------------------------
 
-[1]: http://gihyo.jp/admin/serial/01/ubuntu-recipe/0450
-[2]: https://medium.com/a-swift-misadventure/how-to-setup-your-raspberry-pi-2-3-with-ubuntu-16-04-without-cables-headlessly-9e3eaad32c01
+[1]: https://github.com/raspberrypi/firmware/issues/620
 
