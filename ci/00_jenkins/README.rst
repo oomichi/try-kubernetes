@@ -15,7 +15,7 @@ Configure a gate machine (raspberry pi)
 
 2. Connect the pi to internet via WIFI[2]
 
-* Install necessary network tools and setup::
+Install necessary network tools and setup::
 
  $ sudo apt-get update
  $ sudo apt-get install -y openssh-server wireless-tools wpasupplicant
@@ -38,8 +38,8 @@ Configure a gate machine (raspberry pi)
  + }
  $
 
-* Remove an ethernet cable and reboot the machine.
-* (TODO) The following error happens::
+Remove an ethernet cable and reboot the machine.
+(TODO) The following error happens::
  brcmf_add_if: ERROR: netdev:wlan0 already exists
  brcmf_add_if: ignore IF event
 
