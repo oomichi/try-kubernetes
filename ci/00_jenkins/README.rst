@@ -11,9 +11,11 @@ Configure a gate machine (raspberry pi)
 * Copy ubuntu-16.04-preinstalled-server-armhf to Windows PC
 * Copy ubuntu-16.04-preinstalled-server-armhf+raspi3.img to a micro SD card with Win32DiskImager on Windows PC
 * Insert the micro SD card into the raspberry pi
-** Boot the raspberry pi
+* Boot the raspberry pi
 
-2. Connect the pi to internet via WIFI[2]::
+2. Connect the pi to internet via WIFI[2]
+
+* Install necessary network tools and setup::
 
  $ sudo apt-get update
  $ sudo apt-get install -y openssh-server wireless-tools wpasupplicant
@@ -36,9 +38,8 @@ Configure a gate machine (raspberry pi)
  + }
  $
 
- Remove an ethernet cable and reboot the machine.
-
- The following error happens::
+* Remove an ethernet cable and reboot the machine.
+* (TODO) The following error happens::
  brcmf_add_if: ERROR: netdev:wlan0 already exists
  brcmf_add_if: ignore IF event
 
