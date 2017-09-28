@@ -15,7 +15,7 @@ Install gitlab::
  $ sudo apt-get install gitlab-ce
  $ sudo gitlab-ctl reconfigure
 
-Access to https://<ip-address> with web browser::
+Access to http://<ip-address> with web browser::
 
  Change the password as the page says.
  Login with root/<changed password>
