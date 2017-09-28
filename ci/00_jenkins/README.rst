@@ -81,6 +81,7 @@ On the following sample file, the runner kicks ./test_script.sh::
    tags:
      - my-tag
 
+The runner checks the return code of the script and it considers error if non-zero code.
 
 Setup DHCP server
 -----------------
