@@ -13,6 +13,9 @@ Install gitlab::
  $ sudo apt-get -y install curl ca-certificates
  $ curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
  $ sudo apt-get install gitlab-ce
+ $ vi /etc/gitlab/gitlab.rb
+ - external_url 'http://gitlab.example.com'
+ + external_url 'http://<your url or ip-address>'
  $ sudo gitlab-ctl reconfigure
 
 Access to http://<ip-address> with web browser::
@@ -58,8 +61,26 @@ Register gitlab-runner::
  Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
  $
 
+Admin Area -> Runners -> Edit (my-runner) -> Remove "Lock to current projects"
+
 Setup gitlab CI runner on each repo
 -----------------------------------
+
+Add .gitlab-ci.yml file under root path of the repo.
+The detail is https://docs.gitlab.com/ce/ci/yaml/README.html
+On the following sample file, the runner kicks ./test_script.sh::
+
+ $ cat .gitlab-ci.yml
+ stages:
+   - test
+
+ test_job:
+   stage: test
+   script:
+     - ./test_script.sh
+   tags:
+     - my-tag
+
 
 Setup DHCP server
 -----------------
