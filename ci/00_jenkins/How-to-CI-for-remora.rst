@@ -27,12 +27,14 @@ The following is an idea for doing that.
 How to
 ------
 
-* Register ci_test/ as a new project repo at gitlab::
+* Register all files under ci_test/ as a new project repo at gitlab::
 
   $ git clone git@<gitlab-server>:<user>/<project-name>.git
   $ cd <project-name>
   $ cp ../try-kubernetes/ci/00_jenkins/ci_test/* .
+  $ cp ../try-kubernetes/ci/00_jenkins/ci_test/.gitlab-ci.yml .
   $ git add *
+  $ git add .gitlab-ci.yml
   $ git commit -m "initial commit"
   $ git push origin master
 
