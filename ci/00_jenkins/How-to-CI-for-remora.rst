@@ -27,11 +27,11 @@ The following is an idea for doing that.
 How to
 ------
 
-Register ci_test/ as a new project repo at gitlab.
-Write the latest single commit of the target repo at ci_test/github_history.txt file. For example::
+* Register ci_test/ as a new project repo at gitlab.
+* Write the latest single commit of the target repo at ci_test/github_history.txt file. For example::
 
  https://github.com/nec-openstack/remora/commit/fdce194450c07ccc2af3b0a9c1d19f0661b9b533
 
-Register ci_test/poll_github.sh as a cron job for each hour as you like.
+* Register ci_test/poll_github.sh as a cron job for each hour as you like.
 
 
