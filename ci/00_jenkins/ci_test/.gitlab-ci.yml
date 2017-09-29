@@ -1,0 +1,9 @@
+stages:
+  - test
+
+test_job:
+  stage: test
+  script:
+    - ./test_script.sh
+  tags:
+    - my-tag
