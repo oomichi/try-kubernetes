@@ -40,7 +40,9 @@ How to
 
 * Write the latest single commit of the target repo at ci_test/github_history.txt file. For example::
 
- https://github.com/nec-openstack/remora/commit/fdce194450c07ccc2af3b0a9c1d19f0661b9b533
+  $ echo https://github.com/nec-openstack/remora/commit/fdce194450c07ccc2af3b0a9c1d19f0661b9b533 > github_history.txt
+  $ git commit -m "Register latest commit of target" github_history.txt
+  $ git push origin master
 
 * Register ci_test/poll_github.sh as a cron job for each hour as you like.
 
