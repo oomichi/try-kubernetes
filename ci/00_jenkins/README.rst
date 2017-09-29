@@ -23,6 +23,7 @@ Access to http://<ip-address> with web browser::
  Change the password as the page says.
  Login with root/<changed password>
  Add a user
+ Add a public SSH key to the created user
  Add a project and check the project URL
 
 Move the existing github repo to the above gitlab repo::
