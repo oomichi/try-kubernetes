@@ -27,7 +27,15 @@ The following is an idea for doing that.
 How to
 ------
 
-* Register ci_test/ as a new project repo at gitlab.
+* Register ci_test/ as a new project repo at gitlab::
+
+  $ git clone git@<gitlab-server>:<user>/<project-name>.git
+  $ cd <project-name>
+  $ cp ../try-kubernetes/ci/00_jenkins/ci_test/* .
+  $ git add *
+  $ git commit -m "initial commit"
+  $ git push origin master
+
 * Write the latest single commit of the target repo at ci_test/github_history.txt file. For example::
 
  https://github.com/nec-openstack/remora/commit/fdce194450c07ccc2af3b0a9c1d19f0661b9b533
