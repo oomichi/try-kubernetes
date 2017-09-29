@@ -46,4 +46,5 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+rm -rf /tmp/${GIT_DIRNAME}
 exit 0
