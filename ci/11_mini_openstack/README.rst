@@ -30,11 +30,11 @@ Keystone installation on controller node
 
 Install packages for Keystone::
 
- $ sudo apt-get -y install mysql-server
+ $ sudo apt-get -y install mariadb-server python-pymysql
  $ sudo mysql
- mysql> CREATE DATABASE keystone;
- mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'KEYSTONE_DBPASS';
- mysql> GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'KEYSTONE_DBPASS';
+ > CREATE DATABASE keystone;
+ > GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'KEYSTONE_DBPASS';
+ > GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'KEYSTONE_DBPASS';
  $ sudo apt-get -y install vim keystone apache2 libapache2-mod-wsgi
 
 Confirm the Pike release of Keystone is installed::
@@ -62,4 +62,24 @@ Initialize Keystone service::
  --bootstrap-admin-url http://openstack-controller:35357/v3/ \
  --bootstrap-internal-url http://openstack-controller:5000/v3/ \
  --bootstrap-public-url http://openstack-controller:5000/v3/ \
- --bootstrap-region-id RegionOne 
+ --bootstrap-region-id RegionOne
+ #
+ # vi /etc/apache2/sites-available/000-default.conf
+ -         #ServerName www.example.com
+ +         #ServerName openstack-controller
+ # service apache2 restart
+
+Configure management user::
+
+ $ echo "export OS_USERNAME=admin"      >> ~/.bashrc
+ $ echo "export OS_PASSWORD=ADMIN_PASS" >> ~/.bashrc
+ $ echo "export OS_PROJECT_NAME=admin"             >> ~/.bashrc
+ $ echo "export OS_USER_DOMAIN_NAME=Default"       >> ~/.bashrc
+ $ echo "export OS_PROJECT_DOMAIN_NAME=Default"    >> ~/.bashrc
+ $ echo "export OS_AUTH_URL=http://openstack-controller:35357/v3" >> ~/.bashrc
+ $ echo "export OS_IDENTITY_API_VERSION=3"                        >> ~/.bashrc
+
+Check the installation::
+
+ $ sudo apt-get -y install python-openstackclient
+
