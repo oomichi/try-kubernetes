@@ -69,7 +69,7 @@ Initialize Keystone service::
  +         #ServerName openstack-controller
  # service apache2 restart
 
-Configure management user::
+Configure management user and exit for re-login::
 
  $ echo "export OS_USERNAME=admin"      >> ~/.bashrc
  $ echo "export OS_PASSWORD=ADMIN_PASS" >> ~/.bashrc
@@ -78,6 +78,7 @@ Configure management user::
  $ echo "export OS_PROJECT_DOMAIN_NAME=Default"    >> ~/.bashrc
  $ echo "export OS_AUTH_URL=http://openstack-controller:35357/v3" >> ~/.bashrc
  $ echo "export OS_IDENTITY_API_VERSION=3"                        >> ~/.bashrc
+ $ exit
 
 Check the installation::
 
