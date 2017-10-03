@@ -171,5 +171,10 @@ Edit /etc/glance/glance-registry.conf::
 
 DB sync::
 
+ # mysql
+ > CREATE DATABASE glance;
+ > GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'GLANCE_DBPASS';
+ > GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'GLANCE_DBPASS';
+ > exit
  # su -s /bin/sh -c "glance-manage db_sync" glance
 
