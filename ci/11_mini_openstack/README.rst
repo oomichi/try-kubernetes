@@ -82,4 +82,9 @@ Configure management user::
 Check the installation::
 
  $ sudo apt-get -y install python-openstackclient
-
+ $ openstack user list
+ +----------------------------------+-------+
+ | ID                               | Name  |
+ +----------------------------------+-------+
+ | 006786b32ecd4a009d1b4de7c636fb39 | admin |
+ +----------------------------------+-------+
