@@ -103,7 +103,7 @@ Glance installation on controller node
 
 Configure Keystone for Glance::
 
- $ openstack user create --domain default --password GLANCE_DBPASS glance
+ $ openstack user create --domain default --password GLANCE_PASS glance
  $ openstack role add --project service --user glance admin
  $ openstack service create --name glance --description "OpenStack Image" image
  $ openstack endpoint create --region RegionOne image public http://openstack-controller:9292
