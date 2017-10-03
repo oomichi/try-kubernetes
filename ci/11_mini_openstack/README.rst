@@ -80,6 +80,14 @@ Configure management user and exit for re-login::
  $ echo "export OS_IDENTITY_API_VERSION=3"                        >> ~/.bashrc
  $ exit
 
+Create some projects, users and roles::
+
+ $ openstack project create --domain default --description "Service Project" service
+ $ openstack project create --domain default --description "Kubernetes Project" k8s
+ $ openstack user create --domain default --password-prompt k8s
+ $ openstack role create user
+ $ openstack role add --project k8s --user k8s user
+
 Check the installation::
 
  $ sudo apt-get -y install python-openstackclient
@@ -89,3 +97,79 @@ Check the installation::
  +----------------------------------+-------+
  | 006786b32ecd4a009d1b4de7c636fb39 | admin |
  +----------------------------------+-------+
+
+Glance installation on controller node
+--------------------------------------
+
+Configure Keystone for Glance::
+
+ $ openstack user create --domain default --password GLANCE_DBPASS glance
+ $ openstack role add --project service --user glance admin
+ $ openstack service create --name glance --description "OpenStack Image" image
+ $ openstack endpoint create --region RegionOne image public http://openstack-controller:9292
+ $ openstack endpoint create --region RegionOne image internal http://openstack-controller:9292
+ $ openstack endpoint create --region RegionOne image admin http://openstack-controller:9292
+ 
+Install and configure Glance::
+
+ $ sudo apt-get -y install glance
+
+Edit /etc/glance/glance-api.conf::
+
+ $ sudo vi /etc/glance/glance-api.conf
+ - #connection = <None>
+ + connection = mysql+pymysql://glance:GLANCE_DBPASS@openstack-controller/glance
+
+ [..]
+
+ [keystone_authtoken]
+ + auth_uri = http://localhost:5000
+ + auth_url = http://localhost:35357
+ + memcached_servers = localhost:11211
+ + auth_type = password
+ + project_domain_name = default
+ + user_domain_name = default
+ + project_name = service
+ + username = glance
+ + password = GLANCE_PASS
+
+ [..]
+
+ - #flavor = keystone
+ + flavor = keystone
+
+ [..]
+
+ - #stores = file,http
+ - #default_store = file
+ - #filesystem_store_datadir = /var/lib/glance/images
+ + stores = file,http
+ + default_store = file
+ + filesystem_store_datadir = /var/lib/glance/images
+
+Edit /etc/glance/glance-registry.conf::
+
+ $ sudo vi /etc/glance/glance-registry.conf
+ - #connection = <None>
+ + connection = mysql+pymysql://glance:GLANCE_DBPASS@openstack-controller/glance
+
+ [keystone_authtoken]
+ + auth_uri = http://localhost:5000
+ + auth_url = http://localhost:35357
+ + memcached_servers = localhost:11211
+ + auth_type = password
+ + project_domain_name = default
+ + user_domain_name = default
+ + project_name = service
+ + username = glance
+ + password = GLANCE_PASS
+
+ [..]
+
+ - #flavor = keystone
+ + flavor = keystone
+
+DB sync::
+
+ # su -s /bin/sh -c "glance-manage db_sync" glance
+
