@@ -273,3 +273,23 @@ Sync database::
  # su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova
  # su -s /bin/sh -c "nova-manage db sync" nova
 
+Configure rabbitmq::
+
+ $ sudo apt-get -y install rabbitmq-server
+ $ sudo rabbitmqctl add_user openstack RABBIT_PASS
+ $ sudo rabbitmqctl set_permissions openstack ".*" ".*" ".*"
+
+Configure memcached::
+
+ $ sudo apt-get -y install memcached python-memcache
+ $ sudo vi /etc/memcached.conf
+ - -l 127.0.0.1
+ + -l 192.168.1.1        <<<<<<<<<NEED TO FIX THIS AFTER GETTING NIC>>>>>>>>>>>>>
+
+Confirm nova-api works fine::
+
+ $ nova list
+
+Neutron installation on controller node
+---------------------------------------
+
