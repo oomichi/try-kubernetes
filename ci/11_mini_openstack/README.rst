@@ -407,3 +407,56 @@ Restart and verify installation::
  $ sudo reboot
  [after rebooting..]
 
+Nova installation on compute node
+---------------------------------
+
+Install package::
+
+ $ sudo apt-get -y install nova-compute
+
+Edit /etc/hosts::
+
+ $ sudo vi /etc/hosts
+ + 192.168.1.1  openstack-controller     <<<Edit here after getting nic>>>
+
+
+Edit /etc/nova/nova.conf::
+
+ [DEFAULT]
+ - log_dir = /var/log/nova
+
+ - #transport_url = <None>
+ + transport_url = rabbit://openstack:RABBIT_PASS@openstack-controller
+
+ - #my_ip = <host_ipv4>
+ + my_ip = 192.168.1.2  <<Change here after local network>>
+
+ [keystone_authtoken]
+ + auth_uri = http://openstack-controller:5000
+ + auth_url = http://openstack-controller:35357
+ + memcached_servers = openstack-controller:11211
+ + auth_type = password
+ + project_domain_name = default
+ + user_domain_name = default
+ + project_name = service
+ + username = nova
+ + password = NOVA_PASS
+
+ [vnc]
+ + vncserver_listen = 0.0.0.0
+ + vncserver_proxyclient_address = $my_ip
+ + novncproxy_base_url = http://openstack-controller:6080/vnc_auto.html
+
+ [glance]
+ + api_servers = http://openstack-controller:9292
+
+ [oslo_concurrency]
+ + lock_path = /var/lib/nova/tmp
+
+Add Nova compute node to cell database
+--------------------------------------
+
+Discover compute hosts by operating the following on controller node::
+
+ # su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova
+
