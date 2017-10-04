@@ -293,3 +293,117 @@ Confirm nova-api works fine::
 Neutron installation on controller node
 ---------------------------------------
 
+Configure Keystone for Neutron service::
+
+ $ openstack user create --domain default --password NEUTRON_PASS neutron
+ $ openstack role add --project service --user neutron admin
+ $ openstack service create --name neutron --description "OpenStack Networking" network
+ $ openstack endpoint create --region RegionOne network public http://openstack-controller:9696
+ $ openstack endpoint create --region RegionOne network internal http://openstack-controller:9696
+ $ openstack endpoint create --region RegionOne network admin http://openstack-controller:9696
+
+Install packages::
+
+ $ sudo apt-get -y install neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-dhcp-agent neutron-metadata-agent
+
+Edit /etc/neutron/neutron.conf::
+
+ $ sudo vi /etc/neutron/neutron.conf
+ [database]
+ - connection = sqlite:////var/lib/neutron/neutron.sqlite
+ + connection = mysql+pymysql://neutron:NEUTRON_DBPASS@openstack-controller/neutron
+
+ [DEFAULT]
+ - #transport_url = <None>
+ + transport_url = rabbit://openstack:RABBIT_PASS@openstack-controller
+
+ [keystone_authtoken]
+ + auth_uri = http://localhost:5000
+ + auth_url = http://localhost:35357
+ + memcached_servers = localhost:11211
+ + auth_type = password
+ + project_domain_name = default
+ + user_domain_name = default
+ + project_name = service
+ + username = neutron
+ + password = NEUTRON_PASS
+
+ [nova]
+ + auth_url = http://openstack-controller:35357
+ + auth_type = password
+ + project_domain_name = default
+ + user_domain_name = default
+ + region_name = RegionOne
+ + project_name = service
+ + username = nova
+ + password = NOVA_PASS
+
+Edit /etc/neutron/plugins/ml2/ml2_conf.ini::
+
+ $ sudo vi /etc/neutron/plugins/ml2/ml2_conf.ini
+ [ml2]
+ + type_drivers = flat,vlan
+ + tenant_network_types =
+ + mechanism_drivers = linuxbridge
+ + extension_drivers = port_security
+
+ [ml2_type_flat]
+ + flat_networks = provider
+
+Edit /etc/neutron/plugins/ml2/linuxbridge_agent.ini::
+
+ $ sudo vi /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+ [linux_bridge]
+ + physical_interface_mappings = provider:PROVIDER_INTERFACE_NAME
+
+ [vxlan]
+ + enable_vxlan = false
+
+ [securitygroup]
+ + firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+
+Edit /etc/neutron/dhcp_agent.ini::
+
+ $ sudo vi /etc/neutron/dhcp_agent.ini
+ [DEFAULT]
+ + interface_driver = linuxbridge
+ + enable_isolated_metadata = true
+
+Edit /etc/neutron/metadata_agent.ini::
+
+ $ sudo vi /etc/neutron/metadata_agent.ini
+ [DEFAULT]
+ + nova_metadata_ip = openstack-controller
+ + metadata_proxy_shared_secret = METADATA_SECRET
+
+Edit /etc/nova/nova.conf::
+
+ $ sudo vi /etc/nova/nova.conf
+ [neutron]
+ + url = http://openstack-controller:9696
+ + auth_url = http://openstack-controller:35357
+ + auth_type = password
+ + project_domain_name = default
+ + user_domain_name = default
+ + region_name = RegionOne
+ + project_name = service
+ + username = neutron
+ + password = NEUTRON_PASS
+ + service_metadata_proxy = true
+ + metadata_proxy_shared_secret = METADATA_SECRET
+
+Sync database::
+
+ # mysql
+ > CREATE DATABASE neutron;
+ > GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'NEUTRON_DBPASS';
+ > GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'NEUTRON_DBPASS';
+ > exit
+ # su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf \
+   --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
+
+Restart and verify installation::
+
+ $ sudo reboot
+ [after rebooting..]
+
