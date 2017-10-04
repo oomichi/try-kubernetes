@@ -178,3 +178,98 @@ DB sync::
  > exit
  # su -s /bin/sh -c "glance-manage db_sync" glance
 
+Nova installation on controller node
+------------------------------------
+
+Create database::
+
+ # mysql
+ > CREATE DATABASE nova_api;
+ > CREATE DATABASE nova;
+ > CREATE DATABASE nova_cell0;
+ > GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'NOVA_DBPASS';
+ > GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';
+ > GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY 'NOVA_DBPASS';
+ > GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';
+ > GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'localhost'IDENTIFIED BY 'NOVA_DBPASS';
+ > GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';
+ > exit
+
+Configure Keystone for Nova service::
+
+ $ openstack user create --domain default --password NOVA_PASS nova
+ $ openstack role add --project service --user nova admin
+ $ openstack service create --name nova --description "OpenStack Compute" compute
+ $ openstack endpoint create --region RegionOne compute public http://openstack-controller:8774/v2.1
+ $ openstack endpoint create --region RegionOne compute internal http://openstack-controller:8774/v2.1
+ $ openstack endpoint create --region RegionOne compute admin http://openstack-controller:8774/v2.1
+
+NOTE: Trying to avoid using placement API
+
+Install packages::
+
+ $ sudo apt-get -y install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
+
+Edit /etc/nova/nova.conf::
+
+ $ sudo vi /etc/nova/nova.conf
+ [api_database]
+ - connection = sqlite:////var/lib/nova/nova_api.sqlite
+ + connection = mysql+pymysql://nova:NOVA_DBPASS@openstack-controller/nova_api
+
+ [database]
+ - connection = sqlite:////var/lib/nova/nova.sqlite
+ + connection = mysql+pymysql://nova:NOVA_DBPASS@openstack-controller/nova
+
+ [DEFAULT]
+ - log_dir = /var/log/nova
+
+ - #transport_url = <None>
+ + transport_url = rabbit://openstack:RABBIT_PASS@openstack-controller
+
+ - #auth_strategy = keystone
+ + auth_strategy = keystone
+
+ - #my_ip = <host_ipv4>
+ + my_ip = 192.168.1.1    <<<<<<<<<NEED TO FIX THIS AFTER GETTING NIC>>>>>>>>>>>>>
+
+ - # use_neutron = true
+ + use_neutron = true
+
+ - # firewall_driver = nova.virt.firewall.NoopFirewallDriver
+ + firewall_driver = nova.virt.firewall.NoopFirewallDriver
+
+ [keystone_authtoken]
+ + auth_uri = http://localhost:5000
+ + auth_url = http://localhost:35357
+ + memcached_servers = localhost:11211
+ + auth_type = password
+ + project_domain_name = default
+ + user_domain_name = default
+ + project_name = service
+ + username = nova
+ + password = NOVA_PASS
+
+ [vnc]
+ - #enabled = true
+ - #vncserver_listen = 127.0.0.1
+ - #vncserver_proxyclient_address = 127.0.0.1
+ + enabled = true
+ + vncserver_listen = $my_ip
+ + vncserver_proxyclient_address = $my_ip
+
+ [glance]
+ - #api_servers = <None>
+ + api_servers = http://openstack-controller:9292
+
+ [oslo_concurrency]
+ - #lock_path = /tmp
+ + lock_path = /var/lib/nova/tmp
+
+Sync database::
+
+ # su -s /bin/sh -c "nova-manage api_db sync" nova
+ # su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
+ # su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova
+ # su -s /bin/sh -c "nova-manage db sync" nova
+
