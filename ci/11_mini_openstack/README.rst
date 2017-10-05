@@ -481,6 +481,17 @@ Edit /etc/nova/nova.conf::
  + username = placement
  + password = PLACEMENT_PASS
 
+ [neutron]
+ + url = http://openstack-controller:9696
+ + auth_url = http://openstack-controller:35357
+ + auth_type = password
+ + project_domain_name = default
+ + user_domain_name = default
+ + region_name = RegionOne
+ + project_name = service
+ + username = neutron
+ + password = NEUTRON_PASS
+
 Some works for finalizing installation
 --------------------------------------
 
