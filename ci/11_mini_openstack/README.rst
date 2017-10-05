@@ -430,7 +430,7 @@ Nova installation on compute node
 
 Install package::
 
- $ sudo apt-get -y install nova-compute
+ $ sudo apt-get -y install nova-compute neutron-linuxbridge-agent
 
 Edit /etc/hosts::
 
@@ -491,6 +491,18 @@ Edit /etc/nova/nova.conf::
  + project_name = service
  + username = neutron
  + password = NEUTRON_PASS
+
+Edit /etc/neutron/plugins/ml2/linuxbridge_agent.ini::
+
+ [linux_bridge]
+ + physical_interface_mappings = provider:eno1
+
+ [vxlan]
+ + enable_vxlan = false
+
+ [securitygroup]
+ - #firewall_driver = <None>
+ + firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 
 Some works for finalizing installation
 --------------------------------------
