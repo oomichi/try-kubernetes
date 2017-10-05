@@ -204,11 +204,18 @@ Configure Keystone for Nova service::
  $ openstack endpoint create --region RegionOne compute internal http://openstack-controller:8774/v2.1
  $ openstack endpoint create --region RegionOne compute admin http://openstack-controller:8774/v2.1
 
-NOTE: Trying to avoid using placement API
+Configure Keystone for Placement service::
+
+ $ openstack user create --domain default --password PLACEMENT_PASS placement
+ $ openstack role add --project service --user placement admin
+ $ openstack service create --name placement --description "Placement API" placement
+ $ openstack endpoint create --region RegionOne placement public http://openstack-controller:8778 
+ $ openstack endpoint create --region RegionOne placement internal http://openstack-controller:8778 
+ $ openstack endpoint create --region RegionOne placement admin http://openstack-controller:8778 
 
 Install packages::
 
- $ sudo apt-get -y install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler
+ $ sudo apt-get -y install nova-api nova-conductor nova-consoleauth nova-novncproxy nova-scheduler nova-placement-api
 
 Edit /etc/nova/nova.conf::
 
@@ -265,6 +272,17 @@ Edit /etc/nova/nova.conf::
  [oslo_concurrency]
  - #lock_path = /tmp
  + lock_path = /var/lib/nova/tmp
+
+ [placement]
+ - os_region_name = openstack
+ + os_region_name = RegionOne
+ + project_domain_name = Default
+ + project_name = service
+ + auth_type = password
+ + user_domain_name = Default
+ + auth_url = http://openstack-controller:35357/v3
+ + username = placement
+ + password = PLACEMENT_PASS
 
 Sync database::
 
@@ -453,10 +471,51 @@ Edit /etc/nova/nova.conf::
  [oslo_concurrency]
  + lock_path = /var/lib/nova/tmp
 
-Add Nova compute node to cell database
+ [placement]
+ + os_region_name = RegionOne
+ + project_domain_name = Default
+ + project_name = service
+ + auth_type = password
+ + user_domain_name = Default
+ + auth_url = http://openstack-controller:35357/v3
+ + username = placement
+ + password = PLACEMENT_PASS
+
+Some works for finalizing installation
 --------------------------------------
 
 Discover compute hosts by operating the following on controller node::
 
  # su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova
 
+Add compute flavors::
+
+ $ openstack --os-region-name="$REGION_NAME" flavor create --id 1 --ram 512 --disk 1 --vcpus 1 m1.tiny
+ $ openstack --os-region-name="$REGION_NAME" flavor create --id 2 --ram 2048 --disk 20 --vcpus 1 m1.small
+ $ openstack --os-region-name="$REGION_NAME" flavor create --id 3 --ram 4096 --disk 40 --vcpus 2 m1.medium
+ $ openstack --os-region-name="$REGION_NAME" flavor create --id 4 --ram 8192 --disk 80 --vcpus 4 m1.large
+
+Register virtual machine images::
+
+ $ wget http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
+ $ openstack image create --container-format bare --disk-format qcow2 \
+   --file xenial-server-cloudimg-amd64-disk1.img Ubuntu-16.04-x86_64
+
+Prepare to create a virtual machine::
+
+ $ ssh-keygen -q -N ""
+ $ openstack keypair create --public-key ~/.ssh/id_rsa.pub mykey
+ $ openstack security group rule create --proto icmp default
+ $ openstack security group rule create --proto tcp --dst-port 22 default
+ $ openstack network create  --share --external --provider-physical-network provider --provider-network-type flat provider
+ $ openstack subnet create --network provider \
+   --allocation-pool start=192.168.100.100,end=192.168.100.250 \
+   --dns-nameserver 8.8.4.4 --gateway 192.168.100.1 \
+   --subnet-range 192.168.100.0/24 provider
+
+Create a virtual machine::
+
+ $ PROVIDER_NET_ID=`openstack network list | grep provider | awk '{print $2}'`
+ $ openstack server create --flavor m1.tiny --image Ubuntu-16.04-x86_64 \
+   --nic net-id=$PROVIDER_NET_ID --security-group default \
+   --key-name mykey vm01
