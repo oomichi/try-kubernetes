@@ -527,6 +527,6 @@ Prepare to create a virtual machine::
 Create a virtual machine::
 
  $ PROVIDER_NET_ID=`openstack network list | grep provider | awk '{print $2}'`
- $ openstack server create --flavor m1.tiny --image Ubuntu-16.04-x86_64 \
+ $ openstack server create --flavor m1.medium --image Ubuntu-16.04-x86_64 \
    --nic net-id=$PROVIDER_NET_ID --security-group default \
    --key-name mykey vm01
