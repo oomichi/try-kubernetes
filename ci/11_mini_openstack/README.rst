@@ -45,7 +45,7 @@ Install and configure name server for local network::
 
  +      listen-on port 53 { localhost; 192.168.1.0/24; };
  +      allow-query { localhost; 192.168.1.0/24; };
- +      recursion no;
+ +      recursion yes;
 
  $ sudo vi /etc/bind/named.conf
 
