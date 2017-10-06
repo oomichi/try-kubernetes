@@ -87,6 +87,7 @@ Install and configure dhcp server for local network::
  +   option subnet-mask          255.255.255.0;
  +   option broadcast-address    192.168.1.255;
  +   option domain-name-servers  192.168.1.1;
+ +   range 192.168.1.100 192.168.1.200;
  + }
 
 Select the network interface which dhcp server works.
