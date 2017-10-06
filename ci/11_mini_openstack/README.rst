@@ -130,14 +130,14 @@ Initialize Keystone service::
  # keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
  # keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
  # keystone-manage bootstrap --bootstrap-password ADMIN_PASS \
- --bootstrap-admin-url http://openstack-controller:35357/v3/ \
- --bootstrap-internal-url http://openstack-controller:5000/v3/ \
- --bootstrap-public-url http://openstack-controller:5000/v3/ \
+ --bootstrap-admin-url http://iaas-ctrl:35357/v3/ \
+ --bootstrap-internal-url http://iaas-ctrl:5000/v3/ \
+ --bootstrap-public-url http://iaas-ctrl:5000/v3/ \
  --bootstrap-region-id RegionOne
  #
  # vi /etc/apache2/sites-available/000-default.conf
  -         #ServerName www.example.com
- +         #ServerName openstack-controller
+ +         #ServerName iaas-ctrl
  # service apache2 restart
 
 Configure management user and exit for re-login::
@@ -147,7 +147,7 @@ Configure management user and exit for re-login::
  $ echo "export OS_PROJECT_NAME=admin"             >> ~/.bashrc
  $ echo "export OS_USER_DOMAIN_NAME=Default"       >> ~/.bashrc
  $ echo "export OS_PROJECT_DOMAIN_NAME=Default"    >> ~/.bashrc
- $ echo "export OS_AUTH_URL=http://openstack-controller:35357/v3" >> ~/.bashrc
+ $ echo "export OS_AUTH_URL=http://iaas-ctrl:35357/v3" >> ~/.bashrc
  $ echo "export OS_IDENTITY_API_VERSION=3"                        >> ~/.bashrc
  $ exit
 
@@ -177,9 +177,9 @@ Configure Keystone for Glance::
  $ openstack user create --domain default --password GLANCE_PASS glance
  $ openstack role add --project service --user glance admin
  $ openstack service create --name glance --description "OpenStack Image" image
- $ openstack endpoint create --region RegionOne image public http://openstack-controller:9292
- $ openstack endpoint create --region RegionOne image internal http://openstack-controller:9292
- $ openstack endpoint create --region RegionOne image admin http://openstack-controller:9292
+ $ openstack endpoint create --region RegionOne image public http://iaas-ctrl:9292
+ $ openstack endpoint create --region RegionOne image internal http://iaas-ctrl:9292
+ $ openstack endpoint create --region RegionOne image admin http://iaas-ctrl:9292
  
 Install and configure Glance::
 
@@ -189,14 +189,14 @@ Edit /etc/glance/glance-api.conf::
 
  $ sudo vi /etc/glance/glance-api.conf
  - #connection = <None>
- + connection = mysql+pymysql://glance:GLANCE_DBPASS@openstack-controller/glance
+ + connection = mysql+pymysql://glance:GLANCE_DBPASS@iaas-ctrl/glance
 
  [..]
 
  [keystone_authtoken]
- + auth_uri = http://localhost:5000
- + auth_url = http://localhost:35357
- + memcached_servers = localhost:11211
+ + auth_uri = http://iaas-ctrl:5000
+ + auth_url = http://iaas-ctrl:35357
+ + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -222,12 +222,12 @@ Edit /etc/glance/glance-registry.conf::
 
  $ sudo vi /etc/glance/glance-registry.conf
  - #connection = <None>
- + connection = mysql+pymysql://glance:GLANCE_DBPASS@openstack-controller/glance
+ + connection = mysql+pymysql://glance:GLANCE_DBPASS@iaas-ctrl/glance
 
  [keystone_authtoken]
- + auth_uri = http://localhost:5000
- + auth_url = http://localhost:35357
- + memcached_servers = localhost:11211
+ + auth_uri = http://iaas-ctrl:5000
+ + auth_url = http://iaas-ctrl:35357
+ + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -271,18 +271,18 @@ Configure Keystone for Nova service::
  $ openstack user create --domain default --password NOVA_PASS nova
  $ openstack role add --project service --user nova admin
  $ openstack service create --name nova --description "OpenStack Compute" compute
- $ openstack endpoint create --region RegionOne compute public http://openstack-controller:8774/v2.1
- $ openstack endpoint create --region RegionOne compute internal http://openstack-controller:8774/v2.1
- $ openstack endpoint create --region RegionOne compute admin http://openstack-controller:8774/v2.1
+ $ openstack endpoint create --region RegionOne compute public http://iaas-ctrl:8774/v2.1
+ $ openstack endpoint create --region RegionOne compute internal http://iaas-ctrl:8774/v2.1
+ $ openstack endpoint create --region RegionOne compute admin http://iaas-ctrl:8774/v2.1
 
 Configure Keystone for Placement service::
 
  $ openstack user create --domain default --password PLACEMENT_PASS placement
  $ openstack role add --project service --user placement admin
  $ openstack service create --name placement --description "Placement API" placement
- $ openstack endpoint create --region RegionOne placement public http://openstack-controller:8778 
- $ openstack endpoint create --region RegionOne placement internal http://openstack-controller:8778 
- $ openstack endpoint create --region RegionOne placement admin http://openstack-controller:8778 
+ $ openstack endpoint create --region RegionOne placement public http://iaas-ctrl:8778 
+ $ openstack endpoint create --region RegionOne placement internal http://iaas-ctrl:8778 
+ $ openstack endpoint create --region RegionOne placement admin http://iaas-ctrl:8778 
 
 Install packages::
 
@@ -293,17 +293,17 @@ Edit /etc/nova/nova.conf::
  $ sudo vi /etc/nova/nova.conf
  [api_database]
  - connection = sqlite:////var/lib/nova/nova_api.sqlite
- + connection = mysql+pymysql://nova:NOVA_DBPASS@openstack-controller/nova_api
+ + connection = mysql+pymysql://nova:NOVA_DBPASS@iaas-ctrl/nova_api
 
  [database]
  - connection = sqlite:////var/lib/nova/nova.sqlite
- + connection = mysql+pymysql://nova:NOVA_DBPASS@openstack-controller/nova
+ + connection = mysql+pymysql://nova:NOVA_DBPASS@iaas-ctrl/nova
 
  [DEFAULT]
  - log_dir = /var/log/nova
 
  - #transport_url = <None>
- + transport_url = rabbit://openstack:RABBIT_PASS@openstack-controller
+ + transport_url = rabbit://openstack:RABBIT_PASS@iaas-ctrl
 
  - #auth_strategy = keystone
  + auth_strategy = keystone
@@ -318,9 +318,9 @@ Edit /etc/nova/nova.conf::
  + firewall_driver = nova.virt.firewall.NoopFirewallDriver
 
  [keystone_authtoken]
- + auth_uri = http://localhost:5000
- + auth_url = http://localhost:35357
- + memcached_servers = localhost:11211
+ + auth_uri = http://iaas-ctrl:5000
+ + auth_url = http://iaas-ctrl:35357
+ + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -338,7 +338,7 @@ Edit /etc/nova/nova.conf::
 
  [glance]
  - #api_servers = <None>
- + api_servers = http://openstack-controller:9292
+ + api_servers = http://iaas-ctrl:9292
 
  [oslo_concurrency]
  - #lock_path = /tmp
@@ -351,7 +351,7 @@ Edit /etc/nova/nova.conf::
  + project_name = service
  + auth_type = password
  + user_domain_name = Default
- + auth_url = http://openstack-controller:35357/v3
+ + auth_url = http://iaas-ctrl:35357/v3
  + username = placement
  + password = PLACEMENT_PASS
 
@@ -387,9 +387,9 @@ Configure Keystone for Neutron service::
  $ openstack user create --domain default --password NEUTRON_PASS neutron
  $ openstack role add --project service --user neutron admin
  $ openstack service create --name neutron --description "OpenStack Networking" network
- $ openstack endpoint create --region RegionOne network public http://openstack-controller:9696
- $ openstack endpoint create --region RegionOne network internal http://openstack-controller:9696
- $ openstack endpoint create --region RegionOne network admin http://openstack-controller:9696
+ $ openstack endpoint create --region RegionOne network public http://iaas-ctrl:9696
+ $ openstack endpoint create --region RegionOne network internal http://iaas-ctrl:9696
+ $ openstack endpoint create --region RegionOne network admin http://iaas-ctrl:9696
 
 Install packages::
 
@@ -400,16 +400,16 @@ Edit /etc/neutron/neutron.conf::
  $ sudo vi /etc/neutron/neutron.conf
  [database]
  - connection = sqlite:////var/lib/neutron/neutron.sqlite
- + connection = mysql+pymysql://neutron:NEUTRON_DBPASS@openstack-controller/neutron
+ + connection = mysql+pymysql://neutron:NEUTRON_DBPASS@iaas-ctrl/neutron
 
  [DEFAULT]
  - #transport_url = <None>
- + transport_url = rabbit://openstack:RABBIT_PASS@openstack-controller
+ + transport_url = rabbit://openstack:RABBIT_PASS@iaas-ctrl
 
  [keystone_authtoken]
- + auth_uri = http://localhost:5000
- + auth_url = http://localhost:35357
- + memcached_servers = localhost:11211
+ + auth_uri = http://iaas-ctrl:5000
+ + auth_url = http://iaas-ctrl:35357
+ + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -418,7 +418,7 @@ Edit /etc/neutron/neutron.conf::
  + password = NEUTRON_PASS
 
  [nova]
- + auth_url = http://openstack-controller:35357
+ + auth_url = http://iaas-ctrl:35357
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -462,15 +462,15 @@ Edit /etc/neutron/metadata_agent.ini::
 
  $ sudo vi /etc/neutron/metadata_agent.ini
  [DEFAULT]
- + nova_metadata_ip = openstack-controller
+ + nova_metadata_ip = iaas-ctrl
  + metadata_proxy_shared_secret = METADATA_SECRET
 
 Edit /etc/nova/nova.conf::
 
  $ sudo vi /etc/nova/nova.conf
  [neutron]
- + url = http://openstack-controller:9696
- + auth_url = http://openstack-controller:35357
+ + url = http://iaas-ctrl:9696
+ + auth_url = http://iaas-ctrl:35357
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -506,7 +506,7 @@ Install package::
 Edit /etc/hosts::
 
  $ sudo vi /etc/hosts
- + 192.168.1.1  openstack-controller     <<<Edit here after getting nic>>>
+ + 192.168.1.1  iaas-ctrl     <<<Edit here after getting nic>>>
 
 Edit /etc/nova/nova.conf::
 
@@ -514,15 +514,15 @@ Edit /etc/nova/nova.conf::
  - log_dir = /var/log/nova
 
  - #transport_url = <None>
- + transport_url = rabbit://openstack:RABBIT_PASS@openstack-controller
+ + transport_url = rabbit://openstack:RABBIT_PASS@iaas-ctrl
 
  - #my_ip = <host_ipv4>
  + my_ip = 192.168.1.2  <<Change here after local network>>
 
  [keystone_authtoken]
- + auth_uri = http://openstack-controller:5000
- + auth_url = http://openstack-controller:35357
- + memcached_servers = openstack-controller:11211
+ + auth_uri = http://iaas-ctrl:5000
+ + auth_url = http://iaas-ctrl:35357
+ + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -533,10 +533,10 @@ Edit /etc/nova/nova.conf::
  [vnc]
  + vncserver_listen = 0.0.0.0
  + vncserver_proxyclient_address = $my_ip
- + novncproxy_base_url = http://openstack-controller:6080/vnc_auto.html
+ + novncproxy_base_url = http://iaas-ctrl:6080/vnc_auto.html
 
  [glance]
- + api_servers = http://openstack-controller:9292
+ + api_servers = http://iaas-ctrl:9292
 
  [oslo_concurrency]
  + lock_path = /var/lib/nova/tmp
@@ -547,13 +547,13 @@ Edit /etc/nova/nova.conf::
  + project_name = service
  + auth_type = password
  + user_domain_name = Default
- + auth_url = http://openstack-controller:35357/v3
+ + auth_url = http://iaas-ctrl:35357/v3
  + username = placement
  + password = PLACEMENT_PASS
 
  [neutron]
- + url = http://openstack-controller:9696
- + auth_url = http://openstack-controller:35357
+ + url = http://iaas-ctrl:9696
+ + auth_url = http://iaas-ctrl:35357
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -565,12 +565,12 @@ Edit /etc/nova/nova.conf::
 Edit /etc/neutron/neutron.conf::
 
  [DEFAULT]
- + transport_url = rabbit://openstack:RABBIT_PASS@openstack-controller
+ + transport_url = rabbit://openstack:RABBIT_PASS@iaas-ctrl
 
  [keystone_authtoken]
- + auth_uri = http://openstack-controller:5000
- + auth_url = http://openstack-controller:35357
- + memcached_servers = openstack-controller:11211
+ + auth_uri = http://iaas-ctrl:5000
+ + auth_url = http://iaas-ctrl:35357
+ + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
