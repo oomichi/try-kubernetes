@@ -74,6 +74,42 @@ Install and configure name server for local network::
 
  $ sudo systemctl enable bind9
 
+Install and configure NTP server::
+
+ $ sudo apt-get -y install chrony
+ $ sudo vi /etc/chrony/chrony.conf
+ + allow 192.168.1.0/24
+
+Enable SNAT for connecting to the internet from local network machines::
+
+ $ sudo apt-get install ufw
+ $ sudo vi /etc/sysctl.conf
+ # Uncomment the next line to enable packet forwarding for IPv4
+ - #net.ipv4.ip_forward=1
+ + net.ipv4.ip_forward=1
+
+ $ sudo vi /etc/default/ufw
+ - DEFAULT_INPUT_POLICY="DROP"
+ + DEFAULT_INPUT_POLICY="ACCEPT"
+
+ - DEFAULT_FORWARD_POLICY="DROP"
+ + DEFAULT_FORWARD_POLICY="ACCEPT"
+
+ $ sudo vi /etc/ufw/before.rules
+ + # NAT table rules
+ + *nat
+ + :POSTROUTING ACCEPT [0:0]
+ + :PREROUTING ACCEPT [0:0]
+ +
+ + -A POSTROUTING -s 192.168.1.0/24 -j MASQUERADE
+ +
+ + COMMIT
+
+ # Don't delete these required lines, otherwise there will be errors
+ *filter
+
+ $ sudo ufw enable
+
 Install and configure dhcp server for local network::
 
  $ sudo apt-get -y install isc-dhcp-server
