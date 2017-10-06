@@ -9,19 +9,15 @@ Create hosts file::
  [node]
  192.168.0.2
 
-Change hostname::
-
- $ ansible-playbook -i ./hosts --ask-become-pass 01_change_hostname.yaml
-
 Install basic packages::
 
- $ ansible-playbook -i ./hosts --ask-become-pass 02_install_packages.yaml
+ $ ansible-playbook -i ./hosts --ask-become-pass 01_install_packages.yaml
 
 Initialize kube-master node::
 
- $ ansible-playbook -i ./hosts --ask-become-pass 03_initialize_k8s_master.yaml
+ $ ansible-playbook -i ./hosts --ask-become-pass 02_initialize_k8s_master.yaml
 
 Initialize kube-node node::
 
- $ ansible-playbook -i ./hosts --ask-become-pass 04_initialize_k8s_node.yaml
+ $ ansible-playbook -i ./hosts --ask-become-pass 03_initialize_k8s_node.yaml
 

@@ -25,6 +25,10 @@ How to use
 
    $ 02_install_ssh_key.sh 192.168.0.1
 
+5. Change hostname::
+
+ $ ansible-playbook -i ./hosts --ask-become-pass 03_change_hostname.yaml
+
 References
 ----------
 * http://qiita.com/areaz_/items/c9075f7a0b3e147e92f2
