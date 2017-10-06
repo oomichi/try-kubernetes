@@ -25,6 +25,77 @@ Operate the following commands on all OpenStack nodes to enable the Pike version
  $ sudo apt-get update
  $ sudo apt-get -y dist-upgrade
 
+Controller node
+---------------
+
+Configure local (= OpenStack side) network interface, enp2s0 depends on envs(need to check unconfigured nic with `ifconfig -a`)::
+
+ $ sudo vi /etc/network/interfaces
+ + auto enp2s0
+ + iface enp2s0 inet static
+ + address 192.168.1.1
+ + netmask 255.255.255.0
+
+Install and configure name server for local network::
+
+ $ sudo apt-get -y install bind9
+ $ sudo vi /etc/bind/named.conf.options
+ options {
+        directory "/var/cache/bind";
+
+ +      listen-on port 53 { localhost; 192.168.1.0/24; };
+ +      allow-query { localhost; 192.168.1.0/24; };
+ +      recursion no;
+
+ $ sudo vi /etc/bind/named.conf
+
+ - include "/etc/bind/named.conf.default-zones";
+ + include "/etc/bind/named.conf.iaas-zones";
+
+ $ sudo vi /etc/bind/named.conf.iaas-zones
+ + zone "iaas.net" IN {
+ +   type master;
+ +   file "iaas.net.zone";
+ + };
+
+ $ sudo vi /var/cache/bind/iaas.net.zone
+ + $TTL 86400
+ + 
+ + @ IN SOA iaas.net root.iaas.net (
+ +   2016043008
+ +   3600
+ +   900
+ +   604800
+ +   86400
+ + )
+ +
+ + @            IN NS iaas-ctrl
+ + iaas-ctrl    IN A  192.168.1.1
+
+ $ sudo systemctl enable bind9
+
+Install and configure dhcp server for local network::
+
+ $ sudo apt-get -y install isc-dhcp-server
+ $ sudo vi /etc/dhcp/dhcpd.conf
+
+ - #authoritative;
+ + authoritative;
+
+ + subnet 192.168.1.0 netmask 255.255.255.0 {
+ +   option routers              192.168.1.1;
+ +   option subnet-mask          255.255.255.0;
+ +   option broadcast-address    192.168.1.255;
+ +   option domain-name-servers  192.168.1.1;
+ + }
+
+Select the network interface which dhcp server works.
+This is SUPER important setting to avoid breaking down your (company) network. Local (OpenStack side) interface should be specified::
+
+ $ sudo vi /etc/default/isc-dhcp-server
+ - INTERFACES=""
+ + INTERFACES="enp2s0"
+
 Keystone installation on controller node
 ----------------------------------------
 
