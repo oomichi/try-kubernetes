@@ -14,6 +14,8 @@
       - libapache2-mod-wsgi
       - python-mysqldb
       - python-openstackclient
+  - name: Set net.ipv4.ip_forward
+    shell: sed -i s/"utf8mb4"/"utf8"/ /etc/mysql/mariadb.conf.d/50-client.cnf
   - name: Keystone create database table
     mysql_db:
       name: keystone
