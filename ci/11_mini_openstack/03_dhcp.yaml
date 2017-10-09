@@ -1,0 +1,29 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - python-pexpect
+  - name: Copy dhcpd.conf
+    template:
+      src: dhcp/dhcpd.conf
+      dest: /etc/dhcp/dhcpd.conf
+      owner: root
+      group: root
+      mode: '0644'
+  - name: Copy isc-dhcp-server
+    template:
+      src: dhcp/isc-dhcp-server
+      dest: /etc/default/isc-dhcp-server
+      owner: root
+      group: root
+      mode: '0644'
+  - name: Enable ufw
+    expect:
+      command: ufw enable
+      responses:
+        "Command may disrupt existing ssh connections. Proceed with operation \\(y|n\\)? ": "y"
+

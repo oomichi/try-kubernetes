@@ -1,0 +1,4 @@
+zone "iaas.net" IN {
+  type master;
+  file "iaas.net.zone";
+};

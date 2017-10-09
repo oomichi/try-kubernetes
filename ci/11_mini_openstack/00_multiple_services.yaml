@@ -1,0 +1,25 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - bind9
+      - chrony
+      - ufw
+      - isc-dhcp-server
+  - name: Add nic config 1
+    shell: echo "auto enp2s0" >> /etc/network/interfaces
+  - name: Add nic config 1
+    shell: echo "iface enp2s0 inet static" >> /etc/network/interfaces
+  - name: Add nic config 1
+    shell: echo "address 192.168.1.1" >> /etc/network/interfaces
+  - name: Add nic config 1
+    shell: echo "netmask 255.255.255.0" >> /etc/network/interfaces
+  - name: reboot
+    shell: sleep 2 && shutdown -r now
+    async: 1
+    poll: 0
+    ignore_errors: true

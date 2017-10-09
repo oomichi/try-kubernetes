@@ -1,0 +1,33 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Copy named.conf.options
+    template:
+      src: bind9/named.conf.options
+      dest: /etc/bind/named.conf.options
+      owner: root
+      group: bind
+      mode: '0644'
+  - name: Set named.conf.iaas-zones
+    shell: sed -i s/"named.conf.default-zones"/"named.conf.iaas-zones"/ /etc/bind/named.conf
+  - name: Copy named.conf.iaas-zones
+    template:
+      src: bind9/named.conf.iaas-zones
+      dest: /etc/bind/named.conf.iaas-zones
+      owner: root
+      group: bind
+      mode: '0644'
+  - name: Copy iaas.net.zone
+    template:
+      src: bind9/iaas.net.zone
+      dest: /var/cache/bind/iaas.net.zone
+      owner: root
+      group: bind
+      mode: '0644'
+  - name: Enable bind9
+    shell: systemctl enable bind9
+  - name: Config NTP
+    shell: echo "allow 192.168.1.0/24" >> /etc/chrony/chrony.conf
+

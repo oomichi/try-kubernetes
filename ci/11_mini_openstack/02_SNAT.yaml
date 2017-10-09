@@ -1,0 +1,28 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - python-pexpect
+  - name: Set net.ipv4.ip_forward
+    shell: sed -i s/"#net.ipv4.ip_forward=1"/"net.ipv4.ip_forward=1"/ /etc/sysctl.conf
+  - name: Set DEFAULT_INPUT_POLICY
+    shell: sed -i s/'DEFAULT_INPUT_POLICY="DROP"'/'DEFAULT_INPUT_POLICY="ACCEPT"'/ /etc/default/ufw
+  - name: Set DEFAULT_FORWARD_POLICY
+    shell: sed -i s/'DEFAULT_FORWARD_POLICY="DROP"'/'DEFAULT_FORWARD_POLICY="ACCEPT"'/ /etc/default/ufw
+  - name: Copy before.rules
+    template:
+      src: ufw/before.rules
+      dest: /etc/ufw/before.rules
+      owner: root
+      group: root
+      mode: '0644'
+  - name: Enable ufw
+    expect:
+      command: ufw enable
+      responses:
+        "Command may disrupt existing ssh connections. Proceed with operation \\(y|n\\)? ": "y"
+

@@ -1,0 +1,12 @@
+$TTL 86400
+
+@ IN SOA iaas.net root.iaas.net (
+  2016043008
+  3600
+  900
+  604800
+  86400
+)
+
+@            IN NS iaas-ctrl
+iaas-ctrl    IN A  192.168.1.1
