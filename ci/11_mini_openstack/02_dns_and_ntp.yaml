@@ -3,6 +3,11 @@
   become_user: root
   user: ubuntu
   tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - bind9
+      - chrony
   - name: Copy named.conf.options
     template:
       src: bind9/named.conf.options

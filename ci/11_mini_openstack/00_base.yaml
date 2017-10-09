@@ -1,0 +1,19 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - python-pexpect
+      - software-properties-common
+  - name: Add cloud-archive
+    expect:
+      command: add-apt-repository cloud-archive:pike
+      responses:
+        "Press \\[ENTER\\] to continue or ctrl-c to cancel adding it": ""
+  - name: Update apt
+    shell: apt-get update
+  - name: Upgrade package
+    shell: apt-get -y dist-upgrade

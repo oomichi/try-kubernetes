@@ -6,8 +6,6 @@
   - name: Install packages
     apt: name={{item}} state=present update_cache=yes
     with_items:
-      - bind9
-      - chrony
       - ufw
       - isc-dhcp-server
   - name: Add nic config 1

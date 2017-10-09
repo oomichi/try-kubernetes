@@ -1,0 +1,50 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Keystone Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - mariadb-server
+      - python-pymysql
+      - vim
+      - keystone
+      - apache2
+      - libapache2-mod-wsgi
+      - python-mysqldb
+      - python-openstackclient
+  - name: Keystone create database table
+    mysql_db:
+      name: keystone
+      state: present
+  - name: Keystone create database user
+    mysql_user:
+      name: keystone
+      password: KEYSTONE_DBPASS
+      priv: 'keystone.*:ALL'
+      state: present
+      host: 'localhost'
+  - name: Keystone create database user
+    mysql_user:
+      name: keystone
+      password: KEYSTONE_DBPASS
+      priv: 'keystone.*:ALL'
+      state: present
+      host: '%'
+  - name: Keystone configuration file copy
+    template:
+      src: keystone/keystone.conf
+      dest: /etc/keystone/keystone.conf
+      owner: root
+      group: root
+      mode: '0644'
+  - name: Keystone add adminrc setting
+    shell: echo "source /home/ubuntu/adminrc" >> /home/ubuntu/.bashrc
+  - name: Keystone adminrc file copy
+    template:
+      src: adminrc
+      dest: /home/ubuntu/adminrc
+      owner: ubuntu
+      group: ubuntu
+      mode: '0644'
