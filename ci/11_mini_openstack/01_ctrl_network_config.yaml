@@ -3,11 +3,6 @@
   become_user: root
   user: ubuntu
   tasks:
-  - name: Install packages
-    apt: name={{item}} state=present update_cache=yes
-    with_items:
-      - ufw
-      - isc-dhcp-server
   - name: Add nic config 1
     shell: echo "auto enp2s0" >> /etc/network/interfaces
   - name: Add nic config 1
