@@ -157,9 +157,6 @@ Edit configuration file::
  $ sudo vi
  - connection = sqlite:////var/lib/keystone/keystone.db
  + connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@localhost/keystone
- [..]
- - #provider = fernet
- + provider = fernet
 
 Initialize Keystone service::
 
