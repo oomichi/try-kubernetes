@@ -239,20 +239,6 @@ Edit /etc/glance/glance-api.conf::
  + username = glance
  + password = GLANCE_PASS
 
- [..]
-
- - #flavor = keystone
- + flavor = keystone
-
- [..]
-
- - #stores = file,http
- - #default_store = file
- - #filesystem_store_datadir = /var/lib/glance/images
- + stores = file,http
- + default_store = file
- + filesystem_store_datadir = /var/lib/glance/images
-
 Edit /etc/glance/glance-registry.conf::
 
  $ sudo vi /etc/glance/glance-registry.conf
@@ -269,11 +255,6 @@ Edit /etc/glance/glance-registry.conf::
  + project_name = service
  + username = glance
  + password = GLANCE_PASS
-
- [..]
-
- - #flavor = keystone
- + flavor = keystone
 
 DB sync::
 
