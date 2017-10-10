@@ -15,8 +15,15 @@
       owner: root
       group: root
       mode: '0644'
-  - name: Set my ip address
-    shell: MY_IP=`ifconfig | grep "inet addr:192.168" | awk '{print $2}' | awk -F: '{print $2}'`; sed -i s/"my_ip = 192.168.1.100"/"my_ip = $MY_IP"/ /etc/nova/nova.conf
+  - name: copy sed.sh
+    template:
+      src: nova/sed.sh
+      dest: /tmp/sed.sh
+      owner: root
+      group: root
+      mode: '0700'
+  - name: run sed.sh
+    shell: /tmp/sed.sh
   - name: copy neutron.conf
     template:
       src: neutron/neutron.conf
