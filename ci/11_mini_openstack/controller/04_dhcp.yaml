@@ -22,9 +22,4 @@
       owner: root
       group: root
       mode: '0644'
-  - name: Enable ufw
-    expect:
-      command: ufw enable
-      responses:
-        "Command may disrupt existing ssh connections. Proceed with operation \\(y|n\\)? ": "y"
 
