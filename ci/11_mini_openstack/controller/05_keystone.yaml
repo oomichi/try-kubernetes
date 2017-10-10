@@ -65,9 +65,6 @@
     shell: keystone-manage bootstrap --bootstrap-password ADMIN_PASS --bootstrap-admin-url http://iaas-ctrl:35357/v3/ --bootstrap-internal-url http://iaas-ctrl:5000/v3/ --bootstrap-public-url http://iaas-ctrl:5000/v3/ --bootstrap-region-id RegionOne
   - name: Set apache
     shell: sed -i s/"#ServerName www.example.com"/"ServerName iaas-ctrl"/ /etc/apache2/sites-available/000-default.conf
-  - name: reboot
-    shell: sleep 2 && shutdown -r now
-    async: 1
-    poll: 0
-    ignore_errors: true
+  - name: apache reboot
+    shell: service apache2 restart
 
