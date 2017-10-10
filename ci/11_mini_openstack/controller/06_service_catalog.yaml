@@ -21,4 +21,99 @@
     shell: source adminrc; openstack role add --project k8s --user k8s user
     args:
       executable: /bin/bash
-
+  - name: create glance user
+    shell: source adminrc; openstack user create --domain default --password GLANCE_PASS glance
+    args:
+      executable: /bin/bash
+  - name: add glance role
+    shell: source adminrc; openstack role add --project service --user glance admin
+    args:
+      executable: /bin/bash
+  - name: create glance service
+    shell: source adminrc; openstack service create --name glance --description "OpenStack Image" image
+    args:
+      executable: /bin/bash
+  - name: create glance public endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne image public http://iaas-ctrl:9292
+    args:
+      executable: /bin/bash
+  - name: create glance internal endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne image internal http://iaas-ctrl:9292
+    args:
+      executable: /bin/bash
+  - name: create glance admin endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne image admin http://iaas-ctrl:9292
+    args:
+      executable: /bin/bash
+  - name: create nova user
+    shell: source adminrc; openstack user create --domain default --password NOVA_PASS nova
+    args:
+      executable: /bin/bash
+  - name: add nova user role
+    shell: source adminrc; openstack role add --project service --user nova admin 
+    args:
+      executable: /bin/bash
+  - name: create nova service
+    shell: source adminrc; openstack service create --name nova --description "OpenStack Compute" compute
+    args:
+      executable: /bin/bash
+  - name: create nova public endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne compute public http://iaas-ctrl:8774/v2.1
+    args:
+      executable: /bin/bash
+  - name: create nova internal endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne compute internal http://iaas-ctrl:8774/v2.1
+    args:
+      executable: /bin/bash
+  - name: create nova admin endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne compute admin http://iaas-ctrl:8774/v2.1
+    args:
+      executable: /bin/bash
+  - name: create placement user
+    shell: source adminrc; openstack user create --domain default --password PLACEMENT_PASS placement
+    args:
+      executable: /bin/bash
+  - name: add placement user role
+    shell: source adminrc; openstack role add --project service --user placement admin
+    args:
+      executable: /bin/bash
+  - name: create placement service
+    shell: source adminrc; openstack service create --name placement --description "Placement API" placement
+    args:
+      executable: /bin/bash
+  - name: create placement public endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne placement public http://iaas-ctrl:8778
+    args:
+      executable: /bin/bash
+  - name: create placement internal endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne placement internal http://iaas-ctrl:8778
+    args:
+      executable: /bin/bash
+  - name: create placement admin endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne placement admin http://iaas-ctrl:8778
+    args:
+      executable: /bin/bash
+  - name: create neuron user
+    shell: source adminrc; openstack user create --domain default --password NEUTRON_PASS neutron
+    args:
+      executable: /bin/bash
+  - name: add neutron user role
+    shell: source adminrc; openstack role add --project service --user neutron admin
+    args:
+      executable: /bin/bash
+  - name: create neutron service
+    shell: source adminrc; openstack service create --name neutron --description "OpenStack Networking" network
+    args:
+      executable: /bin/bash
+  - name: create neutron public endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne network public http://iaas-ctrl:9696
+    args:
+      executable: /bin/bash
+  - name: create neutron internal endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne network internal http://iaas-ctrl:9696
+    args:
+      executable: /bin/bash
+  - name: create neutron admin endpoint
+    shell: source adminrc; openstack endpoint create --region RegionOne network admin http://iaas-ctrl:9696
+    args:
+      executable: /bin/bash
