@@ -132,7 +132,7 @@ This is SUPER important setting to avoid breaking down your (company) network. L
 
  $ sudo vi /etc/default/isc-dhcp-server
  - INTERFACES=""
- + INTERFACES="enp2s0"
+ + INTERFACES="enp2s0"                <<<Change enp2s0 for your env>>>
 
 Keystone installation on controller node
 ----------------------------------------
@@ -443,6 +443,9 @@ Edit /etc/neutron/neutron.conf::
  + username = nova
  + password = NOVA_PASS
 
+ [agent]
+ +root_helper = sudo /usr/bin/neutron-rootwrap /etc/neutron/rootwrap.conf
+
 Edit /etc/neutron/plugins/ml2/ml2_conf.ini::
 
  $ sudo vi /etc/neutron/plugins/ml2/ml2_conf.ini
@@ -459,7 +462,7 @@ Edit /etc/neutron/plugins/ml2/linuxbridge_agent.ini::
 
  $ sudo vi /etc/neutron/plugins/ml2/linuxbridge_agent.ini
  [linux_bridge]
- + physical_interface_mappings = provider:PROVIDER_INTERFACE_NAME
+ + physical_interface_mappings = provider:enp2s0   <<<Change enp2s0 for your env>>>
 
  [vxlan]
  + enable_vxlan = false
@@ -588,6 +591,9 @@ Edit /etc/neutron/neutron.conf::
  + project_name = service
  + username = neutron
  + password = NEUTRON_PASS
+
+ [agent]
+ +root_helper = sudo /usr/bin/neutron-rootwrap /etc/neutron/rootwrap.conf
 
 Edit /etc/neutron/plugins/ml2/linuxbridge_agent.ini::
 
