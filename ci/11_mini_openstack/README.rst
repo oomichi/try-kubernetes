@@ -580,6 +580,7 @@ Edit /etc/neutron/neutron.conf::
 
  [DEFAULT]
  + transport_url = rabbit://openstack:RABBIT_PASS@iaas-ctrl
+ + service_plugins = neutron.services.l3_router.l3_router_plugin.L3RouterPlugin
 
  [keystone_authtoken]
  + auth_uri = http://iaas-ctrl:5000
