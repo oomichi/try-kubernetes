@@ -1,4 +1,4 @@
-- hosts: iaas-ctrl
+- hosts: all
   become: true
   become_user: root
   user: ubuntu
