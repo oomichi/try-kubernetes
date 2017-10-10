@@ -1,0 +1,48 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - glance
+  - name: delete database table
+    mysql_db:
+      name: glance
+      state: absent
+  - name: create database table
+    mysql_db:
+      name: glance
+      state: present
+      encoding: utf8
+  - name: create database user
+    mysql_user:
+      name: glance
+      password: GLANCE_DBPASS
+      priv: 'glance.*:ALL'
+      state: present
+      host: 'localhost'
+  - name: create database user
+    mysql_user:
+      name: glance
+      password: GLANCE_DBPASS
+      priv: 'glance.*:ALL'
+      state: present
+      host: '%'
+  - name: copy api configuration file
+    template:
+      src: glance/glance-common.conf
+      dest: /etc/glance/glance-api.conf
+      owner: root
+      group: root
+      mode: '0644'
+  - name: copy registry configuration file
+    template:
+      src: glance/glance-common.conf
+      dest: /etc/glance/glance-registry.conf
+      owner: root
+      group: root
+      mode: '0644'
+  - name: db_sync
+    shell: su -s /bin/sh -c "glance-manage db_sync" glance
