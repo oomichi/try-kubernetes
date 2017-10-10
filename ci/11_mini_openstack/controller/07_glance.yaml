@@ -23,6 +23,7 @@
       priv: 'glance.*:ALL'
       state: present
       host: 'localhost'
+      append_privs: yes
   - name: create database user
     mysql_user:
       name: glance
@@ -30,6 +31,7 @@
       priv: 'glance.*:ALL'
       state: present
       host: '%'
+      append_privs: yes
   - name: copy api configuration file
     template:
       src: glance/glance-common.conf

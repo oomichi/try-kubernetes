@@ -30,6 +30,7 @@
       priv: 'keystone.*:ALL'
       state: present
       host: 'localhost'
+      append_privs: yes
   - name: Keystone create database user
     mysql_user:
       name: keystone
@@ -37,6 +38,7 @@
       priv: 'keystone.*:ALL'
       state: present
       host: '%'
+      append_privs: yes
   - name: Keystone configuration file copy
     template:
       src: keystone/keystone.conf
