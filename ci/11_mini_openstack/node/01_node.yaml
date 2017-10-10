@@ -21,7 +21,7 @@
       dest: /tmp/sed.sh
       owner: root
       group: root
-      mode: '0700'
+      mode: '0755'
   - name: run sed.sh
     shell: /tmp/sed.sh
     args:
