@@ -1,0 +1,37 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - nova-compute
+      - neutron-linuxbridge-agent
+  - name: copy nova.conf
+    template:
+      src: nova/nova.conf
+      dest: /etc/nova/nova.conf
+      owner: root
+      group: root
+      mode: '0644'
+  - name: copy neutron.conf
+    template:
+      src: neutron/neutron.conf
+      dest: /etc/neutron/neutron.conf
+      owner: root
+      group: root
+      mode: '0644'
+  - name: copy linuxbridge_agent.ini
+    template:
+      src: neutron/linuxbridge_agent.ini
+      dest: /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+      owner: root
+      group: root
+      mode: '0644'
+  - name: reboot
+    shell: sleep 2 && shutdown -r now
+    async: 1
+    poll: 0
+    ignore_errors: true
+
