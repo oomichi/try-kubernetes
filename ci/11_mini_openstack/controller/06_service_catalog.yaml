@@ -1,0 +1,24 @@
+- hosts: iaas-ctrl
+  user: ubuntu
+  tasks:
+  - name: create service project
+    shell: source adminrc; openstack project create --domain default --description "Service Project" service
+    args:
+      executable: /bin/bash
+  - name: create k8s project
+    shell: source adminrc; openstack project create --domain default --description "Kubernetes Project" k8s
+    args:
+      executable: /bin/bash
+  - name: create k8s user
+    shell: source adminrc; openstack user create --domain default --password K8S_PASS k8s
+    args:
+      executable: /bin/bash
+  - name: add user role
+    shell: source adminrc; openstack role create user
+    args:
+      executable: /bin/bash
+  - name: add user k8s role
+    shell: source adminrc; openstack role add --project k8s --user k8s user
+    args:
+      executable: /bin/bash
+
