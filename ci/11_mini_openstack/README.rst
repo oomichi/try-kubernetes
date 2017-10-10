@@ -519,11 +519,6 @@ Install package::
 
  $ sudo apt-get -y install nova-compute neutron-linuxbridge-agent
 
-Edit /etc/hosts::
-
- $ sudo vi /etc/hosts
- + 192.168.1.1  iaas-ctrl     <<<Edit here after getting nic>>>
-
 Edit /etc/nova/nova.conf::
 
  [DEFAULT]
