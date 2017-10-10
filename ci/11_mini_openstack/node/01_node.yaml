@@ -16,15 +16,15 @@
       group: root
       mode: '0644'
   - name: get my ip address
-    shell: ifconfig | grep 'inet addr:192.168.1.' | awk '{print $2}' | awk -F: '{print $2}'
+    shell: ifconfig | grep 'inet addr:192\.168\.1\.' | awk '{print $2}' | awk -F':' '{print $2}'
     register: myip
     args:
       executable: /bin/bash
   - name: replace my ip address
     replace:
-      path: /etc/nova/nova.conf
+      name: /etc/nova/nova.conf
       regexp: 'my_ip ='
-      replace: '\1my_ip = {{myip.stdout}}\2'
+      replace: 'my_ip = {{myip.stdout}}'
   - name: copy neutron.conf
     template:
       src: neutron/neutron.conf
