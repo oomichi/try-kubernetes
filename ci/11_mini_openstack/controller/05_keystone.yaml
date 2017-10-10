@@ -14,6 +14,10 @@
       - libapache2-mod-wsgi
       - python-mysqldb
       - python-openstackclient
+  - name: delete database table
+    mysql_db:
+      name: keystone
+      state: absent
   - name: Keystone create database table
     mysql_db:
       name: keystone
@@ -49,3 +53,19 @@
       owner: ubuntu
       group: ubuntu
       mode: '0644'
+  - name: Keystone add adminrc setting
+    shell: su -s /bin/sh -c "keystone-manage db_sync" keystone
+  - name: Keystone fernet_setup
+    shell: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+  - name: Keystone credential_setup
+    shell: keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+  - name: Keystone bootstrap
+    shell: keystone-manage bootstrap --bootstrap-password ADMIN_PASS --bootstrap-admin-url http://iaas-ctrl:35357/v3/ --bootstrap-internal-url http://iaas-ctrl:5000/v3/ --bootstrap-public-url http://iaas-ctrl:5000/v3/ --bootstrap-region-id RegionOne
+  - name: Set apache
+    shell: sed -i s/"#ServerName www.example.com"/"ServerName iaas-ctrl"/ /etc/apache2/sites-available/000-default.conf
+  - name: reboot
+    shell: sleep 2 && shutdown -r now
+    async: 1
+    poll: 0
+    ignore_errors: true
+
