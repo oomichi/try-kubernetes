@@ -141,7 +141,7 @@ Install packages for Keystone::
 
  $ sudo apt-get -y install mariadb-server python-pymysql
  $ sudo mysql
- > CREATE DATABASE keystone;
+ > CREATE DATABASE keystone CHARACTER SET utf8;
  > GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' IDENTIFIED BY 'KEYSTONE_DBPASS';
  > GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'KEYSTONE_DBPASS';
  $ sudo apt-get -y install vim keystone apache2 libapache2-mod-wsgi
@@ -278,7 +278,7 @@ Edit /etc/glance/glance-registry.conf::
 DB sync::
 
  # mysql
- > CREATE DATABASE glance;
+ > CREATE DATABASE glance CHARACTER SET utf8;
  > GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' IDENTIFIED BY 'GLANCE_DBPASS';
  > GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' IDENTIFIED BY 'GLANCE_DBPASS';
  > exit
@@ -290,9 +290,9 @@ Nova installation on controller node
 Create database::
 
  # mysql
- > CREATE DATABASE nova_api;
- > CREATE DATABASE nova;
- > CREATE DATABASE nova_cell0;
+ > CREATE DATABASE nova_api CHARACTER SET utf8;
+ > CREATE DATABASE nova CHARACTER SET utf8;
+ > CREATE DATABASE nova_cell0 CHARACTER SET utf8;
  > GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'localhost' IDENTIFIED BY 'NOVA_DBPASS';
  > GRANT ALL PRIVILEGES ON nova_api.* TO 'nova'@'%' IDENTIFIED BY 'NOVA_DBPASS';
  > GRANT ALL PRIVILEGES ON nova.* TO 'nova'@'localhost' IDENTIFIED BY 'NOVA_DBPASS';
@@ -519,7 +519,7 @@ Edit /etc/nova/nova.conf::
 Sync database::
 
  # mysql
- > CREATE DATABASE neutron;
+ > CREATE DATABASE neutron CHARACTER SET utf8;
  > GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'NEUTRON_DBPASS';
  > GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'NEUTRON_DBPASS';
  > exit
