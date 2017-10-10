@@ -24,6 +24,8 @@
       mode: '0700'
   - name: run sed.sh
     shell: /tmp/sed.sh
+    args:
+      executable: /bin/bash
   - name: copy neutron.conf
     template:
       src: neutron/neutron.conf
