@@ -1,0 +1,113 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - nova-api
+      - nova-conductor
+      - nova-consoleauth
+      - nova-novncproxy
+      - nova-scheduler
+      - nova-placement-api
+      - rabbitmq-server
+      - memcached
+      - python-memcache
+  - name: delete nova_api database table if exists
+    mysql_db:
+      name: nova_api
+      state: absent
+  - name: delete nova database table if exists
+    mysql_db:
+      name: nova
+      state: absent
+  - name: delete nova_cell0 database table if exists
+    mysql_db:
+      name: nova_cell0
+      state: absent
+  - name: create nova_api database table
+    mysql_db:
+      name: nova_api
+      state: present
+      encoding: utf8
+  - name: create nova database table
+    mysql_db:
+      name: nova
+      state: present
+      encoding: utf8
+  - name: create nova_cell0 database table
+    mysql_db:
+      name: nova_cell0
+      state: present
+      encoding: utf8
+  - name: glant all privs to nova user for nova_api 1
+    mysql_user:
+      name: nova
+      password: NOVA_DBPASS
+      priv: 'nova_api.*:ALL'
+      state: present
+      host: 'localhost'
+      append_privs: yes
+  - name: glant all privs to nova user for nova_api 2
+    mysql_user:
+      name: nova
+      password: NOVA_DBPASS
+      priv: 'nova_api.*:ALL'
+      state: present
+      host: '%'
+      append_privs: yes
+  - name: glant all privs to nova user for nova 1
+    mysql_user:
+      name: nova
+      password: NOVA_DBPASS
+      priv: 'nova.*:ALL'
+      state: present
+      host: 'localhost'
+      append_privs: yes
+  - name: glant all privs to nova user for nova 2
+    mysql_user:
+      name: nova
+      password: NOVA_DBPASS
+      priv: 'nova.*:ALL'
+      state: present
+      host: '%'
+      append_privs: yes
+  - name: glant all privs to nova user for nova_cell0 1
+    mysql_user:
+      name: nova
+      password: NOVA_DBPASS
+      priv: 'nova_cell0.*:ALL'
+      state: present
+      host: 'localhost'
+      append_privs: yes
+  - name: glant all privs to nova user for nova_cell0 2
+    mysql_user:
+      name: nova
+      password: NOVA_DBPASS
+      priv: 'nova_cell0.*:ALL'
+      state: present
+      host: '%'
+      append_privs: yes
+  - name: copy configuration file
+    template:
+      src: nova/nova.conf
+      dest: /etc/nova/nova.conf
+      owner: root
+      group: root
+      mode: '0644'
+  - name: db_sync api_db
+    shell: su -s /bin/sh -c "nova-manage api_db sync" nova
+  - name: cell_v2 map_cell0
+    shell: su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
+  - name: cell_v2 create_cell --name=cell1 --verbose
+    shell: su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova
+  - name: db sync
+    shell: su -s /bin/sh -c "nova-manage db sync" nova
+  - name: rabbitmqctl 1
+    shell: rabbitmqctl add_user openstack RABBIT_PASS
+  - name: rabbitmqctl 2
+    shell: rabbitmqctl set_permissions openstack ".*" ".*" ".*"
+  - name: Set l option
+    shell: sed -i s/"-l 127.0.0.1"/"-l 192.168.1.1"/ /etc/memcached.conf
