@@ -481,7 +481,7 @@ Edit /etc/neutron/metadata_agent.ini::
 
  $ sudo vi /etc/neutron/metadata_agent.ini
  [DEFAULT]
- + nova_metadata_ip = iaas-ctrl
+ + nova_metadata_host = iaas-ctrl
  + metadata_proxy_shared_secret = METADATA_SECRET
 
 Edit /etc/nova/nova.conf::
