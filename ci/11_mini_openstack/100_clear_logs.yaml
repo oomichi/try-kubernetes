@@ -1,0 +1,32 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Clear nova logs
+    template:
+      src: empty.log
+      dest: /var/log/nova/{{item}}
+      owner: nova
+      group: nova
+      mode: 0644
+    with_items:
+      - nova-api.log
+      - nova-conductor.log
+      - nova-consoleauth.log
+      - nova-novncproxy.log
+      - nova-scheduler.log
+  - name: Clear neutron logs
+    template:
+      src: empty.log
+      dest: /var/log/neutron/{{item}}
+      owner: neutron
+      group: neutron
+      mode: 0644
+    with_items:
+      - neutron-dhcp-agent.log
+      - neutron-linuxbridge-agent.log
+      - neutron-linuxbridge-cleanup.log
+      - neutron-metadata-agent.log
+      - neutron-server.log
+
