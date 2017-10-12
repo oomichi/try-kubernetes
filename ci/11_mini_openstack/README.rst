@@ -101,7 +101,7 @@ Enable SNAT for connecting to the internet from local network machines::
  + :POSTROUTING ACCEPT [0:0]
  + :PREROUTING ACCEPT [0:0]
  +
- + -A POSTROUTING -s 192.168.1.0/24 -j MASQUERADE
+ + -A POSTROUTING -s 192.168.1.0/24 -o enp0s31f6 -j MASQUERADE
  +
  + COMMIT
 
@@ -124,7 +124,7 @@ Install and configure dhcp server for local network::
  +   option broadcast-address    192.168.1.255;
  +   option domain-name-servers  192.168.1.1;
  +   option domain-name          "iaas.net";
- +   range 192.168.1.100 192.168.1.200;
+ +   range 192.168.1.50 192.168.1.99;
  + }
 
 Select the network interface which dhcp server works.
@@ -325,7 +325,7 @@ Edit /etc/nova/nova.conf::
  + auth_strategy = keystone
 
  - #my_ip = <host_ipv4>
- + my_ip = 192.168.1.1    <<<<<<<<<NEED TO FIX THIS AFTER GETTING NIC>>>>>>>>>>>>>
+ + my_ip = 192.168.1.1
 
  - # use_neutron = true
  + use_neutron = true
@@ -389,7 +389,7 @@ Configure memcached::
  $ sudo apt-get -y install memcached python-memcache
  $ sudo vi /etc/memcached.conf
  - -l 127.0.0.1
- + -l 192.168.1.1        <<<<<<<<<NEED TO FIX THIS AFTER GETTING NIC>>>>>>>>>>>>>
+ + -l 192.168.1.1
 
 Confirm nova-api works fine::
 
@@ -636,7 +636,7 @@ Prepare to create a virtual machine::
  $ openstack security group rule create --proto tcp --dst-port 22 default
  $ openstack network create  --share --external --provider-physical-network provider --provider-network-type flat provider
  $ openstack subnet create --network provider \
-   --allocation-pool start=192.168.100.100,end=192.168.100.250 \
+   --allocation-pool start=192.168.100.100,end=192.168.100.200 \
    --dns-nameserver 8.8.4.4 --gateway 192.168.100.1 \
    --subnet-range 192.168.100.0/24 provider
 
