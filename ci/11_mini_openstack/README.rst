@@ -636,9 +636,9 @@ Prepare to create a virtual machine::
  $ openstack security group rule create --proto tcp --dst-port 22 default
  $ openstack network create  --share --external --provider-physical-network provider --provider-network-type flat provider
  $ openstack subnet create --network provider \
-   --allocation-pool start=192.168.100.100,end=192.168.100.200 \
-   --dns-nameserver 8.8.4.4 --gateway 192.168.100.1 \
-   --subnet-range 192.168.100.0/24 provider
+   --allocation-pool start=192.168.1.100,end=192.168.1.200 \
+   --dns-nameserver 8.8.4.4 --gateway 192.168.1.1 \
+   --subnet-range 192.168.1.0/24 provider
 
 Create a virtual machine::
 
