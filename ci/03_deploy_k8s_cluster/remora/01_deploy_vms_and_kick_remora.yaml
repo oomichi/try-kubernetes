@@ -1,4 +1,14 @@
 - hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install package
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - ansible
+
+- hosts: iaas-ctrl
   user: ubuntu
   tasks:
   - name: openstack network show provider
@@ -38,3 +48,18 @@
     register: worker02_ip
     args:
       executable: /bin/bash
+  - name: create hosts file on remote host
+    template:
+      src: hosts_vms.j2
+      dest: /home/ubuntu/hosts_vms
+      owner: ubuntu
+      group: ubuntu
+      mode: '0644'
+  - name: copy 02_install_remora.yaml file
+    copy:
+      src: 02_install_remora.yaml
+      dest: /home/ubuntu/02_install_remora.yaml
+      owner: ubuntu
+      group: ubuntu
+      mode: '0644'
+

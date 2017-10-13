@@ -1,0 +1,49 @@
+- hosts: all
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install apt-transport-https
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - docker-engine
+- hosts: masters
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install apt-transport-https
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - curl
+      - apt-transport-https
+      - git
+  - name: Add apt-key
+    shell: curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+  - name: Add kubernetes.list
+    shell: echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
+  - name: Install basic packages for k8s
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - kubectl
+      - python3-pip
+      - python3-dev
+- hosts: masters
+  user: ubuntu
+  tasks:
+  - name: clone remora repo
+    shell: git clone https://github.com/nec-openstack/remora
+  - name: Install python libraries
+    shell: cd remora; pip3 install -r requirements.txt
+  - name: fab cluster render
+    shell: fab cluster render
+  - name: fab cluster install.kubelet
+    shell: fab cluster install.kubelet
+  - name: fab cluster install.etcd
+    shell: fab cluster install.etcd
+  - name: fab cluster install.bootstrap
+    shell: fab cluster install.bootstrap
+  - name: fab cluster install.kubernetes
+    shell: fab cluster install.kubernetes
+  - name: fab cluster config
+    shell: fab cluster config
