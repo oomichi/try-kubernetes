@@ -1,0 +1,40 @@
+- hosts: iaas-ctrl
+  user: ubuntu
+  tasks:
+  - name: openstack network show provider
+    shell: source adminrc; openstack network show -c id -f value provider
+    register: providernet
+    args:
+      executable: /bin/bash
+  - name: create a master vm
+    shell: source adminrc; openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id='{{providernet.stdout}}' --security-group cffa06fb-b436-4fa1-be6c-e9d7ffa4d476 --key-name mykey master
+    register: master
+    args:
+      executable: /bin/bash
+  - name: create a worker vm 1
+    shell: source adminrc; openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id='{{providernet.stdout}}' --security-group cffa06fb-b436-4fa1-be6c-e9d7ffa4d476 --key-name mykey worker01
+    register: worker01
+    args:
+      executable: /bin/bash
+  - name: create a worker vm 2
+    shell: source adminrc; openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id='{{providernet.stdout}}' --security-group cffa06fb-b436-4fa1-be6c-e9d7ffa4d476 --key-name mykey worker02
+    register: worker02
+    args:
+      executable: /bin/bash
+  - name: wait for 20 secs
+    wait_for: timeout=20
+  - name: get ip address of worker
+    shell: source adminrc; openstack server show -c addresses -f value '{{master.stdout}}' | sed s/'provider='//
+    register: master_ip
+    args:
+      executable: /bin/bash
+  - name: get ip address of worker 1
+    shell: source adminrc; openstack server show -c addresses -f value '{{worker01.stdout}}' | sed s/'provider='//
+    register: worker01_ip
+    args:
+      executable: /bin/bash
+  - name: get ip address of worker 2
+    shell: source adminrc; openstack server show -c addresses -f value '{{worker02.stdout}}' | sed s/'provider='//
+    register: worker02_ip
+    args:
+      executable: /bin/bash
