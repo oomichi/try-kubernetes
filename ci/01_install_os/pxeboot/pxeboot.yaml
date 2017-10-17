@@ -34,6 +34,13 @@
       owner: root
       group: root
       mode: '0644'
+  - name: Copy preseed.txt for Intel Nuc
+    template:
+      src: conf/preseed_intel_nuc.txt
+      dest: /var/lib/tftpboot/preseed_intel_nuc.cfg
+      owner: root
+      group: root
+      mode: '0644'
   - name: Copy menu.cfg
     template:
       src: conf/menu.cfg
