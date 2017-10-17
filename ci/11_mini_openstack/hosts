@@ -1,6 +1,6 @@
 [iaas-ctrl]
 172.27.138.51
 
-[iaas-node]
+[iaas-cpu]
 192.168.1.100
 
