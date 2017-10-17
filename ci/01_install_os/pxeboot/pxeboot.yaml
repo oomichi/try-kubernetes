@@ -1,0 +1,44 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - isc-dhcp-server
+      - python-pexpect
+      - tftpd-hpa
+  - name: Copy dhcpd.conf
+    template:
+      src: conf/dhcpd.conf
+      dest: /etc/dhcp/dhcpd.conf
+      owner: root
+      group: root
+      mode: '0644'
+  - name: Copy isc-dhcp-server
+    template:
+      src: conf/isc-dhcp-server
+      dest: /etc/default/isc-dhcp-server
+      owner: root
+      group: root
+      mode: '0644'
+  - name: Get netboot image
+    shell: cd /var/lib/tftpboot/; rm -rf *; wget http://archive.ubuntu.com/ubuntu/dists/xenial-updates/main/installer-amd64/current/images/netboot/netboot.tar.gz
+  - name: Extract netboot image
+    shell: cd /var/lib/tftpboot/; tar zxf netboot.tar.gz
+  - name: Copy preseed.txt
+    template:
+      src: conf/preseed.txt
+      dest: /var/lib/tftpboot/preseed.cfg
+      owner: root
+      group: root
+      mode: '0644'
+  - name: Copy menu.cfg
+    template:
+      src: conf/menu.cfg
+      dest: /var/lib/tftpboot/ubuntu-installer/amd64/boot-screens/menu.cfg
+      owner: root
+      group: root
+      mode: '0644'
+
