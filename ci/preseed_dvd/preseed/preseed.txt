@@ -359,7 +359,7 @@ d-i debian-installer/allow_unauthenticated boolean true
 
 
 ### Package selection
-tasksel tasksel/first multiselect ubuntu-desktop
+#tasksel tasksel/first multiselect ubuntu-desktop
 #tasksel tasksel/first multiselect lamp-server, print-server
 #tasksel tasksel/first multiselect kubuntu-desktop
 
