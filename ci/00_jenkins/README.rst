@@ -27,13 +27,6 @@ Access to http://<ip-address:10080> with web browser::
  Add a public SSH key to the created user
  Add a project and check the project URL
 
-Move the existing github repo to the above gitlab repo::
-
- $ git clone https://github.com/nec-openstack/remora
- $ git remote rm origin
- $ git remote add origin <the above project URL>
- $ git push -u origin master
-
 Install gitlab CI runner
 ------------------------
 
