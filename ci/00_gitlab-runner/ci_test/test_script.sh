@@ -75,7 +75,7 @@ git checkout ${LAST_COMMIT}
 
 
 # Operate remora!!
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 if [ $? -ne 0 ]; then
 	echo "Failed to pip install"
 	exit 1
