@@ -30,6 +30,11 @@ git clone ${GIT_URL}
 
 # Create virtual machines with OpenStack
 source ./adminrc
+if [ $? -ne 0 ]; then
+	echo "Failed to source ./adminrc"
+	exit 1
+fi
+
 NETID=`openstack network show -c id -f value provider`
 MASTER=`openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id=${NETID} --security-group ${SECGROUP} --key-name mykey master`
 if [ $? -ne 0 ]; then
