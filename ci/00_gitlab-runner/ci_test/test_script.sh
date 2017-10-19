@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 WORKING_PATH=`pwd`
 LAST_LINE=`tail -n1 ./github_history.txt`
