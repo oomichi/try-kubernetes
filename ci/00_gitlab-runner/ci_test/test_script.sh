@@ -29,7 +29,8 @@ fi
 git clone ${GIT_URL}
 
 # Create virtual machines with OpenStack
-pwd
+echo "Start to create virtual machines.."
+
 source adminrc
 if [ $? -ne 0 ]; then
 	echo "Failed to source adminrc"
@@ -76,12 +77,14 @@ cd ./${GIT_DIRNAME}
 git checkout ${LAST_COMMIT}
 
 # Operate remora!!
+echo "Start to operate remora.."
 ../run_remora.sh
 if [ $? -ne 0 ]; then
 	openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
 	echo "Failed to run remora.sh"
 	exit 1
 fi
+echo "Succeeded to operate remora.."
 
 openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
 
