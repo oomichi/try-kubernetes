@@ -1,7 +1,5 @@
 #!/bin/sh
 
-cd dirname $0
-
 WORKING_PATH=`pwd`
 LAST_LINE=`tail -n1 ./github_history.txt`
 LAST_COMMIT=`echo ${LAST_LINE} | awk -F "/" '{print $NF}'`
@@ -25,8 +23,6 @@ if [ -z ${GIT_DIRNAME} ]; then
 	exit 1
 fi
 
-cd /tmp
-rm -rf /tmp/${GIT_DIRNAME}
 git clone ${GIT_URL}
 cd ./${GIT_DIRNAME}
 
