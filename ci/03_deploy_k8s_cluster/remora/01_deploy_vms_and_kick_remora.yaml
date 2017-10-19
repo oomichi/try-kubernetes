@@ -6,7 +6,12 @@
   - name: Install package
     apt: name={{item}} state=present update_cache=yes
     with_items:
+      - python-pip
       - ansible
+  - name: Upgrade pip
+    shell: pip install --upgrade pip
+  - name: Upgrade ansible
+    shell: pip install --upgrade ansible
 
 - hosts: iaas-ctrl
   user: ubuntu
