@@ -85,30 +85,4 @@ On the following sample file, the runner kicks ./test_script.sh::
 
 The runner checks the return code of the script and it considers error if non-zero code.
 
-Setup DHCP server
------------------
-
-Operate the following::
-
- $ sudo apt-get install isc-dhcp-server
- $ sudo vi /etc/dhcp/dhcpd.conf
- Remove both lines of "option donaim-name" and "domain-name-servers"
- Remove # from #authoritative;
- Add the following part
- subnet 192.168.1.0 netmask 255.255.255.0 {
-     range 192.168.1.100 192.168.1.200;
-     option broadcast-address 192.168.1255;
-     option routers 192.168.1.1;
-     default-lease-time 600;
-     max-lease-time 7200;
-     option domain-name "local";
-     option domain-name-servers 8.8.8.8, 8.8.4.4;
- }
- Change INTERFACE="" to INTERFACES="eth0"
-
-TODO: Add static address configuration for eth0
-
-Configure SNAT between internet and local network
--------------------------------------------------
-
 [1]: https://docs.gitlab.com/runner/install/linux-repository.html
