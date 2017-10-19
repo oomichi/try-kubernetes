@@ -15,9 +15,10 @@ Install gitlab::
  $ sudo apt-get install gitlab-ce
  $ vi /etc/gitlab/gitlab.rb
  - external_url 'http://gitlab.example.com'
- + external_url 'http://<your url or ip-address>'
+ + external_url 'http://<your url or ip-address:10080>'
  $ sudo gitlab-ctl reconfigure
 
+The above 10080 port is for avoiding conflict with OpenStack port.
 Access to http://<ip-address> with web browser::
 
  Change the password as the page says.
