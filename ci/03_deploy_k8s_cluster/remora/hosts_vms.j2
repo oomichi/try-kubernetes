@@ -1,7 +1,7 @@
 [masters]
-{{ master_ip.stdout }}
+{{ master_ip.stdout }} ansible_python_interpreter=/usr/bin/python3
 
 [workers]
-{{ worker01_ip.stdout }}
-{{ worker02_ip.stdout }}
+{{ worker01_ip.stdout }} ansible_python_interpreter=/usr/bin/python3
+{{ worker02_ip.stdout }} ansible_python_interpreter=/usr/bin/python3
 
