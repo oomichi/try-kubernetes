@@ -31,8 +31,8 @@ How to
 
   $ git clone git@<gitlab-server>:<user>/<project-name>.git
   $ cd <project-name>
-  $ cp ../try-kubernetes/ci/00_jenkins/ci_test/* .
-  $ cp ../try-kubernetes/ci/00_jenkins/ci_test/.gitlab-ci.yml .
+  $ cp ../try-kubernetes/ci/00_gitlab-runner/ci_test/* .
+  $ cp ../try-kubernetes/ci/00_gitlab-runner/ci_test/.gitlab-ci.yml .
   $ git add *
   $ git add .gitlab-ci.yml
   $ git commit -m "initial commit"
