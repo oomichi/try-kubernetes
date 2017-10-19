@@ -29,9 +29,10 @@ fi
 git clone ${GIT_URL}
 
 # Create virtual machines with OpenStack
-source ./adminrc
+pwd
+source adminrc
 if [ $? -ne 0 ]; then
-	echo "Failed to source ./adminrc"
+	echo "Failed to source adminrc"
 	exit 1
 fi
 
