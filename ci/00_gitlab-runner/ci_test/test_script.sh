@@ -54,6 +54,12 @@ IP_MASTER=`openstack server show -c addresses -f value ${MASTER} | sed s/'provid
 IP_WORKER01=`openstack server show -c addresses -f value ${WORKER01} | sed s/'provider='//`
 IP_WORKER02=`openstack server show -c addresses -f value ${WORKER02} | sed s/'provider='//`
 
+sed -i s/"IP_MASTER"/"${IP_MASTER}"/g ./cluster.yaml
+sed -i s/"IP_WORKER01"/"${IP_WORKER01}"/g ./cluster.yaml
+sed -i s/"IP_WORKER02"/"${IP_WORKER02}"/g ./cluster.yaml
+cat ./cluster.yaml
+
+cp ./cluster.yaml ./${GIT_DIRNAME}/configs/cluster.yaml
 cd ./${GIT_DIRNAME}
 
 # It is possible that the latest commit of the target repo is different from LAST_COMMIT
@@ -61,16 +67,48 @@ cd ./${GIT_DIRNAME}
 # kicking repo.
 git checkout ${LAST_COMMIT}
 
-if ! [ -e ./start_ci_test.sh ]; then
-	echo "start_ci_test.sh doesn't exist under ${GIT_DIRNAME}"
-	exit 1
-fi
 
-./start_ci_test.sh
+# Operate remora!!
+pip install -r requirements.txt
 if [ $? -ne 0 ]; then
-	echo "Failed to operate start_ci_test.sh."
+	echo "Failed to pip install"
 	exit 1
 fi
 
-rm -rf /tmp/${GIT_DIRNAME}
+fab cluster render
+if [ $? -ne 0 ]; then
+	echo "Failed to fab cluster render"
+	exit 1
+fi
+
+fab cluster install.kubelet
+if [ $? -ne 0 ]; then
+	echo "Failed to fab cluster install.kubelet"
+	exit 1
+fi
+
+fab cluster install.etcd
+if [ $? -ne 0 ]; then
+	echo "Failed to fab cluster install.etcd"
+	exit 1
+fi
+
+fab cluster install.bootstrap
+if [ $? -ne 0 ]; then
+	echo "Failed to fab cluster install.bootstrap"
+	exit 1
+fi
+
+fab cluster install.kubernetes
+if [ $? -ne 0 ]; then
+	echo "Failed to fab cluster install.kubernetes"
+	exit 1
+fi
+
+openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
+if [ $? -ne 0 ]; then
+	echo "Failed to delete virtual machines"
+	exit 1
+fi
+
 exit 0
