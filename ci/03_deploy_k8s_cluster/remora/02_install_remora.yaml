@@ -6,7 +6,7 @@
   - name: Install apt-transport-https
     apt: name={{item}} state=present update_cache=yes
     with_items:
-      - docker-engine
+      - docker.io
       - python3
 - hosts: masters
   become: true
