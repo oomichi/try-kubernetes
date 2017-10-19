@@ -53,6 +53,8 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+echo "Succeeded to create virtual machines."
+
 sleep 10
 
 # Know ip addresses of virtual machines
