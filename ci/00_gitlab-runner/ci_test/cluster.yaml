@@ -1,0 +1,23 @@
+# Username of target VMs
+# If you use Ubuntu, change below line to like `user: ubuntu`.
+user: core
+
+local:
+  assets_dir: "~/.kube/assets"
+
+masters: &masters
+  - IP_MASTER
+workers: &workers
+  - IP_WORKER01
+  - IP_WORKER02
+
+roledefs:
+  bootstrap:
+  - IP_MASTER
+  etcd: *masters
+  master: *masters
+  worker: *workers
+
+kubernetes:
+  # Public kubernetes service address
+  public_service_ip: IP_MASTER
