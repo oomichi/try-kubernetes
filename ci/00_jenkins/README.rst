@@ -19,7 +19,7 @@ Install gitlab::
  $ sudo gitlab-ctl reconfigure
 
 The above 10080 port is for avoiding conflict with OpenStack port.
-Access to http://<ip-address> with web browser::
+Access to http://<ip-address:10080> with web browser::
 
  Change the password as the page says.
  Login with root/<changed password>
