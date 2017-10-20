@@ -56,7 +56,8 @@ fi
 
 echo "Succeeded to create virtual machines."
 
-sleep 10
+echo "Waiting for virtual machines are up."
+sleep 30
 
 # Know ip addresses of virtual machines
 IP_MASTER=`openstack server show -c addresses -f value ${MASTER} | sed s/'provider='//`
