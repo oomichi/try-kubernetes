@@ -1,6 +1,6 @@
 # Username of target VMs
 # If you use Ubuntu, change below line to like `user: ubuntu`.
-user: gitlab-runner
+user: ubuntu
 
 local:
   assets_dir: "~/.kube/assets"
