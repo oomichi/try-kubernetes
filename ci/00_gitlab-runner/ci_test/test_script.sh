@@ -57,7 +57,19 @@ fi
 echo "Succeeded to create virtual machines."
 
 echo "Waiting for virtual machines are up."
-sleep 30
+
+function wait_for_vm_up () {
+	VM=$1
+	while [ `nova console-log ${VM} | grep "login:" | wc -l` = "0" ]
+	do
+		sleep 1
+	done
+	echo "The virtual machine ${VM} is up."
+}
+
+wait_for_vm_up ${MASTER}
+wait_for_vm_up ${WORKER01}
+wait_for_vm_up ${WORKER02}
 
 # Know ip addresses of virtual machines
 IP_MASTER=`openstack server show -c addresses -f value ${MASTER} | sed s/'provider='//`
