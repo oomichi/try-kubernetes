@@ -77,12 +77,12 @@ IP_MASTER=`openstack server show -c addresses -f value ${MASTER} | sed s/'provid
 IP_WORKER01=`openstack server show -c addresses -f value ${WORKER01} | sed s/'provider='//`
 IP_WORKER02=`openstack server show -c addresses -f value ${WORKER02} | sed s/'provider='//`
 
-sed -i s/"IP_MASTER"/"${IP_MASTER}"/g ./cluster.yaml
-sed -i s/"IP_WORKER01"/"${IP_WORKER01}"/g ./cluster.yaml
-sed -i s/"IP_WORKER02"/"${IP_WORKER02}"/g ./cluster.yaml
-cat ./cluster.yaml
-
 cp ./cluster.yaml ./${GIT_DIRNAME}/configs/cluster.yaml
+sed -i s/"IP_MASTER"/"${IP_MASTER}"/g     ./${GIT_DIRNAME}/configs/cluster.yaml
+sed -i s/"IP_WORKER01"/"${IP_WORKER01}"/g ./${GIT_DIRNAME}/configs/cluster.yaml
+sed -i s/"IP_WORKER02"/"${IP_WORKER02}"/g ./${GIT_DIRNAME}/configs/cluster.yaml
+cat ./${GIT_DIRNAME}/configs/cluster.yaml
+
 cd ./${GIT_DIRNAME}
 
 # It is possible that the latest commit of the target repo is different from LAST_COMMIT
