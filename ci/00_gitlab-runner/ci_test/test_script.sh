@@ -7,6 +7,7 @@ GIT_URL=`echo ${LAST_LINE} | sed s@"/commit/${LAST_COMMIT}"@@`
 GIT_DIRNAME=`echo ${GIT_URL} | awk -F "/" '{print $NF}'`
 
 SECGROUP="cffa06fb-b436-4fa1-be6c-e9d7ffa4d476"
+KEYNAME="gitlab-runner-key"
 
 echo "LAST_COMMIT: $LAST_COMMIT"
 echo "GIT_URL: $GIT_URL"
@@ -38,17 +39,17 @@ if [ $? -ne 0 ]; then
 fi
 
 NETID=`openstack network show -c id -f value provider`
-MASTER=`openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id=${NETID} --security-group ${SECGROUP} --key-name mykey master`
+MASTER=`openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id=${NETID} --security-group ${SECGROUP} --key-name ${KEYNAME} master`
 if [ $? -ne 0 ]; then
 	echo "Failed to create a virtual machine for master"
 	exit 1
 fi
-WORKER01=`openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id=${NETID} --security-group ${SECGROUP} --key-name mykey worker01`
+WORKER01=`openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id=${NETID} --security-group ${SECGROUP} --key-name ${KEYNAME} worker01`
 if [ $? -ne 0 ]; then
 	echo "Failed to create a virtual machine for worker01"
 	exit 1
 fi
-WORKER02=`openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id=${NETID} --security-group ${SECGROUP} --key-name mykey worker02`
+WORKER02=`openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id=${NETID} --security-group ${SECGROUP} --key-name ${KEYNAME} worker02`
 if [ $? -ne 0 ]; then
 	echo "Failed to create a virtual machine for worker02"
 	exit 1
