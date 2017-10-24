@@ -77,6 +77,25 @@ IP_MASTER=`openstack server show -c addresses -f value ${MASTER} | sed s/'provid
 IP_WORKER01=`openstack server show -c addresses -f value ${WORKER01} | sed s/'provider='//`
 IP_WORKER02=`openstack server show -c addresses -f value ${WORKER02} | sed s/'provider='//`
 
+ssh-keygen -f "/home/gitlab-runner/.ssh/known_hosts" -R ${IP_MASTER}
+ssh-keygen -f "/home/gitlab-runner/.ssh/known_hosts" -R ${IP_WORKER01}
+ssh-keygen -f "/home/gitlab-runner/.ssh/known_hosts" -R ${IP_WORKER02}
+
+function wait_for_vm_ssh () {
+	IP_VM=$1
+	rm -f empty.txt
+	touch empty.txt
+	while [ `scp empty.txt ubuntu@${IP_VM}:empty.txt > /dev/null; echo $?` != "0" ]
+	do
+		sleep 1
+	done
+	echo "The virtual machine ${IP_VM}'s ssh is enabled."
+}
+
+wait_for_vm_ssh ${IP_MASTER}
+wait_for_vm_ssh ${IP_WORKER01}
+wait_for_vm_ssh ${IP_WORKER02}
+
 cp ./cluster.yaml ./${GIT_DIRNAME}/configs/cluster.yaml
 sed -i s/"IP_MASTER"/"${IP_MASTER}"/g     ./${GIT_DIRNAME}/configs/cluster.yaml
 sed -i s/"IP_WORKER01"/"${IP_WORKER01}"/g ./${GIT_DIRNAME}/configs/cluster.yaml
