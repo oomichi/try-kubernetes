@@ -12,7 +12,7 @@ if [ $? -ne 0 ]; then
 	DETAIL=`cat ${TEMPFILE}`
 	MESSAGE="Failed to test the commit ${LAST_LINE}. ${DETAIL}"
 fi
-curl -XPOST -d "token=${SLACK_API_TOKEN}" -d "channel=#general" -d "text=${MESSAGE}" -d "username=remora-bot" "https://slack.com/api/chat.postMessage"
+curl -XPOST -d "token=${SLACK_API_TOKEN}" -d "channel=#containers" -d "text=${MESSAGE}" -d "username=remora-bot" "https://slack.com/api/chat.postMessage"
 
 rm ${TEMPFILE}
 exit ${RETURN_CODE}
