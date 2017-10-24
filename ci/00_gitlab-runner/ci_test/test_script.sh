@@ -6,6 +6,7 @@ LAST_COMMIT=`echo ${LAST_LINE} | awk -F "/" '{print $NF}'`
 GIT_URL=`echo ${LAST_LINE} | sed s@"/commit/${LAST_COMMIT}"@@`
 GIT_DIRNAME=`echo ${GIT_URL} | awk -F "/" '{print $NF}'`
 
+# The security group needs to allow ssh(22) and k8s port(remora sets 6443 as it)
 SECGROUP="cffa06fb-b436-4fa1-be6c-e9d7ffa4d476"
 KEYNAME="gitlab-runner-key"
 
