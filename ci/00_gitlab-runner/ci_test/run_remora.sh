@@ -43,6 +43,13 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+echo "Start to fab cluster config.."
+fab cluster config
+if [ $? -ne 0 ]; then
+	echo "Failed to fab cluster config"
+	exit 1
+fi
+
 echo "remora is done!!"
 
 exit 0
