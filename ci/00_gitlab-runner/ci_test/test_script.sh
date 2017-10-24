@@ -77,9 +77,8 @@ IP_MASTER=`openstack server show -c addresses -f value ${MASTER} | sed s/'provid
 IP_WORKER01=`openstack server show -c addresses -f value ${WORKER01} | sed s/'provider='//`
 IP_WORKER02=`openstack server show -c addresses -f value ${WORKER02} | sed s/'provider='//`
 
-ssh-keygen -f "/home/gitlab-runner/.ssh/known_hosts" -R ${IP_MASTER}
-ssh-keygen -f "/home/gitlab-runner/.ssh/known_hosts" -R ${IP_WORKER01}
-ssh-keygen -f "/home/gitlab-runner/.ssh/known_hosts" -R ${IP_WORKER02}
+echo "StrictHostKeyChecking no" > ~/.ssh/config
+chmod 600 ~/.ssh/config
 
 function wait_for_vm_ssh () {
 	IP_VM=$1
