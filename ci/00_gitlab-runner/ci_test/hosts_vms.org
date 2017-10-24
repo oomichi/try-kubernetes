@@ -1,4 +1,4 @@
-[masters]
+[master]
 IP_MASTER ansible_python_interpreter=/usr/bin/python3
 
 [workers]
