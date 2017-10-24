@@ -1,0 +1,9 @@
+- hosts: all
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install docker
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - docker.io

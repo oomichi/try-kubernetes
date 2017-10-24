@@ -95,11 +95,24 @@ wait_for_vm_ssh ${IP_MASTER}
 wait_for_vm_ssh ${IP_WORKER01}
 wait_for_vm_ssh ${IP_WORKER02}
 
-cp ./cluster.yaml ./${GIT_DIRNAME}/configs/cluster.yaml
+cp -f ./cluster.yaml ./${GIT_DIRNAME}/configs/cluster.yaml
 sed -i s/"IP_MASTER"/"${IP_MASTER}"/g     ./${GIT_DIRNAME}/configs/cluster.yaml
 sed -i s/"IP_WORKER01"/"${IP_WORKER01}"/g ./${GIT_DIRNAME}/configs/cluster.yaml
 sed -i s/"IP_WORKER02"/"${IP_WORKER02}"/g ./${GIT_DIRNAME}/configs/cluster.yaml
 cat ./${GIT_DIRNAME}/configs/cluster.yaml
+
+echo "Installing packages on virtual machines.."
+cp -f ./hosts_vms.org ./hosts_vms
+sed -i s/"IP_MASTER"/"${IP_MASTER}"/g     ./hosts_vms
+sed -i s/"IP_WORKER01"/"${IP_WORKER01}"/g ./hosts_vms
+sed -i s/"IP_WORKER02"/"${IP_WORKER02}"/g ./hosts_vms
+ansible-playbook -vvvv -i ./hosts_vms install_docker.yaml
+if [ $? -ne 0 ]; then
+	openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
+	echo "Failed to install packages."
+	exit 1
+fi
+echo "Succeeded to install packages."
 
 cd ./${GIT_DIRNAME}
 

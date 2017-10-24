@@ -1,0 +1,7 @@
+[masters]
+IP_MASTER ansible_python_interpreter=/usr/bin/python3
+
+[workers]
+IP_WORKER01 ansible_python_interpreter=/usr/bin/python3
+IP_WORKER02 ansible_python_interpreter=/usr/bin/python3
+
