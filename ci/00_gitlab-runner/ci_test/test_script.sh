@@ -134,7 +134,7 @@ if [ $? -ne 0 ]; then
 	echo "Failed to run remora.sh"
 	exit 1
 fi
-echo "Succeeded to operate remora.."
+echo "Succeeded to operate remora."
 
 openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
 
