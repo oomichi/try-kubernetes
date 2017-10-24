@@ -3,7 +3,7 @@
 SLACK_API_TOKEN="NEED TO BE SET"
 RETURN_CODE=0
 LAST_LINE=`tail -n1 ./github_history.txt`
-MESSAGE="Succeeded to test the commit ${LAST_LINE}"
+MESSAGE="Succeeded to test the remora commit ${LAST_LINE}"
 
 DETAIL=`./run_test.sh`
 if [ $? -ne 0 ]; then
