@@ -136,6 +136,10 @@ if [ $? -ne 0 ]; then
 fi
 echo "Succeeded to operate remora."
 
+cd ..
+
+./run_e2e.sh
+
 openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
 
 exit 0

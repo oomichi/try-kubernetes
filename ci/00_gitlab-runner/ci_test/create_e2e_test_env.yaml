@@ -30,10 +30,17 @@
     file:
       path: ${HOME}/go
       state: directory
+  - name: copy k8s config file
+    template:
+      src: ~/.kube/config
+      dest: /home/ubuntu/admin.conf
+      mode: '0644'
   - name: Set GOPATH
     shell: grep -v GOPATH ${HOME}/.bashrc > /tmp/bashrc; mv /tmp/bashrc ${HOME}/.bashrc; echo "export GOPATH=${HOME}/go" >> ${HOME}/.bashrc
   - name: Set KUBERNETES_CONFORMANCE_TEST
     shell: grep -v KUBERNETES_CONFORMANCE_TEST ${HOME}/.bashrc > /tmp/bashrc; mv /tmp/bashrc ${HOME}/.bashrc; echo "export KUBERNETES_CONFORMANCE_TEST=true" >> ${HOME}/.bashrc
+  - name: Set KUBECONFIG
+    shell: grep -v KUBECONFIG ${HOME}/.bashrc > /tmp/bashrc; mv /tmp/bashrc ${HOME}/.bashrc; echo "export KUBECONFIG=${HOME}/admin.conf" >> ${HOME}/.bashrc
   - name: Download k8s code
     shell: go get k8s.io/kubernetes; echo "Ignore no buildable error"
 - hosts: master
