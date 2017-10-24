@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SLACK_API_TOKEN="NEED TO BE SET"
+SLACK_API_TOKEN=`cat ./slack_api_token`
 RETURN_CODE=0
 LAST_LINE=`tail -n1 ./github_history.txt`
 MESSAGE="Succeeded to test the remora commit ${LAST_LINE}"
