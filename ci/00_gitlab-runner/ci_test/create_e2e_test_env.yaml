@@ -30,11 +30,6 @@
     file:
       path: ${HOME}/go
       state: directory
-  - name: copy k8s config file
-    template:
-      src: ~/.kube/config
-      dest: /home/ubuntu/admin.conf
-      mode: '0644'
   - name: Set GOPATH
     shell: grep -v GOPATH ${HOME}/.bashrc > /tmp/bashrc; mv /tmp/bashrc ${HOME}/.bashrc; echo "export GOPATH=${HOME}/go" >> ${HOME}/.bashrc
   - name: Set KUBERNETES_CONFORMANCE_TEST
