@@ -4,6 +4,6 @@ stages:
 test_job:
   stage: test
   script:
-    - ./test_script.sh
+    - ./start_ci.sh
   tags:
     - my-tag
