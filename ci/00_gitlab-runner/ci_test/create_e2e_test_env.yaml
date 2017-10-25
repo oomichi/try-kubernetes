@@ -49,9 +49,13 @@
   user: ubuntu
   tasks:
   - name: Build e2e binary
-    shell: cd /home/ubuntu/go/src/k8s.io/kubernetes; make quick-release; chown ubuntu -R .
+    shell: cd /home/ubuntu/go/src/k8s.io/kubernetes; make quick-release
+  - name: Change mode of e2e binary
+    shell: cd /home/ubuntu/go/src/k8s.io/kubernetes; chown ubuntu -R .
 - hosts: master
   user: ubuntu
   tasks:
   - name: Make another e2e binaries
-    shell: cd ${HOME}/go/src/k8s.io/kubernetes; make ginkgo; make generated_files
+    shell: cd ${HOME}/go/src/k8s.io/kubernetes; make ginkgo
+  - name: Make generated_files
+    shell: cd ${HOME}/go/src/k8s.io/kubernetes; make generated_files
