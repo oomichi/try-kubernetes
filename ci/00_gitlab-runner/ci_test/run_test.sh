@@ -1,5 +1,6 @@
 #!/bin/bash
 
+LOGFILE=$1
 WORKING_PATH=`pwd`
 LAST_LINE=`tail -n1 ./github_history.txt`
 LAST_COMMIT=`echo ${LAST_LINE} | awk -F "/" '{print $NF}'`
@@ -131,7 +132,7 @@ echo "Start to operate remora.."
 ../run_remora.sh
 if [ $? -ne 0 ]; then
 	openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
-	echo "Failed to run remora.sh"
+	echo "Failed to run remora.sh" | tee ${LOGFILE}
 	exit 1
 fi
 echo "Succeeded to operate remora."
@@ -141,7 +142,7 @@ cd ..
 ./run_e2e.sh
 if [ $? -ne 0 ]; then
 	openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
-	echo "Failed to run e2e test"
+	echo "Failed to run e2e test" | tee ${LOGFILE}
 	exit 1
 fi
 

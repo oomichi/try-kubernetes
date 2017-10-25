@@ -6,7 +6,7 @@ LAST_LINE=`tail -n1 ./github_history.txt`
 MESSAGE="Succeeded to test the remora commit ${LAST_LINE}"
 TEMPFILE=`mktemp remora.log-XXXX`
 
-./run_test.sh | tee ${TEMPFILE}
+./run_test.sh ${TEMPFILE}
 if [ $? -ne 0 ]; then
 	RETURN_CODE=1
 	DETAIL=`cat ${TEMPFILE}`
