@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd dirname $0
+cd `dirname $0`
 
 SECGROUP="cffa06fb-b436-4fa1-be6c-e9d7ffa4d476"
 KEYNAME="gitlab-runner-key"
