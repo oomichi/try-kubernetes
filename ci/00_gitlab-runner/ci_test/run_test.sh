@@ -139,6 +139,11 @@ echo "Succeeded to operate remora."
 cd ..
 
 ./run_e2e.sh
+if [ $? -ne 0 ]; then
+	openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
+	echo "Failed to run e2e test"
+	exit 1
+fi
 
 openstack server delete ${MASTER} ${WORKER01} ${WORKER02}
 
