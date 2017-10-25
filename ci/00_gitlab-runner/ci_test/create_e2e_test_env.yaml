@@ -1,4 +1,4 @@
-- hosts: master
+- hosts: e2e
   become: true
   become_user: root
   user: ubuntu
@@ -23,7 +23,7 @@
     with_items:
       - go
       - gofmt
-- hosts: master
+- hosts: e2e
   user: ubuntu
   tasks:
   - name: Make dir of GOPATH
@@ -43,7 +43,7 @@
     shell: grep -v KUBECONFIG ${HOME}/.bashrc > /tmp/bashrc; mv /tmp/bashrc ${HOME}/.bashrc; echo "export KUBECONFIG=${HOME}/admin.conf" >> ${HOME}/.bashrc
   - name: Download k8s code
     shell: go get k8s.io/kubernetes; echo "Ignore no buildable error"
-- hosts: master
+- hosts: e2e
   become: true
   become_user: root
   user: ubuntu
@@ -52,7 +52,7 @@
     shell: cd /home/ubuntu/go/src/k8s.io/kubernetes; make quick-release
   - name: Change mode of e2e binary
     shell: cd /home/ubuntu/go/src/k8s.io/kubernetes; chown ubuntu -R .
-- hosts: master
+- hosts: e2e
   user: ubuntu
   tasks:
   - name: Make another e2e binaries

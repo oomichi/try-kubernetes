@@ -1,4 +1,4 @@
-- hosts: master
+- hosts: e2e
   user: ubuntu
   tasks:
   - name: run e2e
