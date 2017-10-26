@@ -15,7 +15,9 @@ if [ $? -ne 0 ]; then
 fi
 
 NETID=`openstack network show -c id -f value provider`
-E2E=`openstack server create -c id -f value --flavor m1.medium --image Ubuntu-16.04-x86_64 --nic net-id=${NETID} --security-group ${SECGROUP} --key-name ${KEYNAME} e2e`
+
+# m1.large is necessary to build e2e test for avoiding out-of-memory
+E2E=`openstack server create -c id -f value --flavor m1.large --image Ubuntu-16.04-x86_64 --nic net-id=${NETID} --security-group ${SECGROUP} --key-name ${KEYNAME} e2e`
 if [ $? -ne 0 ]; then
 	echo "Failed to create a virtual machine for e2e"
 	exit 1
