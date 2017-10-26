@@ -1,5 +1,17 @@
 #!/bin/bash
 
+LAST_LINE=`tail -n1 ./github_history.txt`
+LAST_COMMIT=`echo ${LAST_LINE} | awk -F "/" '{print $NF}'`
+GIT_URL=`echo ${LAST_LINE} | sed s@"/commit/${LAST_COMMIT}"@@`
+GIT_DIRNAME=`echo ${GIT_URL} | awk -F "/" '{print $NF}'`
+
+cd ./${GIT_DIRNAME}
+
+# It is possible that the latest commit of the target repo is different from LAST_COMMIT
+# when poll_github.sh detects multiple differences between the target repo and this test
+# kicking repo.
+git checkout ${LAST_COMMIT}
+
 # Operate remora!!
 echo "Start to pip install.."
 pip3 install -r requirements.txt
@@ -49,6 +61,8 @@ if [ $? -ne 0 ]; then
 	echo "Failed to fab cluster config"
 	exit 1
 fi
+
+cd ..
 
 echo "remora is done!!"
 
