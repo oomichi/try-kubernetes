@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd dirname $0
+cd `dirname $0`
 
 WORKING_PATH=`pwd`
 LAST_LINE=`tail -n1 ./github_history.txt`

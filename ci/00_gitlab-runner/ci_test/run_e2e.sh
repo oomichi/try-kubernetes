@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd 'dirname $0'
+cd `dirname $0`
 
 IP_E2E=`openstack server show e2e -c addresses -f value | sed s/"provider="//`
 cp -f ./hosts_e2e.org ./hosts_e2e
