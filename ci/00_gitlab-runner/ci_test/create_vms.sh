@@ -1,7 +1,6 @@
 #!/bin/bash
 
 TEMPFILE=$1
-WORKING_PATH=`pwd`
 LAST_LINE=`tail -n1 ./github_history.txt`
 LAST_COMMIT=`echo ${LAST_LINE} | awk -F "/" '{print $NF}'`
 GIT_URL=`echo ${LAST_LINE} | sed s@"/commit/${LAST_COMMIT}"@@`
