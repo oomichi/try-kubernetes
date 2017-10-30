@@ -5,6 +5,8 @@ LAST_LINE=`tail -n1 ./github_history.txt`
 MESSAGE="Succeeded to test the remora commit ${LAST_LINE}"
 TEMPFILE=`mktemp /tmp/remora-vms-XXXX`
 
+source adminrc
+
 ./create_vms.sh ${TEMPFILE}
 if [ $? -ne 0 ]; then
 	MESSAGE="Failed to test the commit ${LAST_LINE}. (Failed to create vms)"
