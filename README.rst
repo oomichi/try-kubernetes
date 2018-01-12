@@ -159,18 +159,18 @@ Run e2e test
 Prepare
 -------
 
-Need to install golang 1.8 which is not provided from ubuntu 16.04 as the
+Need to install golang 1.9 which is not provided from ubuntu 16.04 as the
 default. So we need to do the following process for that::
 
  $ sudo add-apt-repository ppa:longsleep/golang-backports
  $ sudo apt-get update
- $ sudo apt-get install golang-1.8
+ $ sudo apt-get install golang-1.9
 
 The binary is installed under /usr/lib/go-1.8/bin/go, so we need to make
 a link::
 
- $ sudo ln -s /usr/lib/go-1.8/bin/go /usr/local/bin/go
- $ sudo ln -s /usr/lib/go-1.8/bin/gofmt /usr/local/bin/gofmt
+ $ sudo ln -s /usr/lib/go-1.9/bin/go /usr/local/bin/go
+ $ sudo ln -s /usr/lib/go-1.9/bin/gofmt /usr/local/bin/gofmt
 
 Set GOPATH as parmanent setting::
 
