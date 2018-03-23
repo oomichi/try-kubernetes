@@ -43,7 +43,22 @@ Operate the following installation on both kube-master and kube-host01::
 Initialization of kube-master
 -----------------------------
 
-Operate the following commands::
+(Flannel) Operate the following commands::
+
+ # kubeadm init --pod-network-cidr=10.244.0.0/16
+ [..]
+ Your Kubernetes master has initialized successfully!
+ [..]
+ You can now join any number of machines by running the following on each node
+ as root:
+
+   kubeadm join --token 22ac74.4d061109507a992b 172.27.138.55:6443
+
+10.244.0.0/16 comes from kube-flannel.yml which contains::
+
+ "Network": "10.244.0.0/16",
+
+(Other) Operate the following commands::
 
  # kubeadm init
  [..]
@@ -68,14 +83,16 @@ Operate the following commands::
  $ export KUBECONFIG=$HOME/admin.conf
  $ echo "export KUBECONFIG=$HOME/admin.conf" >> $HOME/.bashrc
 
+(Flannel) Configure network setting for pod2pod communication::
+
+ $ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml
+
+(Weave) Configure network setting for pod2pod communication::
+
+ $ kubectl apply -f https://git.io/weave-kube-1.6
+
 Check the valid installation::
 
- $ kubectl get nodes
- NAME           STATUS     AGE       VERSION
- kube-manager   NotReady   1h        v1.6.6
- $
- $ kubectl apply -f https://git.io/weave-kube-1.6
- $
  $ kubectl get pods --all-namespaces
  NAMESPACE     NAME                                   READY     STATUS              RESTARTS   AGE
  kube-system   etcd-kube-manager                      1/1       Running             0          1h
