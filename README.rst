@@ -135,17 +135,32 @@ Check the node joins into the cluster with the command on the manager::
  kube-manager   Ready     1h        v1.6.6
  $
 
-TODO: Need to enable a node on virtualbox env. Current issue::
+Retrive the way to add a node
+-----------------------------
 
- $ kubectl get nodes
- NAME         STATUS     AGE       VERSION
- k8s-master   Ready      10m       v1.7.3
- k8s-node     NotReady   8m        v1.7.3
- $
- $ kubectl describe node k8s-node
- Name:                   k8s-node
- [..]
- reason:NetworkPluginNotReady message:docker: network plugin is not ready: cni config uninitialized
+Get a kubeadm token::
+
+ $ TOKEN=`sudo kubeadm token list | grep authentication | awk '{print $1}'`
+ $ echo $TOKEN
+ c3cf19.89e62945a88d7a91
+
+If you cannot get a token, need to recreate with::
+
+ $ sudo kubeadm token create
+
+Get a discovery token::
+
+ $ DISCOVERY_TOKEN=`openssl x509 -pubkey \
+ -in /etc/kubernetes/pki/ca.crt | openssl rsa \
+ -pubin -outform der 2>/dev/null | openssl dgst \
+ -sha256 -hex | sed 's/^.* //'`
+ $ echo $DISCOVERY_TOKEN
+ b3bb83c24673649bf1909e9144929a64569b1a7988df97323a9a3449c3b4c1e6
+
+Use the token and the discovery token to add a new node on the node::
+
+ $ kubeadm join --token ${TOKEN} 10.128.0.3:6443
+ --discovery-token-ca-cert-hash sha256:${DISCOVERY_TOKEN}
 
 How to see REST API operation on kubectl command
 ------------------------------------------------
