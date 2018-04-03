@@ -208,8 +208,7 @@ Set GOPATH as parmanent setting::
 
 Install some building packages::
 
- $ sudo apt-get install gcc
- $ sudo apt-get install make
+ $ sudo apt-get install gcc make
 
 Build e2e test binary
 ---------------------
