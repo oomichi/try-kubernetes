@@ -238,7 +238,7 @@ Run e2e test::
 
  $ export KUBECONFIG=$HOME/admin.conf
  $ export KUBERNETES_CONFORMANCE_TEST=true
- $ go run hack/e2e.go -- --provider=skeleton -v --test --test_args="--ginkgo.focus=\[Conformance\]"
+ $ go run hack/e2e.go -- --provider=skeleton --test --test_args="--ginkgo.focus=\[Conformance\]"
  [..]
  Ran 147 of 652 Specs in 6832.526 seconds
  FAIL! -- 132 Passed | 15 Failed | 0 Pending | 505 Skipped --- FAIL: TestE2E (6832.59s)
