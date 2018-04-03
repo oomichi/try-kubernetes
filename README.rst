@@ -35,7 +35,30 @@ Operate the following installation on both kube-master and kube-host01::
  # curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
  # echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
  # apt-get update
- # apt-get install -y docker-engine kubelet kubeadm kubectl kubernetes-cni
+ # apt-get install -y docker-engine
+
+To install the latest packages of Kubernetes::
+
+ # apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+
+If you want to install previous release of Kubernetes, check avaiable releases with::
+
+ # apt-cache policy kubelet
+ kubelet:
+   Installed: (none)
+   Candidate: 1.10.0-00
+   Version table:
+      1.10.0-00 500
+         500 http://apt.kubernetes.io kubernetes-xenial/main amd64 Packages
+      1.9.6-00 500
+         500 http://apt.kubernetes.io kubernetes-xenial/main amd64 Packages
+      1.9.5-00 500
+         [..]
+ #
+
+Then you can specify the release like::
+
+ # apt-get install -y kubelet=1.9.6-00 kubeadm=1.9.6-00 kubectl=1.9.6-00 kubernetes-cni
 
 Initialization of kube-master
 -----------------------------
