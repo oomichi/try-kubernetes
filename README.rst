@@ -193,9 +193,9 @@ default. So we need to do the following process for that::
 
  $ sudo add-apt-repository ppa:longsleep/golang-backports
  $ sudo apt-get update
- $ sudo apt-get install golang-1.9
+ $ sudo apt-get install -y golang-1.9
 
-The binary is installed under /usr/lib/go-1.8/bin/go, so we need to make
+The binary is installed under /usr/lib/go-1.9/bin/go, so we need to make
 a link::
 
  $ sudo ln -s /usr/lib/go-1.9/bin/go /usr/local/bin/go
