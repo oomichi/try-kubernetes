@@ -208,7 +208,7 @@ Set GOPATH as parmanent setting::
 
 Install some building packages::
 
- $ sudo apt-get install gcc make
+ $ sudo apt-get install -y docker.io gcc make
 
 Build e2e test binary
 ---------------------
