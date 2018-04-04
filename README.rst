@@ -340,3 +340,38 @@ with bazel::
 
  $ bazel test //...
 
+Operate something
+-----------------
+
+Sort instances with --sort-by::
+
+ $ kubectl get pods -n=default
+ NAME       READY     STATUS    RESTARTS   AGE
+ pod-00     1/1       Running   0          51s
+ pod-01     1/1       Running   0          1m
+ pod-name   1/1       Running   0          18m
+ $
+ $ kubectl get pods --sort-by=.status.startTime -n=default
+ NAME       READY     STATUS    RESTARTS   AGE
+ pod-name   1/1       Running   0          18m
+ pod-01     1/1       Running   0          55s
+ pod-00     1/1       Running   0          42s
+ $
+ $ kubectl get pods --sort-by=.metadata.name -n=default
+ NAME       READY     STATUS    RESTARTS   AGE
+ pod-00     1/1       Running   0          2m
+ pod-01     1/1       Running   0          2m
+ pod-name   1/1       Running   0          20m
+ $
+
+Create a pod::
+
+ $ kubectl create -f manifests/pod-01.yaml
+
+Create a pod with some changes by edit without any chages of the original manifest file::
+
+ $ kubectl create -f manifests/pod-01.yaml --edit -o json
+
+Create a snapshot of etcd::
+
+ $ ETCDCTL_API=3 etcdctl --endpoints $ENDPOINT snapshot save snapshot.db
