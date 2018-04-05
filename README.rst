@@ -458,7 +458,7 @@ Install etcdctl command (The ubuntu package is too old and doesn't support the s
 
 Create a snapshot::
 
- $ $ ETCDCTL_API=3 ./etcdctl --endpoints http://127.0.0.1:2379 snapshot save snapshot.db
+ $ ETCDCTL_API=3 ./etcdctl --endpoints http://127.0.0.1:2379 snapshot save snapshot.db
  Snapshot saved at snapshot.db
  $
 
