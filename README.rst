@@ -177,9 +177,15 @@ Get a discovery token::
  $ echo $DISCOVERY_TOKEN
  b3bb83c24673649bf1909e9144929a64569b1a7988df97323a9a3449c3b4c1e6
 
+Get an endpoint::
+
+ $ ENDPOINT=`cat admin.conf | grep server | sed s@"    server: https://"@@`
+ $ echo $ENDPOINT
+ 192.168.1.105:6443
+
 Use the token and the discovery token to add a new node on the node::
 
- $ kubeadm join --token ${TOKEN} 10.128.0.3:6443
+ $ kubeadm join --token ${TOKEN} ${ENDPOINT} \
  --discovery-token-ca-cert-hash sha256:${DISCOVERY_TOKEN}
 
 How to see REST API operation on kubectl command
@@ -414,3 +420,6 @@ You can get nginx page like::
 Create a snapshot of etcd::
 
  $ ETCDCTL_API=3 etcdctl --endpoints $ENDPOINT snapshot save snapshot.db
+
+Swapoff on lxcfs (lxcfs is a simple file system to implement nest-cgroup
+for systemd environments which are defact init of Linux kernel today)::
