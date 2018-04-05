@@ -372,6 +372,45 @@ Create a pod with some changes by edit without any chages of the original manife
 
  $ kubectl create -f manifests/pod-01.yaml --edit -o json
 
+Create a deployment with external network access::
+
+ $ kubectl run nginx --image nginx --replicas=3
+ $ kubectl expose deployment nginx --port=80 --target-port=80
+ $ kubectl create -f manifests/ingress-nginx.yaml
+ $ kubectl describe ingress
+ Name:             test-ingress
+ Namespace:        default
+ Address:
+ Default backend:  nginx:80 (10.244.0.25:80,10.244.0.26:80,10.244.0.27:80)
+ Rules:
+   Host  Path  Backends
+   ----  ----  --------
+   *     *     nginx:80 (10.244.0.25:80,10.244.0.26:80,10.244.0.27:80)
+ Annotations:
+ Events:
+   Type    Reason  Age   From                      Message
+   ----    ------  ----  ----                      -------
+   Normal  CREATE  17s   nginx-ingress-controller  Ingress default/test-ingress
+ $
+
+On this environment, ingress-nginx-controller is used and the setting is::
+
+ $ kubectl get services -n ingress-nginx
+ NAME                   TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+ default-http-backend   ClusterIP   10.102.0.178     <none>        80/TCP                       2h
+ ingress-nginx          NodePort    10.101.145.191   <none>        80:31454/TCP,443:31839/TCP   2h
+ $
+
+So NodePort is configured and the host's 31454/TCP is proxied to 80/TCP of the ingress.
+You can get nginx page like::
+
+ $ curl http://localhost:31454
+ <!DOCTYPE html>
+ <html>
+ <head>
+ <title>Welcome to nginx!</title>
+ ..
+
 Create a snapshot of etcd::
 
  $ ETCDCTL_API=3 etcdctl --endpoints $ENDPOINT snapshot save snapshot.db
