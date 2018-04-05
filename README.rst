@@ -421,5 +421,22 @@ Create a snapshot of etcd::
 
  $ ETCDCTL_API=3 etcdctl --endpoints $ENDPOINT snapshot save snapshot.db
 
+(Non-recommended way) Enforce kubelet boot on an environment with swap::
+
+ $ sudo diff -u /etc/systemd/system/kubelet.service.d/10-kubeadm.conf.orig /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+ sudo: unable to resolve host k8s-v109-flannel-worker
+ --- /etc/systemd/system/kubelet.service.d/10-kubeadm.conf.orig  2018-04-05 21:28:10.278748887 +0000
+ +++ /etc/systemd/system/kubelet.service.d/10-kubeadm.conf       2018-04-05 21:32:14.191449307 +0000
+ @@ -6,5 +6,6 @@
+  Environment="KUBELET_AUTHZ_ARGS=--authorization-mode=Webhook --client-ca-file=/etc/kubernetes/pki/ca.crt"
+  Environment="KUBELET_CADVISOR_ARGS=--cadvisor-port=0"
+  Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true --cert-dir=/var/lib/kubelet/pki"
+ +Environment="KUBELET_SWAP_ARGS=--fail-swap-on=false"
+  ExecStart=
+ -ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_SYSTEM_PODS_ARGS $KUBELET_NETWORK_ARGS $KUBELET_DNS_ARGS $KUBELET_AUTHZ_ARGS $KUBELET_CADVISOR_ARGS $KUBELET_CERTIFICATE_ARGS $KUBELET_EXTRA_ARGS
+ +ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_SYSTEM_PODS_ARGS $KUBELET_NETWORK_ARGS $KUBELET_DNS_ARGS $KUBELET_AUTHZ_ARGS $KUBELET_CADVISOR_ARGS $KUBELET_CERTIFICATE_ARGS $KUBELET_EXTRA_ARGS $KUBELET_SWAP_ARGS
+ $
+ $ sudo reboot
+
 Swapoff on lxcfs (lxcfs is a simple file system to implement nest-cgroup
 for systemd environments which are defact init of Linux kernel today)::
