@@ -440,3 +440,15 @@ Create a snapshot of etcd::
 
 Swapoff on lxcfs (lxcfs is a simple file system to implement nest-cgroup
 for systemd environments which are defact init of Linux kernel today)::
+
+ $ diff -u /usr/share/lxcfs/lxc.mount.hook.orig /usr/share/lxcfs/lxc.mount.hook
+ --- /usr/share/lxcfs/lxc.mount.hook.orig        2018-04-05 21:55:21.626302043 +0000
+ +++ /usr/share/lxcfs/lxc.mount.hook     2018-04-05 21:57:05.956673664 +0000
+ @@ -7,6 +7,7 @@
+  if [ -d /var/lib/lxcfs/proc/ ]; then
+      for entry in /var/lib/lxcfs/proc/*; do
+          [ -e "${LXC_ROOTFS_MOUNT}/proc/$(basename $entry)" ] || continue
+ +        [ $entry != "swap" ] || continue
+          mount -n --bind $entry ${LXC_ROOTFS_MOUNT}/proc/$(basename $entry)
+      done
+  fi
