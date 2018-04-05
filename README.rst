@@ -349,7 +349,10 @@ with bazel::
 Operate something
 =================
 
-Sort instances with --sort-by::
+Sort instances with --sort-by
+-----------------------------
+
+Easy one::
 
  $ kubectl get pods -n=default
  NAME       READY     STATUS    RESTARTS   AGE
@@ -370,13 +373,19 @@ Sort instances with --sort-by::
  pod-name   1/1       Running   0          20m
  $
 
-Create a pod::
+Create a pod
+------------
+
+Easy one::
 
  $ kubectl create -f manifests/pod-01.yaml
 
 Create a pod with some changes by edit without any chages of the original manifest file::
 
  $ kubectl create -f manifests/pod-01.yaml --edit -o json
+
+Create a deployment
+-------------------
 
 Create a deployment with external network access::
 
@@ -417,9 +426,44 @@ You can get nginx page like::
  <title>Welcome to nginx!</title>
  ..
 
-Create a snapshot of etcd::
+Create a snapshot of etcd
+-------------------------
 
- $ ETCDCTL_API=3 etcdctl --endpoints $ENDPOINT snapshot save snapshot.db
+On this environment, etcd is running as a pod on kube-system namespace::
+
+ $ kubectl get pods -n kube-system
+ NAME                                              READY     STATUS    RESTARTS   AGE
+ etcd-k8s-v109-flannel-master                      1/1       Running   0          1d
+ ..
+ $
+
+The manifest is /etc/kubernetes/manifests/etcd.yaml::
+
+ $ sudo cat /etc/kubernetes/manifests/etcd.yaml
+ ..
+   - command:
+     - etcd
+     - --data-dir=/var/lib/etcd
+     - --listen-client-urls=http://127.0.0.1:2379
+     - --advertise-client-urls=http://127.0.0.1:2379
+ ..
+
+Install etcdctl command (The ubuntu package is too old and doesn't support the snapshot feature)::
+
+ $ mkdir foo
+ $ cd foo
+ $ wget https://github.com/coreos/etcd/releases/download/v3.2.18/etcd-v3.2.18-linux-amd64.tar.gz
+ $ tar -zxvf etcd-v3.2.18-linux-amd64.tar.gz
+ $ cd etcd-v3.2.18-linux-amd64
+
+Create a snapshot::
+
+ $ $ ETCDCTL_API=3 ./etcdctl --endpoints http://127.0.0.1:2379 snapshot save snapshot.db
+ Snapshot saved at snapshot.db
+ $
+
+Troubleshooting
+---------------
 
 (Non-recommended way) Enforce kubelet boot on an environment with swap::
 
