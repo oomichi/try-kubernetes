@@ -437,7 +437,7 @@ On this environment, etcd is running as a pod on kube-system namespace::
  ..
  $
 
-The manifest is /etc/kubernetes/manifests/etcd.yaml::
+The manifest is /etc/kubernetes/manifests/etcd.yaml and we can see the endpoint (http://127.0.0.1:2379) in this case::
 
  $ sudo cat /etc/kubernetes/manifests/etcd.yaml
  ..
