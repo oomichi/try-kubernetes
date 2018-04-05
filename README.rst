@@ -341,7 +341,7 @@ with bazel::
  $ bazel test //...
 
 Operate something
------------------
+=================
 
 Sort instances with --sort-by::
 
