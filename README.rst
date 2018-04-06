@@ -579,26 +579,58 @@ Rolling-upgrade and Rolling-back for a deployment
 Create a deployment with a little old nginx (v1.7.9)::
 
  $ kubectl create -f manifests/nginx-deployment.yaml
+ $ kubectl describe deployment/nginx-deployment | grep Image
+     Image:        nginx:1.7.9
+ $
 
 Check the ReplicaSet name and the pod names::
 
  $ kubectl get rs
-
+ NAME                          DESIRED   CURRENT   READY     AGE
+ nginx-deployment-75675f5897   3         3         3         6s
+ $
  $ kubectl get pods
+ NAME                                READY     STATUS    RESTARTS   AGE
+ nginx-deployment-75675f5897-9mhmv   1/1       Running   0          36s
+ nginx-deployment-75675f5897-kpgtr   1/1       Running   0          36s
+ nginx-deployment-75675f5897-plq92   1/1       Running   0          36s
+ $
 
 Set a newer nginx image (v1.9.1)::
 
  $ kubectl set image deployment/nginx-deployment nginx=nginx:1.9.1
+ $ kubectl describe deployment/nginx-deployment | grep Image
+     Image:        nginx:1.9.1
+ $
 
 Then check the status of the upgrade::
 
  $ kubectl rollout status deployment/nginx-deployment
+ Waiting for rollout to finish: 1 out of 3 new replicas have been updated...
+ Waiting for rollout to finish: 1 out of 3 new replicas have been updated...
+ Waiting for rollout to finish: 1 out of 3 new replicas have been updated...
+ Waiting for rollout to finish: 2 out of 3 new replicas have been updated...
+ Waiting for rollout to finish: 2 out of 3 new replicas have been updated...
+ Waiting for rollout to finish: 2 old replicas are pending termination...
+ Waiting for rollout to finish: 1 old replicas are pending termination...
+ Waiting for rollout to finish: 1 old replicas are pending termination...
+ deployment "nginx-deployment" successfully rolled out
+ $
 
-Conform new created ReplicaSet and pods::
+Conform new created ReplicaSet and pods. The old ReplicaSet doesn't have
+any pods now and new pods exist::
 
  $ kubectl get rs
-
+ NAME                          DESIRED   CURRENT   READY     AGE
+ nginx-deployment-75675f5897   0         0         0         3m
+ nginx-deployment-c4747d96c    3         3         3         1m
+ $
  $ kubectl get pods
+ NAME                               READY     STATUS    RESTARTS   AGE
+ nginx-deployment-c4747d96c-fbsw6   1/1       Running   0          2m
+ nginx-deployment-c4747d96c-gvqg2   1/1       Running   0          1m
+ nginx-deployment-c4747d96c-jfvvl   1/1       Running   0          1m
+ $
 
 Troubleshooting
 ===============
