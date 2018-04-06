@@ -773,6 +773,28 @@ Check the pod status, it waits for end of init process::
  pod-init-container                  0/1       Init:0/2   0          30s
  $
 
+Check logs of each containers, init-containers start on the order of the manifest::
+
+ $ kubectl logs pod-init-container -c myapp-container
+ Error from server (BadRequest): container "myapp-container" in pod "pod-init-container" is waiting to start: PodInitializing
+ $
+ $ kubectl logs pod-init-container -c init-myservice
+ waiting for myservice
+ nslookup: can't resolve 'myservice'
+ Server:    10.96.0.10
+ Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+ waiting for myservice
+ nslookup: can't resolve 'myservice'
+ Server:    10.96.0.10
+ Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+ waiting for myservice
+ $
+ $ kubectl logs pod-init-container -c init-mydb
+ Error from server (BadRequest): container "init-mydb" in pod "pod-init-container" is waiting to start: PodInitializing
+ $
+
 Create services for making end of init process::
 
  $ kubectl create -f manifests/services-for-init-containers.yaml
@@ -792,32 +814,6 @@ Then the pod outputs the message to show the end as its command in the manifest:
 
  $ kubectl logs pod-init-container
  The app is running!
- $
-
-In addition, we can see the end of init-containers on the logs::
-
- $ kubectl logs pod-init-container -c init-myservice
- ..
- waiting for myservice
- Server:    10.96.0.10
- Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
- nslookup: can't resolve 'myservice'
-
- waiting for myservice
- Server:    10.96.0.10
- Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
-
- Name:      myservice
- Address 1: 10.98.169.169 myservice.default.svc.cluster.local
-
-And more::
-
- $ kubectl logs pod-init-container -c init-mydb
- Server:    10.96.0.10
- Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
-
- Name:      mydb
- Address 1: 10.98.165.47 mydb.default.svc.cluster.local
  $
 
 Troubleshooting
