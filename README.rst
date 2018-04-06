@@ -714,6 +714,8 @@ Confirm the rolling-back succeeded::
 Verify DNS works for Services
 -----------------------------
 
+https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+
 Check what service works on the cluster::
 
  $ kubectl get services
@@ -739,6 +741,18 @@ Create a pod for verifying DNS works::
  #
 
 As the above, DNS works fine and the service nginx-deployment can be looked up from a pod as the same name.
+
+A pod also can be looked up by "pod-ip-address.my-namespace.pod.cluster.local" like::
+
+ $ kubectl get pods -o wide
+ NAME                                READY     STATUS    RESTARTS   AGE       IP            NODE
+ pod-01                              1/1       Running   0          19m       10.244.0.48   k8s-v109-flannel-master
+ $ kubectl exec -it pod-busybox sh
+ / #
+ / # ping 10-244-0-48.default.pod.cluster.local
+ PING 10-244-0-48.default.pod.cluster.local (10.244.0.48): 56 data bytes
+ 64 bytes from 10.244.0.48: seq=0 ttl=64 time=0.033 ms
+ 64 bytes from 10.244.0.48: seq=1 ttl=64 time=0.064 ms
 
 Troubleshooting
 ===============
