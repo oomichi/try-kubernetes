@@ -788,6 +788,12 @@ Create services for making end of init process::
  pod-init-container                  1/1       Running   0          5m
  $
 
+Then the pod outputs the message to show the end as its command in the manifest::
+
+ $ kubectl logs pod-init-container
+ The app is running!
+ $
+
 Troubleshooting
 ===============
 
