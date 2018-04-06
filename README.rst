@@ -794,6 +794,32 @@ Then the pod outputs the message to show the end as its command in the manifest:
  The app is running!
  $
 
+In addition, we can see the end of init-containers on the logs::
+
+ $ kubectl logs pod-init-container -c init-myservice
+ ..
+ waiting for myservice
+ Server:    10.96.0.10
+ Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+ nslookup: can't resolve 'myservice'
+
+ waiting for myservice
+ Server:    10.96.0.10
+ Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+ Name:      myservice
+ Address 1: 10.98.169.169 myservice.default.svc.cluster.local
+
+And more::
+
+ $ kubectl logs pod-init-container -c init-mydb
+ Server:    10.96.0.10
+ Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+ Name:      mydb
+ Address 1: 10.98.165.47 mydb.default.svc.cluster.local
+ $
+
 Troubleshooting
 ===============
 
