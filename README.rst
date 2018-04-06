@@ -583,6 +583,12 @@ Create a deployment with a little old nginx (v1.7.9)::
      Image:        nginx:1.7.9
  $
 
+Check the strategy (in this case (the default), that is RollingUpdate and the upgrade happens immediately just after setting the image)::
+
+ $ kubectl describe deployment/nginx-deployment | grep StrategyType
+ StrategyType:           RollingUpdate
+ $
+
 Check the ReplicaSet name and the pod names::
 
  $ kubectl get rs
