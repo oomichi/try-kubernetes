@@ -714,8 +714,8 @@ Confirm the rolling-back succeeded::
      Image:        nginx:1.7.9
  $
 
-Verify DNS works for Services
------------------------------
+Verify DNS works for Services and Pods
+--------------------------------------
 
 https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
 
