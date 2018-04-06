@@ -766,6 +766,17 @@ Create a pod with init-containers::
 
  $ kubectl create -f manifests/pod-init-container.yaml
 
+Check the pod status, it waits for end of init process::
+
+ $ kubectl get pods
+ NAME                                READY     STATUS     RESTARTS   AGE
+ pod-init-container                  0/1       Init:0/2   0          30s
+ $
+
+Create services for making end of init process::
+
+ $ kubectl create -f manifests/services-for-init-containers.yaml
+
 Troubleshooting
 ===============
 
