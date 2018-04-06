@@ -776,6 +776,17 @@ Check the pod status, it waits for end of init process::
 Create services for making end of init process::
 
  $ kubectl create -f manifests/services-for-init-containers.yaml
+ service "myservice" created
+ service "mydb" created
+ $
+ $ kubectl get pods
+ NAME                                READY     STATUS            RESTARTS   AGE
+ pod-init-container                  0/1       PodInitializing   0          4m
+ $
+ $ kubectl get pods
+ NAME                                READY     STATUS    RESTARTS   AGE
+ pod-init-container                  1/1       Running   0          5m
+ $
 
 Troubleshooting
 ===============
