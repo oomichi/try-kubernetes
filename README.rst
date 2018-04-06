@@ -618,7 +618,7 @@ Then check the status of the upgrade::
  $
 
 Conform new created ReplicaSet and pods. The old ReplicaSet doesn't have
-any pods now and new pods exist::
+any pods now and new pods only exist::
 
  $ kubectl get rs
  NAME                          DESIRED   CURRENT   READY     AGE
