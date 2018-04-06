@@ -561,6 +561,16 @@ Confirm the password in the pod::
  # cat /etc/foo/password
  mypassword
 
+Create a pod with the secret as a variable::
+
+ $ kubectl create -f manifests/pod-using-secret-as-variable.yaml
+
+Confirm the password in the pod::
+
+ $ kubectl exec -it pod-using-secret-as-variable /bin/bash
+ (login the pod)
+ #
+
 Troubleshooting
 ---------------
 
