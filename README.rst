@@ -573,8 +573,8 @@ Confirm the password in the pod::
  # echo $SECRET_PASSWORD
  mypassword
 
-Rolling-upgrade and Rolling-back for a deployment
--------------------------------------------------
+Rolling-upgrade for a deployment
+--------------------------------
 
 Create a deployment with a little old nginx (v1.7.9)::
 
@@ -630,6 +630,79 @@ any pods now and new pods only exist::
  nginx-deployment-c4747d96c-fbsw6   1/1       Running   0          2m
  nginx-deployment-c4747d96c-gvqg2   1/1       Running   0          1m
  nginx-deployment-c4747d96c-jfvvl   1/1       Running   0          1m
+ $
+
+
+Rolling-back of a deployment
+----------------------------
+
+Check the history of a deployment::
+
+ $ kubectl rollout history deployment/nginx-deployment
+ deployments "nginx-deployment"
+ REVISION  CHANGE-CAUSE
+ 1         <none>
+ 2         <none>
+ $
+
+Show the detail of each revision::
+
+ $ kubectl rollout history deployment/nginx-deployment --revision=2
+ deployments "nginx-deployment" with revision #2
+ Pod Template:
+  Labels:       app=nginx
+        pod-template-hash=1520898311
+  Containers:
+   nginx:
+    Image:      nginx:1.9.1
+    Port:       80/TCP
+    Environment:        <none>
+    Mounts:     <none>
+  Volumes:      <none>
+
+ $
+ $ kubectl rollout history deployment/nginx-deployment --revision=1
+ deployments "nginx-deployment" with revision #1
+ Pod Template:
+  Labels:       app=nginx
+        pod-template-hash=2710681425
+  Containers:
+   nginx:
+    Image:      nginx:1.7.9
+    Port:       80/TCP
+    Environment:        <none>
+    Mounts:     <none>
+  Volumes:      <none>
+
+ $
+
+Rolling-back the deployment::
+
+ $ kubectl rollout undo deployment/nginx-deployment
+
+Confirm the rolling-back succeeded::
+
+ $ kubectl rollout history deployment/nginx-deployment
+ deployments "nginx-deployment"
+ REVISION  CHANGE-CAUSE
+ 2         <none>
+ 3         <none>
+ $ kubectl rollout history deployment/nginx-deployment --revision=3
+ deployments "nginx-deployment" with revision #3
+ Pod Template:
+   Labels:       app=nginx
+         pod-template-hash=2710681425
+   Containers:
+    nginx:
+     Image:      nginx:1.7.9
+     Port:       80/TCP
+     Environment:        <none>
+     Mounts:     <none>
+   Volumes:      <none>
+
+ $
+ $ kubectl describe deployment/nginx-deployment | grep Image
+     Image:        nginx:1.7.9
  $
 
 Troubleshooting
