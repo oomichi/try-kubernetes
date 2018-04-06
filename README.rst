@@ -816,6 +816,21 @@ Then the pod outputs the message to show the end as its command in the manifest:
  The app is running!
  $
 
+Create a DaemonSet
+------------------
+
+Create a daemonset::
+
+ $ kubectl create -f manifests/daemonset.yaml
+
+Check the existence::
+
+ $ kubectl get ds -n kube-system
+ NAME                    DESIRED   CURRENT   READY     UP-TO-DATE   AVAILABLE   NODE SELECTOR                   AGE
+ fluentd-elasticsearch   1         1         1         1            1           <none>                          1m
+ ..
+ $
+
 Troubleshooting
 ===============
 
