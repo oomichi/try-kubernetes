@@ -757,6 +757,15 @@ A pod also can be looked up by "pod-ip-address.my-namespace.pod.cluster.local" l
  64 bytes from 10.244.0.48: seq=0 ttl=64 time=0.033 ms
  64 bytes from 10.244.0.48: seq=1 ttl=64 time=0.064 ms
 
+Use init-containers
+-------------------
+
+https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+
+Create a pod with init-containers::
+
+ $ kubectl create -f manifests/pod-init-container.yaml
+
 Troubleshooting
 ===============
 
