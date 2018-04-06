@@ -570,6 +570,8 @@ Confirm the password in the pod::
  $ kubectl exec -it pod-using-secret-as-variable /bin/bash
  (login the pod)
  #
+ # echo $SECRET_PASSWORD
+ mypassword
 
 Troubleshooting
 ---------------
