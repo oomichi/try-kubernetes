@@ -711,6 +711,35 @@ Confirm the rolling-back succeeded::
      Image:        nginx:1.7.9
  $
 
+Verify DNS works for Services
+-----------------------------
+
+Check what service works on the cluster::
+
+ $ kubectl get services
+ NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+ kubernetes         ClusterIP   10.96.0.1     <none>        443/TCP   2d
+ nginx-deployment   ClusterIP   10.99.52.90   <none>        80/TCP    24s
+ $
+
+Create a pod for verifying DNS works::
+
+ $ kubectl create -f manifests/pod-busybox.yaml
+ $ kubectl exec -it pod-busybox sh
+ (login the pod)
+ wget http://nginx-deployment
+ Connecting to nginx-deployment (10.99.52.90:80)
+ index.html           100% |********************************************************************************************************************************************|   612   0:00:00 ETA
+ / # cat index.html
+ <!DOCTYPE html>
+ <html>
+ <head>
+ <title>Welcome to nginx!</title>
+ ..
+ #
+
+As the above, DNS works fine and the service nginx-deployment can be looked up from a pod as the same name.
+
 Troubleshooting
 ===============
 
