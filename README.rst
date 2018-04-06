@@ -573,8 +573,35 @@ Confirm the password in the pod::
  # echo $SECRET_PASSWORD
  mypassword
 
+Rolling-upgrade and Rolling-back for a deployment
+-------------------------------------------------
+
+Create a deployment with a little old nginx (v1.7.9)::
+
+ $ kubectl create -f manifests/nginx-deployment.yaml
+
+Check the ReplicaSet name and the pod names::
+
+ $ kubectl get rs
+
+ $ kubectl get pods
+
+Set a newer nginx image (v1.9.1)::
+
+ $ kubectl set image deployment/nginx-deployment nginx=nginx:1.9.1
+
+Then check the status of the upgrade::
+
+ $ kubectl rollout status deployment/nginx-deployment
+
+Conform new created ReplicaSet and pods::
+
+ $ kubectl get rs
+
+ $ kubectl get pods
+
 Troubleshooting
----------------
+===============
 
 (Non-recommended way) Enforce kubelet boot on an environment with swap::
 
