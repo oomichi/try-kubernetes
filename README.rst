@@ -525,6 +525,42 @@ After making the node tainted with NoExecute, the pods go away from the node::
  nginx-foo-74cd78d68f-vzspf   1/1       Running   0          17s       10.244.0.35   k8s-v109-flannel-master
  $
 
+Create a secret
+---------------
+
+Encode a plain password with base64::
+
+ $ echo -n "mypassword" | base64
+ bXlwYXNzd29yZA==
+ $
+
+Create a secret::
+
+ $ cat manifests/secret-01.yaml
+ apiVersion: v1
+ kind: Secret
+ metadata:
+   name: secret-01
+ type: Opaque
+ data:
+   password: bXlwYXNzd29yZA==
+ $
+ $ kubectl create -f manifests/secret-01.yaml
+
+Create a pod with the secret as a file::
+
+ $ kubectl create -f manifests/pod-using-secret-01.yaml
+
+Confirm the password in the pod::
+
+ $ kubectl exec -it pod-using-secret-01 /bin/bash
+ (login the pod)
+ #
+ # ls /etc/foo/
+ password
+ # cat /etc/foo/password
+ mypassword
+
 Troubleshooting
 ---------------
 
