@@ -525,8 +525,8 @@ After making the node tainted with NoExecute, the pods go away from the node::
  nginx-foo-74cd78d68f-vzspf   1/1       Running   0          17s       10.244.0.35   k8s-v109-flannel-master
  $
 
-Create a secret
----------------
+Create a secret and use it from a pod
+-------------------------------------
 
 Encode a plain password with base64::
 
