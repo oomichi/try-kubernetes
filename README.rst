@@ -1,3 +1,6 @@
+.. contents:: Contents
+    :depth: 4
+
 Try Kubernetes on separated machines
 ====================================
 
