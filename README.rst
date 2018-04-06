@@ -528,6 +528,10 @@ After making the node tainted with NoExecute, the pods go away from the node::
  nginx-foo-74cd78d68f-vzspf   1/1       Running   0          17s       10.244.0.35   k8s-v109-flannel-master
  $
 
+Remove the taint after this try::
+
+ $ kubectl taint nodes k8s-v109-flannel-worker key-
+
 Create a secret and use it from a pod
 -------------------------------------
 
