@@ -773,7 +773,7 @@ Check the pod status, it waits for end of init process::
  pod-init-container                  0/1       Init:0/2   0          30s
  $
 
-Check logs of each containers, init-containers start on the order of the manifest::
+Check logs of each containers, init-containers start on the order of the manifest. That means 2nd init-container also wait for 1st one's finishes::
 
  $ kubectl logs pod-init-container -c myapp-container
  Error from server (BadRequest): container "myapp-container" in pod "pod-init-container" is waiting to start: PodInitializing
