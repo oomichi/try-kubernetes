@@ -462,6 +462,69 @@ Create a snapshot::
  Snapshot saved at snapshot.db
  $
 
+Make a node tainted and pods go away from the node
+--------------------------------------------------
+
+Check pods where live and the node::
+
+ $ kubectl get pods -o wide
+ NAME                         READY     STATUS    RESTARTS   AGE       IP            NODE
+ nginx-foo-74cd78d68f-4jwsq   1/1       Running   0          1m        10.244.0.30   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-5jl55   1/1       Running   0          1m        10.244.1.7    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-9cts2   1/1       Running   0          1m        10.244.1.5    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-9gtwx   1/1       Running   0          1m        10.244.1.6    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-b7zmx   1/1       Running   0          1m        10.244.1.4    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-d97pw   1/1       Running   0          1m        10.244.0.29   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-j27qf   1/1       Running   0          1m        10.244.0.28   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-j45c8   1/1       Running   0          1m        10.244.1.2    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-l4mwq   1/1       Running   0          1m        10.244.0.31   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-wnb4c   1/1       Running   0          1m        10.244.1.3    k8s-v109-flannel-worker
+ $
+ $ kubectl describe node k8s-v109-flannel-worker | grep Taints
+ Taints:             <none>
+ $
+
+Even if making the node tainted with NoSchedule, the pods still exist in the node::
+
+ $ kubectl taint nodes k8s-v109-flannel-worker key=value:NoSchedule
+ node "k8s-v109-flannel-worker" tainted
+ $ kubectl describe node k8s-v109-flannel-worker | grep Taints
+ Taints:             key=value:NoSchedule
+ $
+ $ kubectl get pods -o wide
+ NAME                         READY     STATUS    RESTARTS   AGE       IP            NODE
+ nginx-foo-74cd78d68f-4jwsq   1/1       Running   0          5m        10.244.0.30   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-5jl55   1/1       Running   0          5m        10.244.1.7    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-9cts2   1/1       Running   0          5m        10.244.1.5    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-9gtwx   1/1       Running   0          5m        10.244.1.6    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-b7zmx   1/1       Running   0          5m        10.244.1.4    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-d97pw   1/1       Running   0          5m        10.244.0.29   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-j27qf   1/1       Running   0          5m        10.244.0.28   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-j45c8   1/1       Running   0          5m        10.244.1.2    k8s-v109-flannel-worker
+ nginx-foo-74cd78d68f-l4mwq   1/1       Running   0          5m        10.244.0.31   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-wnb4c   1/1       Running   0          5m        10.244.1.3    k8s-v109-flannel-worker
+ $
+
+After making the node tainted with NoExecute, the pods go away from the node::
+
+ $ kubectl taint nodes k8s-v109-flannel-worker key=value:NoExecute
+ node "k8s-v109-flannel-worker" tainted
+ $ kubectl describe node k8s-v109-flannel-worker | grep Taints
+ Taints:             key=value:NoExecute
+ $ kubectl get pods -o wide
+ NAME                         READY     STATUS    RESTARTS   AGE       IP            NODE
+ nginx-foo-74cd78d68f-48q4p   1/1       Running   0          17s       10.244.0.37   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-4jwsq   1/1       Running   0          8m        10.244.0.30   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-9q6f8   1/1       Running   0          17s       10.244.0.34   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-d97pw   1/1       Running   0          8m        10.244.0.29   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-j27qf   1/1       Running   0          8m        10.244.0.28   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-jlxng   1/1       Running   0          17s       10.244.0.36   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-k5rl9   1/1       Running   0          17s       10.244.0.32   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-l4mwq   1/1       Running   0          8m        10.244.0.31   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-sg52l   1/1       Running   0          17s       10.244.0.33   k8s-v109-flannel-master
+ nginx-foo-74cd78d68f-vzspf   1/1       Running   0          17s       10.244.0.35   k8s-v109-flannel-master
+ $
+
 Troubleshooting
 ---------------
 
