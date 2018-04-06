@@ -549,11 +549,11 @@ Create a secret::
 
 Create a pod with the secret as a file::
 
- $ kubectl create -f manifests/pod-using-secret-01.yaml
+ $ kubectl create -f manifests/pod-using-secret-as-file.yaml
 
 Confirm the password in the pod::
 
- $ kubectl exec -it pod-using-secret-01 /bin/bash
+ $ kubectl exec -it pod-using-secret-as-file /bin/bash
  (login the pod)
  #
  # ls /etc/foo/
