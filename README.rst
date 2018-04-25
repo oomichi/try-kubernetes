@@ -290,7 +290,7 @@ Run e2e test::
 
 Confirm which tests will run without actual tests::
 
- $ go run hack/e2e.go -- -v --test --test_args="--ginkgo.dryRun=true --ginkgo.focus=\[Conformance\]"
+ $ go run hack/e2e.go -- --test --test_args="--ginkgo.dryRun=true --ginkgo.focus=\[Conformance\]"
  [..]
  [k8s.io] Docker Containers
    should use the image defaults if command and args are blank [Conformance]
