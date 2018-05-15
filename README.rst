@@ -349,6 +349,40 @@ with bazel::
 
  $ bazel test //...
 
+Helm & Spinnaker
+================
+
+Install Helm
+------------
+
+As https://github.com/kubernetes/helm#install ::
+
+ $ wget https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz
+ $ tar -zxvf helm-v2.9.1-linux-amd64.tar.gz
+ $ sudo mv linux-amd64/helm /usr/local/bin/
+ $ helm init
+
+Verify helm::
+
+ $ helm version
+ Client: &version.Version{SemVer:"v2.9.1", GitCommit:"20adb27c7c5868466912eebdf6664e7390ebe710", GitTreeState:"clean"}
+ Server: &version.Version{SemVer:"v2.9.1", GitCommit:"20adb27c7c5868466912eebdf6664e7390ebe710", GitTreeState:"clean"}
+ $
+
+Add permission to deploy tiller::
+
+ $ kubectl create serviceaccount --namespace kube-system tiller
+ $ kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+ $ kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+
+Install Spinnaker
+-----------------
+
+Install Spinnaker::
+
+ $ wget https://raw.githubusercontent.com/kubernetes/charts/master/stable/spinnaker/values.yaml
+ $ helm install -n kubelive -f values.yaml stable/spinnaker
+
 Operate something
 =================
 
