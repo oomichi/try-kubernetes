@@ -382,6 +382,10 @@ Install Spinnaker::
 
  $ wget https://raw.githubusercontent.com/kubernetes/charts/master/stable/spinnaker/values.yaml
  $ helm install -n kubelive -f values.yaml stable/spinnaker
+ Error: timed out waiting for the condition
+ $ helm ls --all kubelive
+ NAME            REVISION        UPDATED                         STATUS  CHART           NAMESPACE
+ kubelive        1               Tue May 15 21:36:52 2018        FAILED  spinnaker-0.4.1 default
 
 Operate something
 =================
