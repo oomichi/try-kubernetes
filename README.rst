@@ -383,9 +383,22 @@ Install Spinnaker::
  $ wget https://raw.githubusercontent.com/kubernetes/charts/master/stable/spinnaker/values.yaml
  $ helm install -n kubelive -f values.yaml stable/spinnaker
  Error: timed out waiting for the condition
+ $
  $ helm ls --all kubelive
  NAME            REVISION        UPDATED                         STATUS  CHART           NAMESPACE
  kubelive        1               Tue May 15 21:36:52 2018        FAILED  spinnaker-0.4.1 default
+ $
+ $ kubectl get pods
+ NAME                                              READY     STATUS             RESTARTS   AGE
+ kubelive-create-bucket-j97wn                      0/1       CrashLoopBackOff   5          10m
+ kubelive-jenkins-86bcb6c4b5-h4bqx                 0/1       Pending            0          10m
+ kubelive-minio-5d78b95d9c-pkpss                   0/1       Pending            0          10m
+ kubelive-redis-5667b84965-k4nmz                   0/1       Pending            0          10m
+ kubelive-spinnaker-clouddriver-85997f4b64-q97qq   0/1       Running            0          10m
+ kubelive-spinnaker-deck-86c48f7594-vxmnt          1/1       Running            0          10m
+ kubelive-spinnaker-echo-8ccc9956c-prk58           1/1       Running            0          10m
+ kubelive-spinnaker-front50-6859bf64bb-cn9bd       0/1       CrashLoopBackOff   6          10m
+ kubelive-spinnaker-gate-5468cccbc7-n2ncw          0/1       CrashLoopBackOff   6          10m
 
 Operate something
 =================
