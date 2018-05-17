@@ -320,6 +320,10 @@ Confirm which tests will run without actual tests::
  2017/08/09 15:38:12 e2e.go:80: Done
  $
 
+Specify a single test with regex::
+
+ $ go run hack/e2e.go -- --provider=skeleton --test --test_args="--ginkgo.focus=1\spod\sto\s2\spods"
+
 Setup dev env
 -------------
 
@@ -399,6 +403,11 @@ Install Spinnaker::
  kubelive-spinnaker-echo-8ccc9956c-prk58           1/1       Running            0          10m
  kubelive-spinnaker-front50-6859bf64bb-cn9bd       0/1       CrashLoopBackOff   6          10m
  kubelive-spinnaker-gate-5468cccbc7-n2ncw          0/1       CrashLoopBackOff   6          10m
+ $
+ $ kubectl logs kubelive-create-bucket-j97wn
+ mc: <ERROR> Unable to initialize new config from the provided credentials.
+ Get http://kubelive-minio:9000/probe-bucket-sign/?location=: dial tcp: lookup kubelive-minio on 10.96.0.10:53: no such host
+ $
 
 Operate something
 =================
