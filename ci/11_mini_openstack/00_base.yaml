@@ -10,7 +10,7 @@
       - software-properties-common
   - name: Add cloud-archive
     expect:
-      command: add-apt-repository cloud-archive:pike
+      command: add-apt-repository cloud-archive:queens
       responses:
         "Press \\[ENTER\\] to continue or ctrl-c to cancel adding it": ""
   - name: Update apt

@@ -4,9 +4,9 @@ Minimum OpenStack
 Overview
 --------
 
-This doc explains how to install minimum OpenStack on ubuntu 16.04.
-The release of OpenStack is Pike which is the latest at this time.
-The minimum services are Keystone, Glance, Nova and Neutron only.
+This doc explains how to install minimum OpenStack on ubuntu 18.04.
+The release of OpenStack is Queens which is the latest at this time.
+The minimum services are Keystone, Glance, Nova, Cinder and Neutron only.
 
 All nodes
 ---------
@@ -18,10 +18,10 @@ Change hostname by changing /etc/hostname and /etc/hosts on each node::
  $ sync
  $ sudo reboot
 
-Operate the following commands on all OpenStack nodes to enable the Pike version::
+Operate the following commands on all OpenStack nodes to enable the Queens version::
 
  $ sudo apt-get -y install software-properties-common
- $ sudo add-apt-repository cloud-archive:pike
+ $ sudo add-apt-repository cloud-archive:queens
  $ sudo apt-get update
  $ sudo apt-get -y dist-upgrade
 
@@ -146,10 +146,10 @@ Install packages for Keystone::
  > GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'KEYSTONE_DBPASS';
  $ sudo apt-get -y install vim keystone apache2 libapache2-mod-wsgi
 
-Confirm the Pike release of Keystone is installed::
+Confirm the Queens release of Keystone is installed::
 
  $ keystone-manage --version
- 12.0.0
+ 13.0.0
  $
 
 Edit configuration file::
