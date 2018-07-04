@@ -28,6 +28,15 @@ Operate the following commands on all OpenStack nodes to enable the Queens versi
 Controller node
 ---------------
 
+We can use ansible playbooks for the follwoing operations::
+
+ $ cd controller
+ $ ansible-playbook 01_ctrl_network_config.yaml -i ../hosts --ask-become-pass
+ $ ansible-playbook 02_dns_and_ntp.yaml -i ../hosts --ask-become-pass
+ $ ansible-playbook 03_SNAT.yaml -i ../hosts --ask-become-pass
+ $ ansible-playbook 04_dhcp.yaml -i ../hosts --ask-become-pass
+ $ ansible-playbook 05_keystone.yaml -i ../hosts --ask-become-pass
+
 Configure local (= OpenStack side) network interface, enp2s0 depends on envs(need to check unconfigured nic with `ifconfig -a`)::
 
  $ sudo vi /etc/network/interfaces
@@ -154,7 +163,7 @@ Confirm the Queens release of Keystone is installed::
 
 Edit configuration file::
 
- $ sudo vi
+ $ sudo vi /etc/keystone/keystone.conf
  - connection = sqlite:////var/lib/keystone/keystone.db
  + connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@localhost/keystone
 
