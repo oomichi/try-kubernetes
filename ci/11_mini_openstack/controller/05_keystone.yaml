@@ -62,7 +62,7 @@
   - name: Keystone credential_setup
     shell: keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
   - name: Keystone bootstrap
-    shell: keystone-manage bootstrap --bootstrap-password ADMIN_PASS --bootstrap-admin-url http://iaas-ctrl:35357/v3/ --bootstrap-internal-url http://iaas-ctrl:5000/v3/ --bootstrap-public-url http://iaas-ctrl:5000/v3/ --bootstrap-region-id RegionOne
+    shell: keystone-manage bootstrap --bootstrap-password ADMIN_PASS --bootstrap-admin-url http://iaas-ctrl:5000/v3/ --bootstrap-internal-url http://iaas-ctrl:5000/v3/ --bootstrap-public-url http://iaas-ctrl:5000/v3/ --bootstrap-region-id RegionOne
   - name: Set apache
     shell: sed -i s/"#ServerName www.example.com"/"ServerName iaas-ctrl"/ /etc/apache2/sites-available/000-default.conf
   - name: apache reboot
