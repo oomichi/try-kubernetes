@@ -48,3 +48,7 @@
       mode: '0644'
   - name: db_sync
     shell: su -s /bin/sh -c "glance-manage db_sync" glance
+  - name: restart glance-registry
+    shell: service glance-registry restart
+  - name: restart glance-api
+    shell: service glance-api restart
