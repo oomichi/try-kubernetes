@@ -36,6 +36,8 @@ We can use ansible playbooks for the follwoing operations::
  $ ansible-playbook 03_SNAT.yaml -i ../hosts --ask-become-pass
  $ ansible-playbook 04_dhcp.yaml -i ../hosts --ask-become-pass
  $ ansible-playbook 05_keystone.yaml -i ../hosts --ask-become-pass
+ $ ansible-playbook 06_service_catalog.yaml -i ../hosts --ask-become-pass
+ $ ansible-playbook 07_glance.yaml -i ../hosts --ask-become-pass
 
 Configure local (= OpenStack side) network interface, enp2s0 depends on envs(need to check unconfigured nic with `ifconfig -a`)::
 
