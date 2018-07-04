@@ -111,3 +111,13 @@
     shell: rabbitmqctl set_permissions openstack ".*" ".*" ".*"
   - name: Set l option
     shell: sed -i s/"-l 127.0.0.1"/"-l 192.168.1.1"/ /etc/memcached.conf
+  - name: service nova-api restart
+    shell: service nova-api restart
+  - name: service nova-consoleauth restart
+    shell: service nova-consoleauth restart
+  - name: service nova-scheduler restart
+    shell: service nova-scheduler restart
+  - name: service nova-conductor restart
+    shell: service nova-conductor restart
+  - name: service nova-novncproxy restart
+    shell: service nova-novncproxy restart
