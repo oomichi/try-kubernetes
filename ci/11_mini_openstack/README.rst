@@ -174,7 +174,7 @@ Initialize Keystone service::
  # keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
  # keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
  # keystone-manage bootstrap --bootstrap-password ADMIN_PASS \
- --bootstrap-admin-url http://iaas-ctrl:35357/v3/ \
+ --bootstrap-admin-url http://iaas-ctrl:5000/v3/ \
  --bootstrap-internal-url http://iaas-ctrl:5000/v3/ \
  --bootstrap-public-url http://iaas-ctrl:5000/v3/ \
  --bootstrap-region-id RegionOne
@@ -191,7 +191,7 @@ Configure management user and exit for re-login::
  $ echo "export OS_PROJECT_NAME=admin"             >> ~/.bashrc
  $ echo "export OS_USER_DOMAIN_NAME=Default"       >> ~/.bashrc
  $ echo "export OS_PROJECT_DOMAIN_NAME=Default"    >> ~/.bashrc
- $ echo "export OS_AUTH_URL=http://iaas-ctrl:35357/v3" >> ~/.bashrc
+ $ echo "export OS_AUTH_URL=http://iaas-ctrl:5000/v3" >> ~/.bashrc
  $ echo "export OS_IDENTITY_API_VERSION=3"                        >> ~/.bashrc
  $ exit
 
@@ -239,7 +239,7 @@ Edit /etc/glance/glance-api.conf::
 
  [keystone_authtoken]
  + auth_uri = http://iaas-ctrl:5000
- + auth_url = http://iaas-ctrl:35357
+ + auth_url = http://iaas-ctrl:5000
  + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
@@ -256,7 +256,7 @@ Edit /etc/glance/glance-registry.conf::
 
  [keystone_authtoken]
  + auth_uri = http://iaas-ctrl:5000
- + auth_url = http://iaas-ctrl:35357
+ + auth_url = http://iaas-ctrl:5000
  + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
@@ -344,7 +344,7 @@ Edit /etc/nova/nova.conf::
 
  [keystone_authtoken]
  + auth_uri = http://iaas-ctrl:5000
- + auth_url = http://iaas-ctrl:35357
+ + auth_url = http://iaas-ctrl:5000
  + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
@@ -376,7 +376,7 @@ Edit /etc/nova/nova.conf::
  + project_name = service
  + auth_type = password
  + user_domain_name = Default
- + auth_url = http://iaas-ctrl:35357/v3
+ + auth_url = http://iaas-ctrl:5000/v3
  + username = placement
  + password = PLACEMENT_PASS
 
@@ -433,7 +433,7 @@ Edit /etc/neutron/neutron.conf::
 
  [keystone_authtoken]
  + auth_uri = http://iaas-ctrl:5000
- + auth_url = http://iaas-ctrl:35357
+ + auth_url = http://iaas-ctrl:5000
  + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
@@ -443,7 +443,7 @@ Edit /etc/neutron/neutron.conf::
  + password = NEUTRON_PASS
 
  [nova]
- + auth_url = http://iaas-ctrl:35357
+ + auth_url = http://iaas-ctrl:5000
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -498,7 +498,7 @@ Edit /etc/nova/nova.conf::
  $ sudo vi /etc/nova/nova.conf
  [neutron]
  + url = http://iaas-ctrl:9696
- + auth_url = http://iaas-ctrl:35357
+ + auth_url = http://iaas-ctrl:5000
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -544,7 +544,7 @@ Edit /etc/nova/nova.conf::
 
  [keystone_authtoken]
  + auth_uri = http://iaas-ctrl:5000
- + auth_url = http://iaas-ctrl:35357
+ + auth_url = http://iaas-ctrl:5000
  + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
@@ -570,13 +570,13 @@ Edit /etc/nova/nova.conf::
  + project_name = service
  + auth_type = password
  + user_domain_name = Default
- + auth_url = http://iaas-ctrl:35357/v3
+ + auth_url = http://iaas-ctrl:5000/v3
  + username = placement
  + password = PLACEMENT_PASS
 
  [neutron]
  + url = http://iaas-ctrl:9696
- + auth_url = http://iaas-ctrl:35357
+ + auth_url = http://iaas-ctrl:5000
  + auth_type = password
  + project_domain_name = default
  + user_domain_name = default
@@ -593,7 +593,7 @@ Edit /etc/neutron/neutron.conf::
 
  [keystone_authtoken]
  + auth_uri = http://iaas-ctrl:5000
- + auth_url = http://iaas-ctrl:35357
+ + auth_url = http://iaas-ctrl:5000
  + memcached_servers = iaas-ctrl:11211
  + auth_type = password
  + project_domain_name = default
