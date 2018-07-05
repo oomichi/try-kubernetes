@@ -9,15 +9,6 @@
       - cinder-volume
       - lvm2
       - thin-provisioning-tools
-  - name: create a backing file for LVM
-    shell: truncate /var/lib/cinder/lvm-backing --size 100G
-  - name: change the mod of the backing file
-    file: path=/var/lib/cinder/lvm-backing owner=cinder group=cinder mode=0644
-  - name: create a loopback device for the backing file
-    shell: losetup -f --show /var/lib/cinder/lvm-backing
-    register: mydevice
-  - name: create a vg
-    shell: vgcreate cinder-volumes {{mydevice.stdout}}
   - name: copy cinder-setup-backing-file
     template:
       src: cinder/cinder-setup-backing-file
@@ -28,7 +19,23 @@
   - name: create a symlink for cinder-setup-backing-file
     file:
       src: /etc/init.d/cinder-setup-backing-file
-      dest: /etc/rc3.d/S10cinder-setup-backing-file
+      dest: /etc/rc5.d/S10cinder-setup-backing-file
       owner: root
       group: root
       state: link
+  - name: copy cinder.conf
+    template:
+      src: cinder/cinder.conf
+      dest: /etc/cinder/cinder.conf
+      owner: root
+      group: cinder
+      mode: '0644'
+  - name: create a backing file for LVM
+    shell: truncate /var/lib/cinder/lvm-backing --size 100G
+  - name: change the mod of the backing file
+    file: path=/var/lib/cinder/lvm-backing owner=cinder group=cinder mode=0644
+  - name: create a loopback device for the backing file
+    shell: losetup -f --show /var/lib/cinder/lvm-backing
+    register: mydevice
+  - name: create a vg
+    shell: vgcreate cinder-volumes {{mydevice.stdout}}
