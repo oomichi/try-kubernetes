@@ -1,0 +1,1 @@
+losetup -f --show /var/lib/cinder/lvm-backing
