@@ -9,6 +9,31 @@
       - cinder-volume
       - lvm2
       - thin-provisioning-tools
+  - name: delete cinder database table if exists
+    mysql_db:
+      name: cinder
+      state: absent
+  - name: create cinder database table
+    mysql_db:
+      name: cinder
+      state: present
+      encoding: utf8
+  - name: glant all privs to cinder user for cinder 1
+    mysql_user:
+      name: cinder
+      password: CINDER_DBPASS
+      priv: 'cinder.*:ALL'
+      state: present
+      host: 'localhost'
+      append_privs: yes
+  - name: glant all privs to cinder user for cinder 2
+    mysql_user:
+      name: cinder
+      password: CINDER_DBPASS
+      priv: 'cinder.*:ALL'
+      state: present
+      host: '%'
+      append_privs: yes
   - name: copy cinder-setup-backing-file
     template:
       src: cinder/cinder-setup-backing-file
