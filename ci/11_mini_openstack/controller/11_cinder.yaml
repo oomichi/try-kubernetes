@@ -7,8 +7,17 @@
     apt: name={{item}} state=present update_cache=yes
     with_items:
       - cinder-volume
+      - cinder-api
+      - cinder-scheduler
       - lvm2
       - thin-provisioning-tools
+  - name: copy cinder.conf
+    template:
+      src: cinder/cinder.conf
+      dest: /etc/cinder/cinder.conf
+      owner: root
+      group: cinder
+      mode: '0644'
   - name: delete cinder database table if exists
     mysql_db:
       name: cinder
@@ -34,6 +43,44 @@
       state: present
       host: '%'
       append_privs: yes
+  - name: Cinder db_sync
+    shell: su -s /bin/sh -c "cinder-manage db sync" cinder
+  - name: create cinder user
+    shell: source adminrc; openstack user create --domain default --password CINDER_PASS cinder
+    args:
+      executable: /bin/bash
+  - name: add cinder role
+    shell: source adminrc; openstack role add --project service --user cinder admin
+    args:
+      executable: /bin/bash
+  - name: create cinder services
+    shell: source adminrc; openstack service create --name cinder --description "OpenStack Block Storage" {{item}}
+    args:
+      executable: /bin/bash
+    with_items:
+      - volumev2
+      - volumev3
+  - name: create cinder public endpoints
+    shell: source adminrc; openstack endpoint create --region RegionOne volume{{item}} public http://iaas-ctrl:8776/{{item}}/%\(project_id\)s
+    args:
+      executable: /bin/bash
+    with_items:
+      - v2
+      - v3
+  - name: create cinder internal endpoints
+    shell: source adminrc; openstack endpoint create --region RegionOne volume{{item}} internal http://iaas-ctrl:8776/{{item}}/%\(project_id\)s
+    args:
+      executable: /bin/bash
+    with_items:
+      - v2
+      - v3
+  - name: create cinder admin endpoints
+    shell: source adminrc; openstack endpoint create --region RegionOne volume{{item}} admin http://iaas-ctrl:8776/{{item}}/%\(project_id\)s
+    args:
+      executable: /bin/bash
+    with_items:
+      - v2
+      - v3
   - name: copy cinder-setup-backing-file
     template:
       src: cinder/cinder-setup-backing-file
@@ -48,13 +95,6 @@
       owner: root
       group: root
       state: link
-  - name: copy cinder.conf
-    template:
-      src: cinder/cinder.conf
-      dest: /etc/cinder/cinder.conf
-      owner: root
-      group: cinder
-      mode: '0644'
   - name: create a backing file for LVM
     shell: truncate /var/lib/cinder/lvm-backing --size 100G
   - name: change the mod of the backing file
