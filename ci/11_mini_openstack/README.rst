@@ -41,6 +41,7 @@ We can use ansible playbooks for the follwoing operations::
  $ ansible-playbook 08_nova.yaml -i ../hosts --ask-become-pass
  $ ansible-playbook 09_neutron.yaml -i ../hosts --ask-become-pass
  $ ansible-playbook 10_flavor_and_image.yaml -i ../hosts --ask-become-pass
+ $ ansible-playbook 11_cinder.yaml -i ../hosts --ask-become-pass
 
 Configure local (= OpenStack side) network interface, enp2s0 depends on envs(need to check unconfigured nic with `ifconfig -a`)::
 
