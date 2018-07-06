@@ -1,1 +1,12 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          cinder-setup-backing-file
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Cinder Setup Backing File
+# Description:       Provides EBS like storage for your
+#                    virtual machine instances
+### END INIT INFO
+
 losetup -f --show /var/lib/cinder/lvm-backing
