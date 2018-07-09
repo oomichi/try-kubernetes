@@ -6,6 +6,7 @@
   - name: Install packages
     apt: name={{item}} state=present update_cache=yes
     with_items:
+      - nova-compute-libvirt
       - nova-compute
       - neutron-linuxbridge-agent
   - name: copy nova.conf
