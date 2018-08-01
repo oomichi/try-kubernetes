@@ -253,9 +253,29 @@ Download k8s source code::
 The above should install k8s cluster code, but now we face the error.
 TODO: This should be fixed later.
 
-Build e2e test binary::
+Check out the same version as the target k8s cluster::
 
  $ cd $GOPATH/src/k8s.io/kubernetes
+ $ kubectl version
+ Client Version: version.Info{
+   Major:"1", Minor:"11", GitVersion:"v1.11.1",
+   GitCommit:"b1b29978270dc22fecc592ac55d903350454310a",
+   GitTreeState:"clean", BuildDate:"2018-07-17T18:53:20Z", GoVersion:"go1.10.3", Compiler:"gc", Platform:"linux/amd64"}
+ Server Version: version.Info{Major:"1", Minor:"11", GitVersion:"v1.11.1",
+   GitCommit:"b1b29978270dc22fecc592ac55d903350454310a",
+   GitTreeState:"clean", BuildDate:"2018-07-17T18:43:26Z", GoVersion:"go1.10.3", Compiler:"gc", Platform:"linux/amd64"}
+ $
+ $ $ git tag -l
+ v0.10.0
+ ..
+ v1.11.1
+ ..
+ $
+ $ git checkout refs/tags/v1.11.1
+ $ git checkout -b tag-v1.11.1
+
+Build e2e test binary::
+
  # The docker daemon runs as root user, not docker user. So it is necessary to specify `su`
  $ sudo make quick-release
  $ sudo chown $USER -R .
