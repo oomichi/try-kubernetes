@@ -265,7 +265,7 @@ Check out the same version as the target k8s cluster::
    GitCommit:"b1b29978270dc22fecc592ac55d903350454310a",
    GitTreeState:"clean", BuildDate:"2018-07-17T18:43:26Z", GoVersion:"go1.10.3", Compiler:"gc", Platform:"linux/amd64"}
  $
- $ $ git tag -l
+ $ git tag -l
  v0.10.0
  ..
  v1.11.1
