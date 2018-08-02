@@ -195,6 +195,30 @@ Use the token and the discovery token on k8s-node to add a new node on the node:
  # kubeadm join --token ${TOKEN} ${ENDPOINT} \
  --discovery-token-ca-cert-hash sha256:${DISCOVERY_TOKEN}
 
+Enable metrics-server for HPA
+-----------------------------
+
+Install metrics-server on k8s-master::
+
+ $ git clone https://github.com/kubernetes-incubator/metrics-server
+ $ cd metrics-server/
+ $ kubectl create -f deploy/1.8+/
+
+Change kubelet config on all nodes::
+
+ --- /var/lib/kubelet/config.yaml.orig    2018-08-02 16:57:23.865340698 +0000
+ +++ /var/lib/kubelet/config.yaml 2018-08-02 17:14:29.502421376 +0000
+ @@ -57,6 +57,7 @@
+  oomScoreAdj: -999
+  podPidsLimit: -1
+  port: 10250
+ +readOnlyPort: 10255
+  registryBurst: 10
+  registryPullQPS: 5
+  resolvConf: /etc/resolv.conf
+
+Reboot all nodes
+
 How to see REST API operation on kubectl command
 ------------------------------------------------
 
