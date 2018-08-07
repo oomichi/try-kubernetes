@@ -298,7 +298,8 @@ Check out the same version as the target k8s cluster::
  $ git checkout refs/tags/v1.11.1
  $ git checkout -b tag-v1.11.1
 
-Build e2e test binary::
+Build e2e test binary.
+(NOTE: When changing the e2e code, we need to build the binary again to apply the changes)::
 
  # The docker daemon runs as root user, not docker user. So it is necessary to specify `su`
  $ sudo make quick-release
@@ -366,6 +367,10 @@ Confirm which tests will run without actual tests::
 Specify a single test with regex::
 
  $ go run hack/e2e.go -- --provider=skeleton --test --test_args="--ginkgo.focus=1\spod\sto\s2\spods"
+
+If changing e2e code, we need to specify --check-version-skew=false to skip checking versions of both server and e2e client::
+
+ $ go run hack/e2e.go -- --provider=skeleton --test --test_args="--ginkgo.focus=from\s3\sto\s5$" --check-version-skew=false
 
 Setup dev env
 -------------
