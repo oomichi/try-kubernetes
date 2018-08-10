@@ -219,6 +219,17 @@ Change kubelet config on all nodes::
 
 Reboot all nodes
 
+Configure kubelet on ubuntu 16.04
+---------------------------------
+
+kubelet is started as one of systemd units on ubuntu 16.04.
+The configuration file is /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+In the file, kubelet config is specified as /var/lib/kubelet/config.yaml
+So if needing to change kubelet config, you need to change the file.
+For example, we can specify --read-only-port for Metrics-server like::
+
+  readOnlyPort: 10255
+
 How to see REST API operation on kubectl command
 ------------------------------------------------
 
