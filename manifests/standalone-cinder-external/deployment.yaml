@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: standalone-cinder-provisioner
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: standalone-cinder-provisioner
+    spec:
+      serviceAccountName: standalone-cinder-provisioner
+      hostAliases:
+      - ip: "192.168.1.1"
+        hostnames:
+        - "iaas-ctrl"
+      containers:
+      - name: standalone-cinder-provisioner
+        image: docker.io/k8scloudprovider/cinder-provisioner:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: OS_AUTH_URL
+          value: http://iaas-ctrl:5000/v3
+        - name: OS_USERNAME
+          value: admin
+        - name: OS_PASSWORD
+          value: ADMIN_PASS
+        - name: OS_TENANT_ID
+          value: 682e74f275fe427abd9eb6759f3b68c5
+        - name: OS_REGION_NAME
+          value: RegionOne
+        - name: OS_DOMAIN_NAME
+          value: Default
