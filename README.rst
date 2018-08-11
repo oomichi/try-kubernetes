@@ -230,6 +230,35 @@ For example, we can specify --read-only-port for Metrics-server like::
 
   readOnlyPort: 10255
 
+Integrate standalone-cinder of the external cloud-provider-openstack for Dynamic Volume Provisioning
+----------------------------------------------------------------------------------------------------
+
+NOTE: It is not necessary to add options (--cloud-provider, --cloud-config) to kube-controller-manager and other processes at all.
+
+Use manifests as samples from https://github.com/oomichi/try-kubernetes/tree/master/manifests/standalone-cinder-external
+
+Add RBAC for standalone-cinder deployment::
+
+ $ kubectl create -f rbac.yaml
+
+Change hostAliases, OS_AUTH_URL and other OS_*** env values of deployment.yaml for your environment.
+
+Deploy standalone-cinder::
+
+ $ kubectl create -f deployment.yaml
+
+Add default StorageClass::
+
+ $ kubectl create -f storage-class.yaml
+
+Verify Dynamic Volume Provisioning works fine::
+
+ $ kubectl create -f pvc.yaml
+ $ kubectl get pvc
+ NAME           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+ cinder-claim   Bound     pvc-af01ada4-9cf4-11e8-a146-fa163e420595   1Gi        RWO            gold           31s
+ $
+
 How to see REST API operation on kubectl command
 ------------------------------------------------
 
