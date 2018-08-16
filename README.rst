@@ -342,10 +342,7 @@ Build e2e test binary.
 (NOTE: When changing the e2e code, we need to build the binary again to apply the changes)::
 
  # The docker daemon runs as root user, not docker user. So it is necessary to specify `su`
- $ sudo make quick-release
- $ sudo chown $USER -R .
- $ make ginkgo
- $ make generated_files
+ $ sudo /usr/local/go/bin/go  run hack/e2e.go -- --build
 
 Run e2e test
 ------------
