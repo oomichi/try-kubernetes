@@ -31,14 +31,14 @@ Based on http://tracpath.com/works/devops/how-to-install-the-kubernetes-kubeadm/
 
  Reboot the VM
 
-Operate the following installation on both kube-master and kube-host01::
+Operate the following installation on both kube-master and kube-host01 (nfs-common is for Subpath)::
 
  $ sudo su -
  # apt-get update && apt-get install -y apt-transport-https
  # curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
  # echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
  # apt-get update
- # apt-get install -y docker-engine
+ # apt-get install -y docker-engine nfs-common
 
 To install the latest packages of Kubernetes::
 
