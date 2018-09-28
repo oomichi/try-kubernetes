@@ -202,33 +202,22 @@ Install metrics-server on k8s-master::
 
  $ git clone https://github.com/kubernetes-incubator/metrics-server
  $ cd metrics-server/
+ $ vi deploy/1.8+/metrics-server-deployment.yaml
+ $ git diff
+ diff --git a/deploy/1.8+/metrics-server-deployment.yaml b/deploy/1.8+/metrics-server-deployment.yaml
+ index 2196866..8477bce 100644
+ --- a/deploy/1.8+/metrics-server-deployment.yaml
+ +++ b/deploy/1.8+/metrics-server-deployment.yaml
+ @@ -34,4 +34,8 @@ spec:
+          volumeMounts:
+          - name: tmp-dir
+            mountPath: /tmp
+ +        command:
+ +        - /metrics-server
+ +        - --kubelet-insecure-tls
+ +        - --kubelet-preferred-address-types=InternalIP
+
  $ kubectl create -f deploy/1.8+/
-
-Change kubelet config on all nodes::
-
- --- /var/lib/kubelet/config.yaml.orig    2018-08-02 16:57:23.865340698 +0000
- +++ /var/lib/kubelet/config.yaml 2018-08-02 17:14:29.502421376 +0000
- @@ -57,6 +57,7 @@
-  oomScoreAdj: -999
-  podPidsLimit: -1
-  port: 10250
- +readOnlyPort: 10255
-  registryBurst: 10
-  registryPullQPS: 5
-  resolvConf: /etc/resolv.conf
-
-Reboot all nodes
-
-Configure kubelet on ubuntu 16.04
----------------------------------
-
-kubelet is started as one of systemd units on ubuntu 16.04.
-The configuration file is /etc/systemd/system/kubelet.service.d/10-kubeadm.conf.
-In the file, kubelet config is specified as /var/lib/kubelet/config.yaml
-So if needing to change kubelet config, you need to change the file.
-For example, we can specify --read-only-port for Metrics-server like::
-
-  readOnlyPort: 10255
 
 Integrate standalone-cinder of the external cloud-provider-openstack for Dynamic Volume Provisioning
 ----------------------------------------------------------------------------------------------------
