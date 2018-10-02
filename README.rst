@@ -248,6 +248,17 @@ Verify Dynamic Volume Provisioning works fine::
  cinder-claim   Bound     pvc-af01ada4-9cf4-11e8-a146-fa163e420595   1Gi        RWO            gold           31s
  $
 
+Make the mount propagation work proerly
+---------------------------------------
+
+Edit /etc/systemd/system/multi-user.target.wants/docker.service like::
+
+ [Service] 
+ - MountFlags=slave
+ + MountFlags=shared
+
+This is required to pass e2e test "[sig-storage] CSI Volumes CSI plugin test using CSI driver: hostPath".
+
 How to see REST API operation on kubectl command
 ------------------------------------------------
 
