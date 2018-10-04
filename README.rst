@@ -143,10 +143,18 @@ Make the manager schedulable::
  Taints:                 <none>
  $
 
-Add a node into k8s cluster
----------------------------
+Initialization of a k8s node
+----------------------------
 
-Operate the following command on a node (not manager)::
+To make the mount propagation work proerly, edit /etc/systemd/system/multi-user.target.wants/docker.service like::
+
+ [Service] 
+ - MountFlags=slave
+ + MountFlags=shared
+
+This is required to pass e2e test "[sig-storage] CSI Volumes CSI plugin test using CSI driver: hostPath".
+
+To add a node into k8s cluster, operate the following command on a node (not manager)::
 
  # kubeadm join --token 22ac74.4d061109507a992b 172.27.138.55:6443
 
@@ -247,17 +255,6 @@ Verify Dynamic Volume Provisioning works fine::
  NAME           STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
  cinder-claim   Bound     pvc-af01ada4-9cf4-11e8-a146-fa163e420595   1Gi        RWO            gold           31s
  $
-
-Make the mount propagation work proerly
----------------------------------------
-
-Edit /etc/systemd/system/multi-user.target.wants/docker.service like::
-
- [Service] 
- - MountFlags=slave
- + MountFlags=shared
-
-This is required to pass e2e test "[sig-storage] CSI Volumes CSI plugin test using CSI driver: hostPath".
 
 How to see REST API operation on kubectl command
 ------------------------------------------------
