@@ -257,6 +257,24 @@ Verify Dynamic Volume Provisioning works fine::
  cinder-claim   Bound     pvc-af01ada4-9cf4-11e8-a146-fa163e420595   1Gi        RWO            gold           31s
  $
 
+Enable MetricsGrabber
+---------------------
+
+Change the listening address of kube-scheduler to 0.0.0.0::
+
+ $ sudo vi /etc/kubernetes/manifests/kube-scheduler.yaml
+ --- ./kube-scheduler.yaml.orig        2018-08-22 02:30:16.060204589 +0000
+ +++ /etc/kubernetes/manifests/kube-scheduler.yaml       2018-08-22 02:30:38.160555932 +0000
+ @@ -13,7 +13,7 @@
+    containers:
+    - command:
+      - kube-scheduler
+ -     - --address=127.0.0.1
+ +    - --address=0.0.0.0
+      - --kubeconfig=/etc/kubernetes/scheduler.conf
+      - --leader-elect=true
+      image: k8s.gcr.io/kube-scheduler-amd64:v1.11.1
+
 How to see REST API operation on kubectl command
 ------------------------------------------------
 
