@@ -24,6 +24,9 @@ rules:
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["list", "watch", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["get", "list", "create", "update"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
