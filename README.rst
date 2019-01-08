@@ -275,6 +275,21 @@ Change the listening address of kube-scheduler to 0.0.0.0::
       - --leader-elect=true
       image: k8s.gcr.io/kube-scheduler-amd64:v1.11.1
 
+Change the listening address of kube-controller-manager to 0.0.0.0::
+
+ $ sudo vi /etc/kubernetes/manifests/kube-controller-manager.yaml
+ --- kube-controller-manager.yaml        2019-01-08 23:39:48.721525219 +0000
+ +++ /etc/kubernetes/manifests/kube-controller-manager.yaml      2019-01-08 23:40:09.266003213 +0000
+ @@ -13,7 +13,7 @@
+    containers:
+    - command:
+      - kube-controller-manager
+ -    - --address=127.0.0.1
+ +    - --address=0.0.0.0
+      - --allocate-node-cidrs=true
+      - --authentication-kubeconfig=/etc/kubernetes/controller-manager.conf
+      - --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf
+
 How to see REST API operation on kubectl command
 ------------------------------------------------
 
