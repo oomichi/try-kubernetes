@@ -445,11 +445,13 @@ Setup dev env
 
 Install bazel::
 
- $ sudo apt-get install openjdk-8-jdk    (Don't install openjdk-9-jdk which is not supported on bazel now)
- $ sudo vi /etc/apt/sources.list.d/bazel.list
- $ cat /etc/apt/sources.list.d/bazel.list
- deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8
- $ sudo apt-get install bazel
+ $ sudo apt-get install pkg-config zip g++ zlib1g-dev unzip python
+ $ wget https://github.com/bazelbuild/bazel/releases/download/0.21.0/bazel-0.21.0-installer-linux-x86_64.sh
+ $ chmod 755 bazel-0.21.0-installer-linux-x86_64.sh
+ $ ./bazel-0.21.0-installer-linux-x86_64.sh --user
+ $
+ $ export PATH="$PATH:$HOME/bin"
+ $ echo "export PATH=$PATH:$HOME/bin" >> $HOME/.bashrc
 
 Run unit tests on kubernetes/test-infra::
 
