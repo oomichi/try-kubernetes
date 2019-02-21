@@ -290,6 +290,24 @@ Change the listening address of kube-controller-manager to 0.0.0.0::
       - --authentication-kubeconfig=/etc/kubernetes/controller-manager.conf
       - --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf
 
+Enable StorageObjectInUseProtection plugin on admission controller
+------------------------------------------------------------------
+
+StorageObjectInUseProtection sets the PV protection finalizer flag before
+a PV object appears on k8s API. "PV protection" e2e test requires this behavior.
+
+Add StorageObjectInUseProtection to --enable-admission-plugins option::
+
+ $ sudo vi /etc/kubernetes/manifests/kube-apiserver.yaml
+    - --advertise-address=192.168.1.102
+    - --allow-privileged=true
+    - --client-ca-file=/etc/kubernetes/pki/ca.crt
+ -  - --enable-admission-plugins=NodeRestriction
+ +  - --enable-admission-plugins=NodeRestriction,StorageObjectInUseProtection
+    - --enable-bootstrap-token-auth=true
+    - --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt
+    - --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt
+
 How to see REST API operation on kubectl command
 ------------------------------------------------
 
