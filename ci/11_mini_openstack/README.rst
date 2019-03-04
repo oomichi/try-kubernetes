@@ -662,6 +662,9 @@ Create a virtual machine::
    --nic net-id=$PROVIDER_NET_ID --security-group default \
    --key-name mykey vm01
 
+Enable Octavia
+==============
+
 Create amphora-x64-haproxy.qcow2 image for Octavia LB
 -----------------------------------------------------
 
