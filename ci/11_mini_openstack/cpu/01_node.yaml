@@ -21,7 +21,7 @@
     register: myip
     args:
       executable: /bin/bash
-  - name: replace my ip address
+  - name: replace my ip address for nova.conf
     replace:
       name: /etc/nova/nova.conf
       regexp: 'my_ip ='
@@ -40,6 +40,11 @@
       owner: root
       group: root
       mode: '0644'
+  - name: replace my ip address for linuxbridge_agent.ini
+    replace:
+      name: /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+      regexp: 'local_ip ='
+      replace: 'local_ip = {{myip.stdout}}'
   - name: reboot
     shell: sleep 2 && shutdown -r now
     async: 1

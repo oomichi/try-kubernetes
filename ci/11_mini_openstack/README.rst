@@ -465,13 +465,16 @@ Edit /etc/neutron/plugins/ml2/ml2_conf.ini::
 
  $ sudo vi /etc/neutron/plugins/ml2/ml2_conf.ini
  [ml2]
- + type_drivers = flat,vlan
- + tenant_network_types =
- + mechanism_drivers = linuxbridge
- + extension_drivers = port_security
+ type_drivers = flat,vxlan
+ tenant_network_types = vxlan
+ mechanism_drivers = linuxbridge,l2population
+ extension_drivers = port_security
 
  [ml2_type_flat]
- + flat_networks = provider
+ flat_networks = provider
+
+ [ml2_type_vxlan]
+ vni_ranges = 1:1000
 
 Edit /etc/neutron/plugins/ml2/linuxbridge_agent.ini::
 
@@ -480,10 +483,17 @@ Edit /etc/neutron/plugins/ml2/linuxbridge_agent.ini::
  + physical_interface_mappings = provider:enp2s0   <<<Change enp2s0 for your env>>>
 
  [vxlan]
- + enable_vxlan = false
+ [vxlan]
+ enable_vxlan = true
+ local_ip = 192.168.1.1  <<<Change 192.168.1.1 for your env>>>
+ l2_population = true
+ vxlan_group =
+
+ [agent]
+ prevent_arp_spoofing = true
 
  [securitygroup]
- + firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+ firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 
 Edit /etc/neutron/dhcp_agent.ini::
 
@@ -617,7 +627,13 @@ Edit /etc/neutron/plugins/ml2/linuxbridge_agent.ini::
  + physical_interface_mappings = provider:eno1
 
  [vxlan]
- + enable_vxlan = false
+ + enable_vxlan = true
+ + local_ip = 192.168.1.59    <<Change 192.168.1.59 for your env>>
+ + l2_population = true
+ + vxlan_group =
+
+ [agent]
+ + prevent_arp_spoofing = true
 
  [securitygroup]
  - #firewall_driver = <None>
