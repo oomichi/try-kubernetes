@@ -337,11 +337,11 @@ Run e2e test
 Prepare
 -------
 
-Need to install golang 1.10.2 which is not provided from ubuntu 16.04 as the
+Need to install golang 1.12.1 which is not provided from ubuntu 16.04 as the
 default. So we need to do the following process for that::
 
- $ wget https://dl.google.com/go/go1.10.3.linux-amd64.tar.gz
- $ sudo tar -C /usr/local/ -xzf go1.10.3.linux-amd64.tar.gz
+ $ wget https://dl.google.com/go/go1.12.1.linux-amd64.tar.gz
+ $ sudo tar -C /usr/local/ -xzf go1.12.1.linux-amd64.tar.gz
  $ export PATH=$PATH:/usr/local/go/bin
  $ echo "export PATH=$PATH:/usr/local/go/bin" >> $HOME/.bashrc
 
