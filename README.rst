@@ -344,6 +344,7 @@ default. So we need to do the following process for that::
  $ sudo tar -C /usr/local/ -xzf go1.12.1.linux-amd64.tar.gz
  $ export PATH=$PATH:/usr/local/go/bin
  $ echo "export PATH=$PATH:/usr/local/go/bin" >> $HOME/.bashrc
+ $ sudo ln -s /usr/local/go/bin/go /usr/local/bin/go
 
 Set GOPATH as parmanent setting::
 
