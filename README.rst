@@ -62,7 +62,7 @@ If you want to install previous release of Kubernetes, check avaiable releases w
 
 Then you can specify the release like::
 
- # apt-get install -y kubelet=1.9.6-00 kubeadm=1.9.6-00 kubectl=1.9.6-00 kubernetes-cni
+ # apt-get install -y kubelet=1.9.6-00 kubeadm=1.9.6-00 kubectl=1.9.6-00
 
 Initialization of kube-master
 -----------------------------
