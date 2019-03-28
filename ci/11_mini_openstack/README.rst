@@ -658,6 +658,9 @@ Register virtual machine images::
  $ wget http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
  $ openstack image create --container-format bare --disk-format qcow2 \
    --file xenial-server-cloudimg-amd64-disk1.img Ubuntu-16.04-x86_64
+ $ wget https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
+ $ openstack image create --container-format bare --disk-format qcow2 \
+   --file bionic-server-cloudimg-amd64.img Ubuntu-18.04-x86_64
 
 Prepare to create a virtual machine::
 
