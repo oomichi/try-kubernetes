@@ -9,7 +9,7 @@ Install
 
 Based on http://tracpath.com/works/devops/how-to-install-the-kubernetes-kubeadm/
 
-- Distro: ubuntu 16.04 LTS
+- Distro: ubuntu 18.04 LTS
 
 (VirtualBox) Add an internal network between VMs::
 
@@ -39,11 +39,11 @@ Operate the following installation on both kube-master and kube-host01 (nfs-comm
  # echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
  # add-apt-repository ppa:gluster/glusterfs-4.1
  # apt-get update
- # apt-get install -y docker-engine nfs-common glusterfs-client
+ # apt-get install -y docker.io nfs-common glusterfs-client
 
 To install the latest packages of Kubernetes::
 
- # apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+ # apt-get install -y kubelet kubeadm kubectl
 
 If you want to install previous release of Kubernetes, check avaiable releases with::
 
