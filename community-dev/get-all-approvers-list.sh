@@ -32,12 +32,17 @@ do
 	cat ./OWNERS_ALIASES | sed s/"${aliase}"/"${mod_aliase}"/ > $temp_aliases
 	for approver in $(cat $temp_aliases | yq ".aliases.${mod_aliase}" | grep '"' | sed s/[,\"]//g)
 	do
-		echo $approver >> $temp
+		# github IDs are sometimes written with CamelCase or lowercase for the same ID in OWNERS files.
+		# So here translates all IDs in lowercase.
+		echo $approver | tr '[A-Z]' '[a-z]' >> $temp
 	done
 done
 	
-cat $temp | sort | uniq
-
+for githubid in $(cat $temp | sort | uniq)
+do
+	name=$(curl "https://github.com/${githubid}" 2>/dev/null | grep '"name"' | awk -F">" '{print $2}' | awk -F"<" '{print $1}')
+	echo "${name} <${githubid}>"
+done
 rm -f -- "$temp"
 rm -f -- "$temp_aliases"
 
