@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 
-owners=$(ls */OWNERS ./OWNERS)
+owners=$(ls ./*/OWNERS ./OWNERS)
 approvers=()
 aliases=()
 
 for file in $owners
 do
 	for approver in $(cat $file | yq '.approvers' | grep '"' | sed s/[,\"]//g)
+	do
+		approvers+=( "$approver" )
+	done
+	# The following is for the root directory OWNERS
+	for approver in $(cat $file | yq '.filters.".*".approvers' | grep '"' | sed s/[,\"]//g)
 	do
 		approvers+=( "$approver" )
 	done
