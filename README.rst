@@ -331,6 +331,17 @@ Just specify '--v=8' option on kubectl command like::
                                                       "beta.kubernetes.io/os":"linux",
                                                       "kubernetes.io/hostname":"kube-host01"} ..
 
+How to know resource workload for each node
+-------------------------------------------
+
+This requires metrics-server is enabled.
+How to know resource work load for each node is::
+
+ $ kubectl top node
+ NAME         CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+ k8s-master   113m         5%     1271Mi          33%
+ k8s-node01   116m         5%     902Mi           23%
+
 Run e2e test
 ============
 
