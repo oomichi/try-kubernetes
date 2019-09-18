@@ -7,7 +7,8 @@ How to create the preseed DVD::
  $ mkdir mk-preseed
  $ cd mk-preseed/
  $ mkdir dvd
- $ sudo mount -t iso9660 ubuntu-16.04-server-amd64.iso ./dvd
+ $ wget http://releases.ubuntu.com/18.04/ubuntu-18.04.3-live-server-amd64.iso
+ $ sudo mount -t iso9660 ubuntu-18.04.3-live-server-amd64.iso ./dvd
  $ mkdir tmp
  $ cd dvd
  $ find . ! -type l | cpio -pdum ../tmp/
