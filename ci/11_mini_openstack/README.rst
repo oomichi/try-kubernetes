@@ -532,8 +532,13 @@ Restart and verify installation::
  $ sudo reboot
  [after rebooting..]
 
-Nova installation on compute node
----------------------------------
+Nova and Neutron installation on compute node
+---------------------------------------------
+
+We can use ansible playbook for the follwoing operations::
+
+ $ cd cpu
+ $ ansible-playbook 01_node.yaml -i ../hosts --ask-become-pass
 
 Install package::
 
