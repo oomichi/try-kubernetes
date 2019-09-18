@@ -3,14 +3,13 @@
   become_user: root
   user: ubuntu
   tasks:
-  - name: Add nic config 1
-    shell: echo "auto enp2s0" >> /etc/network/interfaces
-  - name: Add nic config 1
-    shell: echo "iface enp2s0 inet static" >> /etc/network/interfaces
-  - name: Add nic config 1
-    shell: echo "address 192.168.1.1" >> /etc/network/interfaces
-  - name: Add nic config 1
-    shell: echo "netmask 255.255.255.0" >> /etc/network/interfaces
+  - name: Copy netplan config file
+    template:
+      src: netplan/60-localnet-init.yaml
+      dest: /etc/netplan/60-localnet-init.yaml
+      owner: root
+      group: root
+      mode: '0644'
   - name: reboot
     shell: sleep 2 && shutdown -r now
     async: 1
