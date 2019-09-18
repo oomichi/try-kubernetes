@@ -5,7 +5,7 @@ Overview
 --------
 
 This doc explains how to install minimum OpenStack on ubuntu 18.04.
-The release of OpenStack is Queens which is the latest at this time.
+The release of OpenStack is Stein which is the latest at this time.
 The minimum services are Keystone, Glance, Nova, Cinder and Neutron only.
 
 All nodes
@@ -18,10 +18,10 @@ Change hostname by changing /etc/hostname and /etc/hosts on each node::
  $ sync
  $ sudo reboot
 
-Operate the following commands on all OpenStack nodes to enable the Queens version::
+Operate the following commands on all OpenStack nodes to enable the Stein version::
 
  $ sudo apt-get -y install software-properties-common
- $ sudo add-apt-repository cloud-archive:queens
+ $ sudo add-apt-repository cloud-archive:stein
  $ sudo apt-get update
  $ sudo apt-get -y dist-upgrade
 
