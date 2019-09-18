@@ -52,11 +52,13 @@ We can use ansible playbooks for the follwoing operations::
 
 Configure local (= OpenStack side) network interface, enp2s0 depends on envs(need to check unconfigured nic with `ifconfig -a`)::
 
- $ sudo vi /etc/network/interfaces
- + auto enp2s0
- + iface enp2s0 inet static
- + address 192.168.1.1
- + netmask 255.255.255.0
+ $ sudo vi /etc/netplan/60-localnet-init.yaml
+ + network:
+ +  version: 2
+ +  ethernets:
+ +    enp2s0:
+ +     dhcp4: no
+ +     addresses: [192.168.1.1/24]
 
 Install and configure name server for local network::
 
