@@ -168,10 +168,10 @@ Install packages for Keystone::
  > GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' IDENTIFIED BY 'KEYSTONE_DBPASS';
  $ sudo apt-get -y install vim keystone apache2 libapache2-mod-wsgi
 
-Confirm the Queens release of Keystone is installed::
+Confirm the Stein release of Keystone is installed::
 
  $ keystone-manage --version
- 13.0.0
+ 15.0.0
  $
 
 Edit configuration file::
@@ -249,23 +249,6 @@ Edit /etc/glance/glance-api.conf::
  + connection = mysql+pymysql://glance:GLANCE_DBPASS@iaas-ctrl/glance
 
  [..]
-
- [keystone_authtoken]
- + auth_uri = http://iaas-ctrl:5000
- + auth_url = http://iaas-ctrl:5000
- + memcached_servers = iaas-ctrl:11211
- + auth_type = password
- + project_domain_name = default
- + user_domain_name = default
- + project_name = service
- + username = glance
- + password = GLANCE_PASS
-
-Edit /etc/glance/glance-registry.conf::
-
- $ sudo vi /etc/glance/glance-registry.conf
- - #connection = <None>
- + connection = mysql+pymysql://glance:GLANCE_DBPASS@iaas-ctrl/glance
 
  [keystone_authtoken]
  + auth_uri = http://iaas-ctrl:5000
