@@ -6,10 +6,9 @@ How to create the preseed DVD::
  $ sudo apt-get -y install syslinux mtools mbr genisoimage dvd+rw-tools
  $ mkdir mk-preseed
  $ cd mk-preseed/
- $ mkdir dvd
+ $ mkdir dvd tmp
  $ wget http://releases.ubuntu.com/18.04/ubuntu-18.04.3-live-server-amd64.iso
  $ sudo mount -t iso9660 ubuntu-18.04.3-live-server-amd64.iso ./dvd
- $ mkdir tmp
  $ cd dvd
  $ find . ! -type l | cpio -pdum ../tmp/
  $ cd ../tmp/
