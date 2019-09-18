@@ -18,6 +18,13 @@ Change hostname by changing /etc/hostname and /etc/hosts on each node::
  $ sync
  $ sudo reboot
 
+NOTE: Necessary to change /etc/hosts of iaas-ctrl like the following because mysql server listens 127.0.0.1:3306::
+
+ $ sudo vi /etc/hosts
+ - 127.0.0.1 localhost
+ - 127.0.1.1 iaas-ctrl
+ + 127.0.0.1 localhost iaas-ctrl
+
 Operate the following commands on all OpenStack nodes to enable the Stein version::
 
  $ sudo apt-get -y install software-properties-common
