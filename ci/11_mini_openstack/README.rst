@@ -681,23 +681,4 @@ Create a virtual machine::
 Enable Octavia
 ==============
 
-Create amphora-x64-haproxy.qcow2 image for Octavia LB
------------------------------------------------------
-
-Run::
-
- $ sudo apt-get install python-pip
- $ sudo pip install diskimage-builder
- $ sudo apt-get install qemu
- $ git clone https://github.com/openstack/octavia
- $ cd octavia/
- $ ./diskimage-create/diskimage-create.sh
- ..
- 2019-03-02 02:56:01.510 | Converting image using qemu-img convert
- 2019-03-02 02:57:16.436 | Image file /home/ubuntu/octavia/amphora-x64-haproxy.qcow2 created...
- 2019-03-02 02:57:16.642 | Build completed successfully
- $
- $ ls amphora-x64-haproxy.qcow2
- amphora-x64-haproxy.qcow2
- $
 
