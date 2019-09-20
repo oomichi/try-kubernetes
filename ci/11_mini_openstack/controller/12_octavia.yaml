@@ -129,7 +129,7 @@
   - name: create certs private directory
     file: path=/etc/octavia/certs/private state=directory owner=octavia group=octavia mode=0700
   - name: create the certificates
-    shell: /tmp/octavia/bin/create_dual_intermediate_CA.sh
+    shell: cd /tmp/octavia/bin; /tmp/octavia/bin/create_dual_intermediate_CA.sh
     args:
       executable: /bin/bash
   - name: copy certs 1-5
