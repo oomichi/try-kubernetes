@@ -26,6 +26,13 @@
       owner: octavia
       group: octavia
       mode: '0644'
+  - name: copy octaviarc
+    template:
+      src: octavia/octaviarc
+      dest: /etc/octavia/octaviarc
+      owner: octavia
+      group: octavia
+      mode: '0644'
   - name: create octavia user
     shell: source adminrc; openstack user create --domain default --password OCTAVIA_PASS octavia
     args:
@@ -186,7 +193,7 @@
   - name: chmod ssh public key
     file: path=/etc/octavia/.ssh/octavia_ssh_key.pub owner=octavia group=octavia mode=0600
   - name: create keypair for SSH login to amphorae
-    shell: source adminrc; openstack keypair create --public-key /etc/octavia/.ssh/octavia_ssh_key.pub octavia_ssh_key
+    shell: source octaviarc; openstack keypair create --public-key /etc/octavia/.ssh/octavia_ssh_key.pub octavia_ssh_key
     args:
       executable: /bin/bash
   - name: delete octavia database table if exists
