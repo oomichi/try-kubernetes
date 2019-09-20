@@ -41,7 +41,7 @@
     args:
       executable: /bin/bash
   - name: get the ID of lb-mgmt-net
-    shell: openstack network show lb-mgmt-net -c id -f value
+    shell: source adminrc; openstack network show lb-mgmt-net -c id -f value
     register: lbmgmtnet
     args:
       executable: /bin/bash
@@ -75,7 +75,7 @@
     args:
       executable: /bin/bash
   - name: get the ID of lb-mgmt-sec-grp
-    shell: openstack security group show lb-mgmt-sec-grp -c id -f value
+    shell: source adminrc; openstack security group show lb-mgmt-sec-grp -c id -f value
     register: lbmgmtsecgrp
     args:
       executable: /bin/bash
