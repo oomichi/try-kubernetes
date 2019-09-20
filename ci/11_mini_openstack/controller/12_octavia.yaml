@@ -17,6 +17,8 @@
       - octavia-worker
       - python3-octavia
       - python3-octaviaclient
+  - name: chmod /etc/octavia
+    file: path=/etc/octavia owner=octavia group=octavia mode=0755
   - name: copy octavia.conf
     template:
       src: octavia/octavia.conf
@@ -100,6 +102,8 @@
     shell: source adminrc; openstack endpoint create --region RegionOne load-balancer admin http://iaas-ctrl:9876
     args:
       executable: /bin/bash
+  - name: cleanup temporary directory for octavia repo
+    file: path=/tmp/octavia state=absent
   - name: create temporary directory for octavia repo
     file: path=/tmp/octavia state=directory owner=octavia group=octavia mode=0755
   - name: clone octavia repo
