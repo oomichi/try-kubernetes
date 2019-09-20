@@ -60,19 +60,19 @@
       regexp: 'lb-mgmt-net_id'
       replace: '{{lbmgmtnet.stdout}}'
   - name: create octavia security group
-    shell: source adminrc; openstack security group create lb-mgmt-sec-grp
+    shell: source /etc/octavia/octaviarc; openstack security group create lb-mgmt-sec-grp
     args:
       executable: /bin/bash
   - name: create octavia security group rule for icmp
-    shell: source adminrc; openstack security group rule create --protocol icmp lb-mgmt-sec-grp
+    shell: source /etc/octavia/octaviarc; openstack security group rule create --protocol icmp lb-mgmt-sec-grp
     args:
       executable: /bin/bash
   - name: create octavia security group rule for ssh
-    shell: source adminrc; openstack security group rule create --protocol tcp --dst-port 22 lb-mgmt-sec-grp
+    shell: source /etc/octavia/octaviarc; openstack security group rule create --protocol tcp --dst-port 22 lb-mgmt-sec-grp
     args:
       executable: /bin/bash
   - name: create octavia security group rule for tcp/9443
-    shell: source adminrc; openstack security group rule create --protocol tcp --dst-port 9443 lb-mgmt-sec-grp
+    shell: source /etc/octavia/octaviarc; openstack security group rule create --protocol tcp --dst-port 9443 lb-mgmt-sec-grp
     args:
       executable: /bin/bash
   - name: create health-mgr security group
@@ -84,7 +84,7 @@
     args:
       executable: /bin/bash
   - name: get the ID of lb-mgmt-sec-grp
-    shell: source adminrc; openstack security group show lb-mgmt-sec-grp -c id -f value
+    shell: source /etc/octavia/octaviarc; openstack security group show lb-mgmt-sec-grp -c id -f value
     register: lbmgmtsecgrp
     args:
       executable: /bin/bash
@@ -193,7 +193,7 @@
   - name: chmod ssh public key
     file: path=/etc/octavia/.ssh/octavia_ssh_key.pub owner=octavia group=octavia mode=0600
   - name: create keypair for SSH login to amphorae
-    shell: source octaviarc; openstack keypair create --public-key /etc/octavia/.ssh/octavia_ssh_key.pub octavia_ssh_key
+    shell: source /etc/octavia/octaviarc; openstack keypair create --public-key /etc/octavia/.ssh/octavia_ssh_key.pub octavia_ssh_key
     args:
       executable: /bin/bash
   - name: delete octavia database table if exists
