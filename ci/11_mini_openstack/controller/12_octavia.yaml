@@ -111,7 +111,7 @@
     args:
       executable: /bin/bash
   - name: upload the amphora image
-    shell: source adminrc; openstack image create --disk-format qcow2 --container-format bare --private --tag amphora --file /tmp/octavia/diskimage-create/.amp_tox_test/amphora-x64-haproxy.qcow2 amphora-x64-haproxy
+    shell: source adminrc; openstack image create --disk-format qcow2 --container-format bare --private --tag amphora --file /tmp/octavia/diskimage-create/amphora-x64-haproxy.qcow2 amphora-x64-haproxy
     args:
       executable: /bin/bash
   - name: tag the amphora image
