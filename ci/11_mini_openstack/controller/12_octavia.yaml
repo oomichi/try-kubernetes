@@ -183,7 +183,7 @@
     mysql_user:
       name: octavia
       password: OCTAVIA_DBPASS
-     priv: 'octavia.*:ALL'
+      priv: 'octavia.*:ALL'
       state: present
       host: 'localhost'
       append_privs: yes
