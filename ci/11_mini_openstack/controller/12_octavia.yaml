@@ -170,7 +170,6 @@
     shell: source adminrc; openstack keypair create --public-key /etc/octavia/.ssh/octavia_ssh_key.pub octavia_ssh_key
     args:
       executable: /bin/bash
-
   - name: delete octavia database table if exists
     mysql_db:
       name: octavia
@@ -196,31 +195,5 @@
       state: present
       host: '%'
       append_privs: yes
-
-
-  - name: Cinder db_sync
-    shell: su -s /bin/sh -c "cinder-manage db sync" cinder
-
-  - name: copy cinder-setup-backing-file
-    template:
-      src: cinder/cinder-setup-backing-file
-      dest: /etc/init.d/cinder-setup-backing-file
-      owner: root
-      group: root
-      mode: '0755'
-  - name: create a symlink for cinder-setup-backing-file
-    file:
-      src: /etc/init.d/cinder-setup-backing-file
-      dest: /etc/rc5.d/S10cinder-setup-backing-file
-      owner: root
-      group: root
-      state: link
-  - name: create a backing file for LVM
-    shell: truncate /var/lib/cinder/lvm-backing --size 100G
-  - name: change the mod of the backing file
-    file: path=/var/lib/cinder/lvm-backing owner=cinder group=cinder mode=0644
-  - name: create a loopback device for the backing file
-    shell: losetup -f --show /var/lib/cinder/lvm-backing
-    register: mydevice
-  - name: create a vg
-    shell: vgcreate cinder-volumes {{mydevice.stdout}}
+  - name: Octavia db_sync
+    shell: su -s /bin/sh -c "octavia-db-manage --config-file /etc/octavia/octavia.conf upgrade head" octavia
