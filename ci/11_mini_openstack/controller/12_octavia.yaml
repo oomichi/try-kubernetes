@@ -1,0 +1,170 @@
+- hosts: iaas-ctrl
+  become: true
+  become_user: root
+  user: ubuntu
+  tasks:
+  - name: Install packages
+    apt: name={{item}} state=present update_cache=yes
+    with_items:
+      - tox
+      - qemu-utils
+      - git
+      - kpartx
+      - debootstrap
+      - octavia-api
+      - octavia-health-manager
+      - octavia-housekeeping
+      - octavia-worker
+      - python3-octavia
+      - python3-octaviaclient
+  - name: copy octavia.conf
+    template:
+      src: octavia/octavia.conf
+      dest: /etc/octavia/octavia.conf
+      owner: octavia
+      group: octavia
+      mode: '0644'
+  - name: create octavia user
+    shell: source adminrc; openstack user create --domain default --password OCTAVIA_PASS octavia
+    args:
+      executable: /bin/bash
+  - name: add octavia role
+    shell: source adminrc; openstack role add --project service --user octavia admin
+    args:
+      executable: /bin/bash
+  - name: create octavia services
+    shell: source adminrc; openstack service create --name octavia --description "OpenStack Load Balancer" load-balancer
+    args:
+      executable: /bin/bash
+  - name: create octavia public endpoints
+    shell: source adminrc; openstack endpoint create --region RegionOne load-balancer public http://iaas-ctrl:9876
+    args:
+      executable: /bin/bash
+  - name: create octavia internal endpoints
+    shell: source adminrc; openstack endpoint create --region RegionOne load-balancer internal http://iaas-ctrl:9876
+    args:
+      executable: /bin/bash
+  - name: create octavia admin endpoints
+    shell: source adminrc; openstack endpoint create --region RegionOne load-balancer admin http://iaas-ctrl:9876
+    args:
+      executable: /bin/bash
+  - name: create temporary directory for octavia repo
+    file: path=/tmp/octavia state=directory owner=octavia group=octavia mode=0755
+  - name: clone octavia repo
+    shell: git clone https://github.com/openstack/octavia.git /tmp/octavia/
+    args:
+      executable: /bin/bash
+  - name: create an amphora image
+    shell: cd /tmp/octavia/diskimage-create; tox -e build
+    args:
+      executable: /bin/bash
+  - name: upload the amphora image
+    shell: openstack image create --disk-format qcow2 --container-format bare --private --tag amphora --file /tmp/octavia/diskimage-create/.amp_tox_test/amphora-x64-haproxy.qcow2 amphora-x64-haproxy
+    args:
+      executable: /bin/bash
+  - name: create a flavor for amphora instance
+    shell: openstack flavor create --id 200 --vcpus 1 --ram 1024 --disk 10 "amphora" --private
+    args:
+      executable: /bin/bash
+  - name: chown /etc/octavia directory
+    file: path=/etc/octavia owner=octavia group=octavia
+  - name: create certs directory
+    file: path=/etc/octavia/certs state=directory owner=octavia group=octavia mode=0700
+  - name: create certs private directory
+    file: path=/etc/octavia/certs/private state=directory owner=octavia group=octavia mode=0700
+  - name: create the certificates
+    shell: /tmp/octavia/bin/create_dual_intermediate_CA.sh
+    args:
+      executable: /bin/bash
+  - name: copy certs 1-5
+    shell: cp /tmp/octavia/bin/dual_ca/etc/octavia/certs/server_ca.cert.pem /etc/octavia/certs/
+    args:
+      executable: /bin/bash
+  - name: copy certs 2-5
+    shell: cp /tmp/octavia/bin/dual_ca/etc/octavia/certs/server_ca-chain.cert.pem /etc/octavia/certs/
+    args:
+      executable: /bin/bash
+  - name: copy certs 3-5
+    shell: cp /tmp/octavia/bin/dual_ca/etc/octavia/certs/server_ca.key.pem /etc/octavia/certs/private/
+    args:
+      executable: /bin/bash
+  - name: copy certs 4-5
+    shell: cp /tmp/octavia/bin/dual_ca/etc/octavia/certs/client_ca.cert.pem /etc/octavia/certs/
+    args:
+      executable: /bin/bash
+  - name: copy certs 5-5
+    shell: cp /tmp/octavia/bin/dual_ca/etc/octavia/certs/client.cert-and-key.pem /etc/octavia/certs/private/
+    args:
+      executable: /bin/bash
+  - name: chmod certs 1-5
+    file: path=/etc/octavia/certs/server_ca.cert.pem owner=octavia group=octavia mode=0600
+  - name: chmod certs 2-5
+    file: path=/etc/octavia/certs/server_ca-chain.cert.pem owner=octavia group=octavia mode=0600
+  - name: chmod certs 3-5
+    file: path=/etc/octavia/certs/private/server_ca.key.pem owner=octavia group=octavia mode=0600
+  - name: chmod certs 4-5
+    file: path=/etc/octavia/certs/client_ca.cert.pem owner=octavia group=octavia mode=0600
+  - name: chmod certs 5-5
+    file: path=/etc/octavia/certs/private/client.cert-and-key.pem owner=octavia group=octavia mode=0600
+  - name: create ssh key directory
+    file: path=/etc/octavia/.ssh state=directory owner=octavia group=octavia mode=0700
+  - name: create ssh key
+    shell: su -s /bin/sh -c 'ssh-keygen -b 2048 -t rsa -N "" -f /etc/octavia/.ssh/octavia_ssh_key' octavia
+  - name: create keypair for SSH login to amphorae
+    shell: openstack keypair create --public-key /etc/octavia/.ssh/octavia_ssh_key.pub octavia_ssh_key
+    args:
+      executable: /bin/bash
+
+  - name: delete octavia database table if exists
+    mysql_db:
+      name: octavia
+      state: absent
+  - name: create octavia database table
+    mysql_db:
+      name: octavia
+      state: present
+      encoding: utf8
+  - name: glant all privs to octavia user for octavia 1
+    mysql_user:
+      name: octavia
+      password: OCTAVIA_DBPASS
+     priv: 'octavia.*:ALL'
+      state: present
+      host: 'localhost'
+      append_privs: yes
+  - name: glant all privs to octavia user for octavia 2
+    mysql_user:
+      name: octavia
+      password: OCTAVIA_DBPASS
+      priv: 'octavia.*:ALL'
+      state: present
+      host: '%'
+      append_privs: yes
+
+
+  - name: Cinder db_sync
+    shell: su -s /bin/sh -c "cinder-manage db sync" cinder
+
+  - name: copy cinder-setup-backing-file
+    template:
+      src: cinder/cinder-setup-backing-file
+      dest: /etc/init.d/cinder-setup-backing-file
+      owner: root
+      group: root
+      mode: '0755'
+  - name: create a symlink for cinder-setup-backing-file
+    file:
+      src: /etc/init.d/cinder-setup-backing-file
+      dest: /etc/rc5.d/S10cinder-setup-backing-file
+      owner: root
+      group: root
+      state: link
+  - name: create a backing file for LVM
+    shell: truncate /var/lib/cinder/lvm-backing --size 100G
+  - name: change the mod of the backing file
+    file: path=/var/lib/cinder/lvm-backing owner=cinder group=cinder mode=0644
+  - name: create a loopback device for the backing file
+    shell: losetup -f --show /var/lib/cinder/lvm-backing
+    register: mydevice
+  - name: create a vg
+    shell: vgcreate cinder-volumes {{mydevice.stdout}}
