@@ -179,6 +179,12 @@
     file: path=/etc/octavia/.ssh state=directory owner=octavia group=octavia mode=0700
   - name: create ssh key
     shell: su -s /bin/sh -c 'ssh-keygen -b 2048 -t rsa -N "" -f /etc/octavia/.ssh/octavia_ssh_key' octavia
+  - name: chmod ssh key directory
+    file: path=/etc/octavia/.ssh owner=octavia group=octavia mode=0700
+  - name: chmod ssh private key
+    file: path=/etc/octavia/.ssh/octavia_ssh_key owner=octavia group=octavia mode=0600
+  - name: chmod ssh public key
+    file: path=/etc/octavia/.ssh/octavia_ssh_key.pub owner=octavia group=octavia mode=0600
   - name: create keypair for SSH login to amphorae
     shell: source adminrc; openstack keypair create --public-key /etc/octavia/.ssh/octavia_ssh_key.pub octavia_ssh_key
     args:
