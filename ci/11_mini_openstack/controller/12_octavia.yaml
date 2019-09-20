@@ -86,6 +86,15 @@
       name: /etc/octavia/octavia.conf
       regexp: 'lb-mgmt-sec-grp_id'
       replace: '{{lbmgmtsecgrp.stdout}}'
+  - name: get the ID of lb-mgmt-subnet
+    shell: source adminrc; openstack subnet show lb-mgmt-subnet -c id -f value
+    register: lbmgmtsubnet
+    args:
+      executable: /bin/bash
+  - name: create octavia management port
+    shell: source adminrc; openstack port create --security-group lb-health-mgr-sec-grp --device-owner Octavia:health-mgr --host=iaas-ctrl --network lb-mgmt-net --fixed-ip subnet={{lbmgmtsubnet.stdout}},ip-address=192.168.0.4 octavia-health-manager-listen-port
+    args:
+      executable: /bin/bash
   - name: create octavia services
     shell: source adminrc; openstack service create --name octavia --description "OpenStack Load Balancer" load-balancer
     args:
