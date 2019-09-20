@@ -32,6 +32,58 @@
     shell: source adminrc; openstack role add --project service --user octavia admin
     args:
       executable: /bin/bash
+  - name: create octavia management network
+    shell: source adminrc; openstack network create lb-mgmt-net
+    args:
+      executable: /bin/bash
+  - name: create octavia management subnet
+    shell: source adminrc; openstack subnet create --subnet-range 192.168.0.0/24 --allocation-pool start=192.168.0.2,end=192.168.0.200 --network lb-mgmt-net lb-mgmt-subnet
+    args:
+      executable: /bin/bash
+  - name: get the ID of lb-mgmt-net
+    shell: openstack network show lb-mgmt-net -c id -f value
+    register: lbmgmtnet
+    args:
+      executable: /bin/bash
+  - name: replace the ID of lb-mgmt-net for octavia.conf
+    replace:
+      name: /etc/octavia/octavia.conf
+      regexp: 'lb-mgmt-net_id'
+      replace: '{{lbmgmtnet.stdout}}'
+  - name: create octavia security group
+    shell: source adminrc; openstack security group create lb-mgmt-sec-grp
+    args:
+      executable: /bin/bash
+  - name: create octavia security group rule for icmp
+    shell: source adminrc; openstack security group rule create --protocol icmp lb-mgmt-sec-grp
+    args:
+      executable: /bin/bash
+  - name: create octavia security group rule for ssh
+    shell: source adminrc; openstack security group rule create --protocol tcp --dst-port 22 lb-mgmt-sec-grp
+    args:
+      executable: /bin/bash
+  - name: create octavia security group rule for tcp/9443
+    shell: source adminrc; openstack security group rule create --protocol tcp --dst-port 9443 lb-mgmt-sec-grp
+    args:
+      executable: /bin/bash
+  - name: create health-mgr security group
+    shell: source adminrc; openstack security group create lb-health-mgr-sec-grp
+    args:
+      executable: /bin/bash
+  - name: create health-mgr security group rule
+    shell: source adminrc; openstack security group rule create --protocol udp --dst-port 5555 lb-health-mgr-sec-grp
+    args:
+      executable: /bin/bash
+  - name: get the ID of lb-mgmt-sec-grp
+    shell: openstack security group show lb-mgmt-sec-grp -c id -f value
+    register: lbmgmtsecgrp
+    args:
+      executable: /bin/bash
+  - name: replace the ID of lb-mgmt-sec-grp for octavia.conf
+    replace:
+      name: /etc/octavia/octavia.conf
+      regexp: 'lb-mgmt-sec-grp_id'
+      replace: '{{lbmgmtsecgrp.stdout}}'
   - name: create octavia services
     shell: source adminrc; openstack service create --name octavia --description "OpenStack Load Balancer" load-balancer
     args:
@@ -59,11 +111,15 @@
     args:
       executable: /bin/bash
   - name: upload the amphora image
-    shell: openstack image create --disk-format qcow2 --container-format bare --private --tag amphora --file /tmp/octavia/diskimage-create/.amp_tox_test/amphora-x64-haproxy.qcow2 amphora-x64-haproxy
+    shell: source adminrc; openstack image create --disk-format qcow2 --container-format bare --private --tag amphora --file /tmp/octavia/diskimage-create/.amp_tox_test/amphora-x64-haproxy.qcow2 amphora-x64-haproxy
+    args:
+      executable: /bin/bash
+  - name: tag the amphora image
+    shell: source adminrc; openstack image set --tag amphora amphora-x64-haproxy
     args:
       executable: /bin/bash
   - name: create a flavor for amphora instance
-    shell: openstack flavor create --id 200 --vcpus 1 --ram 1024 --disk 10 "amphora" --private
+    shell: source adminrc; openstack flavor create --id 200 --vcpus 1 --ram 1024 --disk 10 "amphora" --private
     args:
       executable: /bin/bash
   - name: chown /etc/octavia directory
@@ -111,7 +167,7 @@
   - name: create ssh key
     shell: su -s /bin/sh -c 'ssh-keygen -b 2048 -t rsa -N "" -f /etc/octavia/.ssh/octavia_ssh_key' octavia
   - name: create keypair for SSH login to amphorae
-    shell: openstack keypair create --public-key /etc/octavia/.ssh/octavia_ssh_key.pub octavia_ssh_key
+    shell: source adminrc; openstack keypair create --public-key /etc/octavia/.ssh/octavia_ssh_key.pub octavia_ssh_key
     args:
       executable: /bin/bash
 
