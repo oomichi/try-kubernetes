@@ -24,7 +24,7 @@
       group: root
       mode: '0644'
   - name: Get netboot image
-    shell: cd /var/lib/tftpboot/; rm -rf *; wget http://archive.ubuntu.com/ubuntu/dists/xenial-updates/main/installer-amd64/current/images/netboot/netboot.tar.gz
+    shell: cd /var/lib/tftpboot/; rm -rf *; wget http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/netboot.tar.gz
   - name: Extract netboot image
     shell: cd /var/lib/tftpboot/; tar zxf netboot.tar.gz
   - name: Copy preseed.txt
