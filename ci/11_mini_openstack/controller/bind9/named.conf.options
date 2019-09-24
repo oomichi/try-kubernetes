@@ -4,8 +4,8 @@ options {
 	auth-nxdomain no;    # conform to RFC1035
 	listen-on-v6 { none; };
 
-	listen-on port 53 { localhost; 192.168.1.0/24; };
-	allow-query { localhost; 192.168.1.0/24; };
+	listen-on port 53 { 127.0.0.1; 192.168.1.0/24; };
+	allow-query { 127.0.0.1; 192.168.1.0/24; };
 	recursion yes;
 };
 
