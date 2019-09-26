@@ -107,9 +107,20 @@ Operate the following commands::
  $ export KUBECONFIG=$HOME/admin.conf
  $ echo "export KUBECONFIG=$HOME/admin.conf" >> $HOME/.bashrc
 
-(Flannel) Configure network setting for pod2pod communication::
+(Flannel) Configure network setting for pod2pod communication (have added workaround for CNI version)::
 
- $ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+ $ wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+ $ vi kube-flannel.yml
+ @@ -105,7 +105,7 @@
+ data:
+   cni-conf.json: |
+     {
+ -      "cniVersion": "0.2.0",
+ +      "cniVersion": "0.3.1",
+        "name": "cbr0",
+        "plugins": [
+         {
+ $ kubectl apply -f kube-flannel.yml
 
 (Weave) Configure network setting for pod2pod communication::
 
