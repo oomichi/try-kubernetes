@@ -412,8 +412,11 @@ Build e2e test binary.
  # The docker daemon runs as root user, not docker user. So it is necessary to specify `sudo`
  $ cd ${HOME}/go/src/k8s.io/test-infra/kubetest
  $ go build
+ $ mkdir ${HOME}/go/bin
+ $ cp ${HOME}/go/src/k8s.io/test-infra/kubetest/kubetest ${HOME}/go/bin
+ $ export PATH=${PATH}:${HOME}/go/bin
  $ cd ${HOME}/go/src/k8s.io/kubernetes
- $ sudo ${HOME}/go/src/k8s.io/test-infra/kubetest/kubetest --build
+ $ sudo ${HOME}/go/bin/kubetest --build
 
 Run e2e test
 ------------
@@ -422,23 +425,7 @@ Run e2e test::
 
  $ export KUBECONFIG=$HOME/admin.conf
  $ export KUBERNETES_CONFORMANCE_TEST=true
- $ go run hack/e2e.go -- --provider=skeleton --test --test_args="--ginkgo.focus=\[Conformance\]"
- [..]
- Ran 147 of 652 Specs in 6832.526 seconds
- FAIL! -- 132 Passed | 15 Failed | 0 Pending | 505 Skipped --- FAIL: TestE2E (6832.59s)
- FAIL
-
- Ginkgo ran 1 suite in 1h53m52.981857781s
- Test Suite Failed
- !!! Error in ./hack/ginkgo-e2e.sh:132
-   Error in ./hack/ginkgo-e2e.sh:132. '"${ginkgo}" "${ginkgo_args[@]:+${ginkgo_args[@]}}" "${e2e_test}" -- "${auth_config[@]:+${auth_config[@]}}" --ginkgo.flakeAttempts="${FLAKE_ATTEMPTS}" --host="${KUBE_MASTER_URL}" --provider="${KUBERNETES_PROVIDER}" --gce-project="${PROJECT:-}" --gce-zone="${ZONE:-}" --gce-region="${REGION:-}" --gce-multizone="${MULTIZONE:-false}" --gke-cluster="${CLUSTER_NAME:-}" --kube-master="${KUBE_MASTER:-}" --cluster-tag="${CLUSTER_ID:-}" --cloud-config-file="${CLOUD_CONFIG:-}" --repo-root="${KUBE_ROOT}" --node-instance-group="${NODE_INSTANCE_GROUP:-}" --prefix="${KUBE_GCE_INSTANCE_PREFIX:-e2e}" --network="${KUBE_GCE_NETWORK:-${KUBE_GKE_NETWORK:-e2e}}" --node-tag="${NODE_TAG:-}" --master-tag="${MASTER_TAG:-}" --federated-kube-context="${FEDERATION_KUBE_CONTEXT:-e2e-federation}" ${KUBE_CONTAINER_RUNTIME:+"--container-runtime=${KUBE_CONTAINER_RUNTIME}"} ${MASTER_OS_DISTRIBUTION:+"--master-os-distro=${MASTER_OS_DISTRIBUTION}"} ${NODE_OS_DISTRIBUTION:+"--node-os-distro=${NODE_OS_DISTRIBUTION}"} ${NUM_NODES:+"--num-nodes=${NUM_NODES}"} ${E2E_REPORT_DIR:+"--report-dir=${E2E_REPORT_DIR}"} ${E2E_REPORT_PREFIX:+"--report-prefix=${E2E_REPORT_PREFIX}"} "${@:-}"' exited with status 1
-   Call stack:
-     1: ./hack/ginkgo-e2e.sh:132 main(...)
- Exiting with status 1
- 2017/08/09 13:41:10 util.go:133: Step './hack/ginkgo-e2e.sh --ginkgo.focus=\[Conformance\]' finished in 1h53m53.425307436s
- 2017/08/09 13:41:10 main.go:245: Something went wrong: encountered 1 errors: [error during ./hack/ginkgo-e2e.sh --ginkgo.focus=\[Conformance\]: exit status 1]
- 2017/08/09 13:41:10 e2e.go:78: err: exit status 1
- exit status 1
+ $ kubetest --provider=skeleton --test --test_args="--ginkgo.focus=\[Conformance\]"
 
 Confirm which tests will run without actual tests::
 
