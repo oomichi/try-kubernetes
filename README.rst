@@ -382,12 +382,8 @@ Build e2e test binary
 
 Download k8s source code::
 
+ $ go get k8s.io/test-infra
  $ go get k8s.io/kubernetes
- package k8s.io/kubernetes: no buildable Go source files in /home/oomichi/go/src/k8s.io/kubernetes
- $
-
-The above should install k8s cluster code, but now we face the error.
-TODO: This should be fixed later.
 
 Check out the same version as the target k8s cluster::
 
@@ -413,8 +409,10 @@ Check out the same version as the target k8s cluster::
 Build e2e test binary.
 (NOTE: When changing the e2e code, we need to build the binary again to apply the changes)::
 
- # The docker daemon runs as root user, not docker user. So it is necessary to specify `su`
- $ sudo /usr/local/go/bin/go  run hack/e2e.go -- --build
+ # The docker daemon runs as root user, not docker user. So it is necessary to specify `sudo`
+ $ cd ${HOME}/go/src/k8s.io/test-infra/kubetest
+ $ go build
+ $ sudo ./kubetest --build
 
 Run e2e test
 ------------
