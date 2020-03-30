@@ -212,22 +212,7 @@ Install metrics-server on k8s-master::
 
  $ git clone https://github.com/kubernetes-incubator/metrics-server
  $ cd metrics-server/
- $ vi deploy/1.8+/metrics-server-deployment.yaml
- $ git diff
- diff --git a/deploy/1.8+/metrics-server-deployment.yaml b/deploy/1.8+/metrics-server-deployment.yaml
- index 2196866..8477bce 100644
- --- a/deploy/1.8+/metrics-server-deployment.yaml
- +++ b/deploy/1.8+/metrics-server-deployment.yaml
- @@ -34,4 +34,8 @@ spec:
-          volumeMounts:
-          - name: tmp-dir
-            mountPath: /tmp
- +        command:
- +        - /metrics-server
- +        - --kubelet-insecure-tls
- +        - --kubelet-preferred-address-types=InternalIP
-
- $ kubectl create -f deploy/1.8+/
+ $ kubectl create -f deploy/kubernetes/
 
 Integrate standalone-cinder of the external cloud-provider-openstack for Dynamic Volume Provisioning
 ----------------------------------------------------------------------------------------------------
