@@ -18,7 +18,6 @@ How to use Kubespray without IaaS layer feature
    $ sudo pip3 install -r requirements.txt
 
 2. Configure::
-
   $ declare -a IPS=(192.168.1.156 192.168.1.135)
   (Etcd server is installed into the first node(.156 at the above sample))
   $ cp -rfp inventory/sample/ inventory/mycluster/
