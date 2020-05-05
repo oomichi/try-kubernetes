@@ -31,9 +31,9 @@ How to use Kubespray without IaaS layer feature
    $ (Confirm target hosts are specified correctly)
    $
    $ vi inventory/mycluster/group_vars/k8s-cluster/addons.yml
-   (Enable metrics-server for HPA)
-   - metrics_server_enabled: false
-   + metrics_server_enabled: true
+    (Enable metrics-server for HPA)
+    - metrics_server_enabled: false
+    + metrics_server_enabled: true
 
 3. Run the Ansible-playbook::
 
