@@ -12,6 +12,10 @@ declare -a IPS=(${IPS_NODES})
 set -e
 
 sudo yum -y install git python3-pip patch
+
+# libselinux-python3 is for getting kubeconfig
+sudo yum -y install libselinux-python3
+
 git clone https://github.com/kubernetes-sigs/kubespray
 cd kubespray/
 
