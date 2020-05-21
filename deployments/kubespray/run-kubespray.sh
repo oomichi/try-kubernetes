@@ -22,7 +22,10 @@ git fetch origin pull/6163/head:WORKAROUND
 git checkout WORKAROUND
 git log -p -n1 > foo.patch
 git checkout remotes/origin/release-2.13
+set +e   # Temporary disable for partitially failed to apply the patch (not critical because of fedora, not redhat/centos)
 patch -p1 < foo.patch
+set -e
+rm foo.patch
 # End - This is a workaround for Docker version issue
 
 sudo pip3 install -r requirements.txt
@@ -36,3 +39,5 @@ sed -i s/"override_system_hostname: true"/"override_system_hostname: false"/ rol
 ansible-playbook -i inventory/sample/hosts.yaml  --become --become-user=root cluster.yml
 
 echo "Succeeded to deploy Kubernetes cluster"
+
+
