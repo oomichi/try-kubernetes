@@ -30,11 +30,11 @@ rm foo.patch
 
 sudo pip3 install -r requirements.txt
 CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
-sed -i s/"metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
-sed -i s/"ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
-sed -i s/"kubeconfig_localhost: false"/"kubeconfig_localhost: true"/     inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
-sed -i s/"kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
-sed -i s/"override_system_hostname: true"/"override_system_hostname: false"/ roles/bootstrap-os/defaults/main.yml
+sed -i s/"^metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
+sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
+sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+sed -i s/"^kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+sed -i s/"^override_system_hostname: true"/"override_system_hostname: false"/ roles/bootstrap-os/defaults/main.yml
 
 ansible-playbook -i inventory/sample/hosts.yaml  --become --become-user=root cluster.yml
 
