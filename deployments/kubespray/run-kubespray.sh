@@ -42,7 +42,7 @@ sed -i s/"^override_system_hostname: true"/"override_system_hostname: false"/ ro
 
 # The following ansible-playbook is failed sometimes due to some different reasons.
 # So here retries multiple times
-set -e
+set +e
 # TODO: Increase RETRY number after getting basic stability of this script
 RETRY=1
 for step in `seq 1 ${RETRY}`; do
@@ -56,5 +56,8 @@ for step in `seq 1 ${RETRY}`; do
 	fi
 	sleep 5
 done
+
+mkdir ~/.kube
+cp `find . -name admin.conf` ~/.kube/config
 
 echo "Succeeded to deploy Kubernetes cluster"
