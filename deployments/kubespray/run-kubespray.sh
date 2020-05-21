@@ -36,8 +36,21 @@ sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   invent
 sed -i s/"^kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 sed -i s/"^override_system_hostname: true"/"override_system_hostname: false"/ roles/bootstrap-os/defaults/main.yml
 
-ansible-playbook -i inventory/sample/hosts.yaml  --become --become-user=root cluster.yml
+# The following ansible-playbook is failed sometimes due to some different reasons.
+# So here retries multiple times
+set -e
+# TODO: Increase RETRY number after getting basic stability of this script
+RETRY=1
+for step in `seq 1 ${RETRY}`; do
+	ansible-playbook -i inventory/sample/hosts.yaml  --become --become-user=root cluster.yml
+	if [ $? -eq 0 ]; then
+		break
+	fi
+	echo "Failed to do the ansible-playbook in step ${step}"
+	if [ ${step} -eq ${RETRY_LOGIN} ]; then
+		exit 1
+	fi
+	sleep 5
+done
 
 echo "Succeeded to deploy Kubernetes cluster"
-
-
