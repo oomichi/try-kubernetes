@@ -78,3 +78,21 @@ kubectl create -f yaml/test-ingress-nginx.yaml
 if [ $? -ne 0 ]; then
 	exit 1
 fi
+INGRESS_ENDPOINTS=`kubectl get ingress example-ingress  --template={{.status.loadBalancer.ingress}} | sed s/"\map\[ip:"/""/g | sed s/"\]"//g | sed s/"\["/""/g`
+if [ "${INGRESS_ENDPOINTS}" = "" ]; then
+	echo "Failed to get endpoints of ingress example-ingress"
+	exit 1
+fi
+for endpoint in ${INGRESS_ENDPOINTS}; do
+	for path in `echo "foo bar"`; do
+		response=`curl http://${endpoint}/${path} 2>/dev/null`
+
+		# The APP should return the same string as the path. (See the yaml)
+		if [ "${response}" != "${path}" ]; then
+			echo "Failed to 'curl http://${endpoint}/${path}' Unexpected response: ${response}"
+			exit 1
+		fi
+	done
+	echo "The ingress http://${endpoint} returns expected responses"
+done
+kubectl delete -f yaml/test-ingress-nginx.yaml
