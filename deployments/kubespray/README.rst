@@ -10,7 +10,7 @@ Kubespray: Deploy a production ready Kubernetes cluster anywhere (AWS, GCE, Azur
 How to use Kubespray without IaaS layer feature
 -----------------------------------------------
 
-1. Specify IP addresses of nodes which are consisted for Kubernetes cluster::
+1. Specify IP addresses of nodes which will be consisted for Kubernetes cluster::
 
    $ export IPS_NODES=(192.168.1.100 192.168.1.101 192.168.1.102)
 
