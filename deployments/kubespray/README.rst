@@ -10,43 +10,11 @@ Kubespray: Deploy a production ready Kubernetes cluster anywhere (AWS, GCE, Azur
 How to use Kubespray without IaaS layer feature
 -----------------------------------------------
 
-1. Install necessary packages::
+Specify IP addresses of nodes which are consisted for Kubernetes cluster::
+  $ export IPS_NODES=(192.168.1.100 192.168.1.101 192.168.1.102)
 
-   $ sudo yum -y install git python3-pip
-   $ git clone https://github.com/kubernetes-sigs/kubespray
-   $ cd kubespray/
-   $ sudo pip3 install -r requirements.txt
-
-2. Configure::
-
-   $ declare -a IPS=(192.168.1.156 192.168.1.135)
-   $ (Etcd server is installed into the first node(.156 at the above sample))
-   $
-   $ cp -rfp inventory/sample/ inventory/mycluster/
-   $
-   $ CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
-   $ vi inventory/mycluster/group_vars/k8s-cluster/k8s-cluster.yml
-   $ (You can select Kubernetes version with kube_version in k8s-cluster.yml file. The sample is v1.17.5 at this time)
-   $ vi inventory/mycluster/hosts
-   $ (Confirm target hosts are specified correctly)
-   $
-   $ vi inventory/mycluster/group_vars/k8s-cluster/addons.yml
-    (Enable metrics-server for HPA)
-    - metrics_server_enabled: false
-    + metrics_server_enabled: true
-
-3. Run the Ansible-playbook::
-
-   $ ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml
-   (It takes time)
-
-4. Get kubeconfig to operate kubectl command::
-
-   $ sudo cp /etc/kubernetes/admin.conf $HOME/
-   $ sudo chown $(id -u):$(id -g) $HOME/admin.conf
-   $ export KUBECONFIG=$HOME/admin.conf
-   $ echo "export KUBECONFIG=$HOME/admin.conf" >> $HOME/.bashrc
-
+Run the script::
+  $ run-kubespray.sh
 
 How to use Kubespray on Azure
 -----------------------------
