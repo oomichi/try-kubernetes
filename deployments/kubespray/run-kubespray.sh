@@ -6,12 +6,6 @@ if [ "${IPS_NODES}" = "" ]; then
 	exit 1
 fi
 
-if [ "${IP_INGRESS_NGINX}" = "" ]; then
-	echo 'Need to specify exposed IP address of ingress-nginx like:'
-	echo '$ IP_INGRESS_NGINX="192.168.1.201" ./run-kubespray.sh'
-	exit 1
-fi
-
 declare -a IPS=(${IPS_NODES})
 
 # Enable error handling
@@ -43,7 +37,7 @@ sudo pip3 install -r requirements.txt
 CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
 sed -i s/"^metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
 sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
-sed -i s/'^ingress_publish_status_address: ""'/'ingress_publish_status_address: "${IP_INGRESS_NGINX}"'/   inventory/sample/group_vars/k8s-cluster/addons.yml
+sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
 sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 sed -i s/"^kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 sed -i s/"^override_system_hostname: true"/"override_system_hostname: false"/ roles/bootstrap-os/defaults/main.yml
