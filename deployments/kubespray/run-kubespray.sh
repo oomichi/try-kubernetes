@@ -13,7 +13,7 @@ declare -a IPS=(${IPS_NODES})
 # Enable error handling
 set -e
 
-sudo yum -y install git python3-pip patch
+sudo yum -y install git python3-pip
 
 # libselinux-python3 is for getting kubeconfig
 sudo yum -y install libselinux-python3
