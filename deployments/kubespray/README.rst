@@ -6,6 +6,9 @@ Kubespray: Deploy a production ready Kubernetes cluster anywhere (AWS, GCE, Azur
 - It consists of Ansible-playbooks.
 - Kubespray selects stable Kubernetes version as the default.
   For example, when the community is developing v1.19 on master branch, the default version is v1.17.x, not v1.18.x.(Ref: https://github.com/kubernetes-sigs/kubespray/pull/5967)
+- Kubespray allocates roles of nodes automatically based on the node number. You can customize these roles as you like.
+  The following is default roles with Kubespray.
+  If specifying 5 IP addresses of nodes, the first 2 nodes work as k8s-master, the first 3 nodes work as etcd, and all nodes work as k8s-node.
 
 How to use Kubespray without IaaS layer feature
 -----------------------------------------------
