@@ -12,11 +12,11 @@ How to use Kubespray without IaaS layer feature
 
 1. Specify IP addresses of nodes which are consisted for Kubernetes cluster::
 
-  $ export IPS_NODES=(192.168.1.100 192.168.1.101 192.168.1.102)
+ $ export IPS_NODES=(192.168.1.100 192.168.1.101 192.168.1.102)
 
 2. Run the script::
 
-  $ run-kubespray.sh
+ $ run-kubespray.sh
 
 How to use Kubespray on Azure
 -----------------------------
