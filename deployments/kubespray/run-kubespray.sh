@@ -21,22 +21,10 @@ sudo yum -y install libselinux-python3
 cd ~/
 git clone https://github.com/kubernetes-sigs/kubespray
 cd kubespray/
-
-# Start - This is a workaround for Docker version issue
-# After merging https://github.com/kubernetes-sigs/kubespray/pull/6163
-# we can remove this
-git fetch origin pull/6163/head:WORKAROUND
-git checkout WORKAROUND
-git log -p -n1 > foo.patch
 git checkout remotes/origin/release-2.13
-set +e   # Temporary disable for partitially failed to apply the patch (not critical because of fedora, not redhat/centos)
-patch -p1 < foo.patch
-set -e
-rm foo.patch
-# End - This is a workaround for Docker version issue
-
 sudo pip3 install -r requirements.txt
 CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
+
 sed -i s/"^metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
 sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
 sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
