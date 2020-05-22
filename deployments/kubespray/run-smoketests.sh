@@ -8,7 +8,6 @@ function check_pod_status() {
 		namespace="default"
 	fi
 
-	# This script waits 5 mins(5sec * 60) for waiting pods status
 	RETRY_CHECK=60
 
 	# Multiple sequential successes are necessary to verify the status
