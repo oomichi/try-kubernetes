@@ -56,7 +56,7 @@ for step in `seq 1 ${RETRY}`; do
 		break
 	fi
 	echo "Failed to do the ansible-playbook in step ${step}"
-	if [ ${step} -eq ${RETRY_LOGIN} ]; then
+	if [ ${step} -eq ${RETRY} ]; then
 		exit 1
 	fi
 	sleep 5
