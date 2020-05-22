@@ -49,6 +49,9 @@ for step in `seq 1 ${RETRY}`; do
 	sleep 5
 done
 
+# Enable error handling
+set -e
+
 mkdir ~/.kube
 cp `find . -name admin.conf` ~/.kube/config
 
