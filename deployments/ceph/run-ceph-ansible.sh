@@ -31,11 +31,12 @@ if [ "${OSD_NODES}" = "" ]; then
 	echo '  $ ./run-ceph-ansible.sh'
 	exit 1
 fi
-if [ "${DATA_DEVICE}" = "" ]; then
-	echo 'Need to specify storage device on osd nodes.'
+if [ "${DATA_DEVICES}" = "" ]; then
+	echo 'Need to specify storage devices on osd nodes.'
 	echo 'NOTE: All osd nodes should have the same specified storage devices.'
+	echo 'NOTE: These storage devices should not be logical devices(/dev/loop0, etc.)'
 	echo ''
-	echo '  $ export DATA_DEVICE="/dev/sdb"'
+	echo '  $ export DATA_DEVICES="/dev/sdb"'
 	echo '  $ ./run-ceph-ansible.sh'
 	exit 1
 fi
@@ -64,6 +65,14 @@ for node in ${OSD_NODES}; do
 	echo "${node}" >> ./hosts
 done
 
+# Create group_vars/osds.yml
+rm -f ./group_vars/osds.yml
+touch ./group_vars/osds.yml
+echo         "devices:"   >> ./group_vars/osds.yml
+for dev in ${DATA_DEVICES}; do
+	echo "  - ${dev}" >> ./group_vars/osds.yml
+done
+
 # Enable error handling
 set -e
 
@@ -82,9 +91,6 @@ sudo pip3 install -r requirements.txt
 cp ${PATH_THIS_SCRIPT}/files/all.yml                 group_vars/all.yml
 sed -i s/"MONITOR_INTERFACE"/"${MONITOR_INTERFACE}"/ group_vars/all.yml
 sed -i s@"PUBLIC_NETWORK"@"${PUBLIC_NETWORK}"@       group_vars/all.yml  # PUBLIC_NETWORK contains /, so we need to use another char here.
-
-cp ${PATH_THIS_SCRIPT}/files/osds.yml     group_vars/osds.yml
-sed -i s@"DATA_DEVICE"@"${DATA_DEVICE}"@  group_vars/osds.yml  # DATA?DEVICE contains /, so we need to use another char here.
 
 cp site.yml.sample site.yml
 
