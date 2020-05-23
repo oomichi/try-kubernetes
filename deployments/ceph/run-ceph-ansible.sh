@@ -52,15 +52,15 @@ done
 # Create hosts
 rm -f ./hosts
 touch ./hosts
-echo         "[mons]" >> ./hosts
+echo         "[mons]"  >> ./hosts
 for node in ${MON_NODES}; do
 	echo "${node}" >> ./hosts
 done
-echo         "[mgrs]" >> ./hosts
+echo         "[mgrs]"  >> ./hosts
 for node in ${MGR_NODES}; do
 	echo "${node}" >> ./hosts
 done
-echo         "[osds]" >> ./hosts
+echo         "[osds]"  >> ./hosts
 for node in ${OSD_NODES}; do
 	echo "${node}" >> ./hosts
 done
