@@ -1,0 +1,12 @@
+ceph_origin: repository
+ceph_repository: community
+ceph_repository_type: cdn
+ceph_stable_release: nautilus
+
+fetch_directory: ~/ceph-ansible-keys
+
+monitor_interface: MONITOR_INTERFACE
+public_network: PUBLIC_NETWORK
+cluster_network: "{{ public_network }}"
+
+dashboard_enabled: false
