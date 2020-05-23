@@ -41,10 +41,11 @@ if [ "${DATA_DEVICES}" = "" ]; then
 	exit 1
 fi
 
-for mon in ${MON_NODES}; do
-	ping -c 1 ${mon}
+# TODO: Add all node checks
+for node in ${MON_NODES}; do
+	ping -c 1 ${node}
 	if [ $? -ne 0 ]; then
-		echo "Node ${mon} in MON_NODES is not reachable"
+		echo "Node ${node} in MON_NODES is not reachable"
 		exit 1
 	fi
 done
@@ -94,4 +95,4 @@ sed -i s@"PUBLIC_NETWORK"@"${PUBLIC_NETWORK}"@       group_vars/all.yml  # PUBLI
 
 cp site.yml.sample site.yml
 
-# ansible-playbook -i ./hosts ./site.yml
+ansible-playbook -i ./hosts ./site.yml
