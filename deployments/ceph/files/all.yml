@@ -5,8 +5,8 @@ ceph_stable_release: nautilus
 
 fetch_directory: ~/ceph-ansible-keys
 
-monitor_interface: MONITOR_INTERFACE
-public_network: PUBLIC_NETWORK
+monitor_interface: CEPH_MONITOR_INTERFACE
+public_network: CEPH_PUBLIC_NETWORK
 cluster_network: "{{ public_network }}"
 
 dashboard_enabled: false
