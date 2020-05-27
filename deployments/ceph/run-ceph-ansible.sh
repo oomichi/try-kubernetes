@@ -50,6 +50,16 @@ for node in ${CEPH_MON_NODES}; do
 	fi
 done
 
+# Enable error handling
+set -e
+
+sudo yum -y install git python3-pip
+
+PATH_THIS_SCRIPT=`pwd`
+cd ~/
+git clone https://github.com/ceph/ceph-ansible.git
+cd ceph-ansible/
+
 # Create hosts
 rm -f ./hosts
 touch ./hosts
@@ -57,10 +67,12 @@ echo         "[mons]"  >> ./hosts
 for node in ${CEPH_MON_NODES}; do
 	echo "${node}" >> ./hosts
 done
+echo         ""        >> ./hosts
 echo         "[mgrs]"  >> ./hosts
 for node in ${CEPH_MGR_NODES}; do
 	echo "${node}" >> ./hosts
 done
+echo         ""        >> ./hosts
 echo         "[osds]"  >> ./hosts
 for node in ${CEPH_OSD_NODES}; do
 	echo "${node}" >> ./hosts
@@ -73,16 +85,6 @@ echo         "devices:"   >> ./group_vars/osds.yml
 for dev in ${CEPH_DATA_DEVICES}; do
 	echo "  - ${dev}" >> ./group_vars/osds.yml
 done
-
-# Enable error handling
-set -e
-
-sudo yum -y install git python3-pip
-
-PATH_THIS_SCRIPT=`pwd`
-cd ~/
-git clone https://github.com/ceph/ceph-ansible.git
-cd ceph-ansible/
 
 # ceph-ansible stable-5.0(For ceph version octopus) doesn't support CentOS7.
 git checkout remotes/origin/stable-4.0
