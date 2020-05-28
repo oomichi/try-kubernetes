@@ -2,6 +2,7 @@
 
 CEPH_MONITOR_INTERFACE=${CEPH_MONITOR_INTERFACE:-"eth0"}
 CEPH_PUBLIC_NETWORK=${CEPH_PUBLIC_NETWORK}
+CEPH_MGR_NODES=${CEPH_MGR_NODES:-"${CEPH_MON_NODES}"}
 
 if [ "${CEPH_PUBLIC_NETWORK}" = "" ]; then
 	echo 'Need to specify public network address like:'
