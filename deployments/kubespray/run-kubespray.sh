@@ -62,6 +62,6 @@ done
 set -e
 
 mkdir ~/.kube
-cp `find . -name admin.conf` ~/.kube/config
+cp ./inventory/sample/artifacts/admin.conf ~/.kube/config
 
 echo "Succeeded to deploy Kubernetes cluster"
