@@ -38,7 +38,7 @@ if [ "${CEPH_MON_NODES}" != "" ]; then
 		MONITORS="${MONITORS} ${node}:6789"
 	done
 	sed -i s/"^cephfs_provisioner_enabled: false"/"cephfs_provisioner_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
-	sed -i s/'^# cephfs_provisioner_monitors: "172.24.0.1:6789,172.24.0.2:6789,172.24.0.3:6789'/'cephfs_provisioner_monitors: "${MONITORS}"'/ inventory/sample/group_vars/k8s-cluster/addons.yml
+	sed -i s/'^# cephfs_provisioner_monitors: "172.24.0.1:6789,172.24.0.2:6789,172.24.0.3:6789"'/"cephfs_provisioner_monitors: \"${MONITORS}\""/ inventory/sample/group_vars/k8s-cluster/addons.yml
 fi
 
 # The following ansible-playbook is failed sometimes due to some different reasons.
