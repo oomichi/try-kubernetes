@@ -32,6 +32,15 @@ sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   invent
 sed -i s/"^kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 sed -i s/"^override_system_hostname: true"/"override_system_hostname: false"/ roles/bootstrap-os/defaults/main.yml
 
+if [ "${CEPH_MON_NODES}" != "" ]; then
+	MONITORS=""
+	for node in ${CEPH_MON_NODES}; do
+		MONITORS="${MONITORS} ${node}:6789"
+	done
+	sed -i s/"^cephfs_provisioner_enabled: false"/"cephfs_provisioner_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
+	sed -i s/'^# cephfs_provisioner_monitors: "172.24.0.1:6789,172.24.0.2:6789,172.24.0.3:6789'/'cephfs_provisioner_monitors: "${MONITORS}"'/ inventory/sample/group_vars/k8s-cluster/addons.yml
+fi
+
 # The following ansible-playbook is failed sometimes due to some different reasons.
 # So here retries multiple times
 set +e
