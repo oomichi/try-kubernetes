@@ -28,7 +28,7 @@ CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/invent
 # Replace node1, node2, ... with actual hostnames for avoiding overwriting the result of "kubectl get nodes"
 INDEX_NODE=1
 for node in ${K8S_NODES}; do
-	nodename=`ssh -oStrictHostKeyChecking=no ${node} 'echo ${HOSTNAME}' | awk -F. '{print $1}'`
+	nodename=`ssh -oStrictHostKeyChecking=no ${node} 'hostname -s'`
 	sed -i s/"node${INDEX_NODE}:"/"${nodename}:"/g inventory/sample/hosts.yaml
 	INDEX_NODE=`expr ${INDEX_NODE} + 1`
 done
