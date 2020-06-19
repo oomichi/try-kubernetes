@@ -386,9 +386,7 @@ Build e2e test binary.
 
  # The docker daemon runs as root user, not docker user. So it is necessary to specify `sudo`
  $ cd ${HOME}/go/src/k8s.io/test-infra/kubetest
- $ go build
- $ mkdir ${HOME}/go/bin
- $ cp ${HOME}/go/src/k8s.io/test-infra/kubetest/kubetest ${HOME}/go/bin
+ $ GO111MODULE=on go install ./kubetest
  $ export PATH=${PATH}:${HOME}/go/bin
  $ cd ${HOME}/go/src/k8s.io/kubernetes
  $ sudo ${HOME}/go/bin/kubetest --build
