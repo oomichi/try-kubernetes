@@ -400,9 +400,9 @@ Run e2e test::
  $ export KUBERNETES_CONFORMANCE_TEST=true
  $ kubetest --provider=skeleton --test --test_args="--ginkgo.focus=\[Conformance\]"
 
-Confirm which tests will run without actual tests::
+Confirm which tests will run without actual tests (Need to specify provider to avoid an error)::
 
- $ go run hack/e2e.go -- --test --test_args="--ginkgo.dryRun=true --ginkgo.focus=\[Conformance\]"
+ $ kubetest --provider=skeleton --test --test_args="--ginkgo.dryRun=true --ginkgo.focus=\[Conformance\]"
  [..]
  [k8s.io] Docker Containers
    should use the image defaults if command and args are blank [Conformance]
@@ -434,11 +434,11 @@ Confirm which tests will run without actual tests::
 
 Specify a single test with regex::
 
- $ go run hack/e2e.go -- --provider=skeleton --test --test_args="--ginkgo.focus=1\spod\sto\s2\spods"
+ $ kubetest --provider=skeleton --test --test_args="--ginkgo.focus=1\spod\sto\s2\spods"
 
 If changing e2e code, we need to specify --check-version-skew=false to skip checking versions of both server and e2e client::
 
- $ go run hack/e2e.go -- --provider=skeleton --test --test_args="--ginkgo.focus=from\s3\sto\s5$" --check-version-skew=false
+ $ kubetest --provider=skeleton --test --test_args="--ginkgo.focus=from\s3\sto\s5$" --check-version-skew=false
 
 Setup dev env
 -------------
