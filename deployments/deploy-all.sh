@@ -1,5 +1,7 @@
 #!/bin/bash
 
+VM_IMAGE=${VM_IMAGE:-"CentOS-7-x86_64"}
+
 function create_machine() {
         VM_NAME=$1
 
@@ -10,7 +12,7 @@ function create_machine() {
                 sleep 5
         fi
         echo "Creating server(${VM_NAME}).."
-        openstack server create --flavor=m1.medium --image=CentOS-7-x86_64 --network=provider --key-name=mykey ${VM_NAME} > /dev/null
+        openstack server create --flavor=m1.medium --image=${VM_IMAGE} --network=provider --key-name=mykey ${VM_NAME} > /dev/null
         if [ $? -ne 0 ]; then
                 echo "Failed to create a server"
                 exit 1
