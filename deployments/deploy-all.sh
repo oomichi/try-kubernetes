@@ -1,6 +1,7 @@
 #!/bin/bash
 
 VM_IMAGE=${VM_IMAGE:-"CentOS-7-x86_64"}
+VM_USER=${VM_USER:="centos"}
 
 function create_machine() {
         VM_NAME=$1
@@ -44,19 +45,19 @@ IP_WORKER=`openstack server show worker -c addresses -f value | awk -F"=" '{prin
 
 sh-keygen -f "/home/ubuntu/.ssh/known_hosts" -R "${IP_MASTER}"
 
-scp -oStrictHostKeyChecking=no ~/.ssh/id_rsa centos@${IP_MASTER}:/home/centos/.ssh/id_rsa
+scp -oStrictHostKeyChecking=no ~/.ssh/id_rsa ${VM_USER}@${IP_MASTER}:/home/${VM_USER}/.ssh/id_rsa
 if [ $? -ne 0 ]; then
         echo "Failed to copy ssh key to server(${IP_MASTER})"
         exit 1
 fi
 
-scp -oStrictHostKeyChecking=no kubespray/run-kubespray.sh centos@${IP_MASTER}:/home/centos/run-kubespray.sh
+scp -oStrictHostKeyChecking=no kubespray/run-kubespray.sh ${VM_USER}@${IP_MASTER}:/home/${VM_USER}/run-kubespray.sh
 if [ $? -ne 0 ]; then
         echo "Failed to copy run-kubespray.sh to server(${IP_MASTER})"
         exit 1
 fi
 
-ssh -oStrictHostKeyChecking=no centos@${IP_MASTER} "K8S_NODES=\"${IP_MASTER} ${IP_WORKER}\" /home/centos/run-kubespray.sh"
+ssh -oStrictHostKeyChecking=no ${VM_USER}@${IP_MASTER} "K8S_NODES=\"${IP_MASTER} ${IP_WORKER}\" /home/${VM_USER}/run-kubespray.sh"
 if [ $? -ne 0 ]; then
         echo "Failed to operate run-kubespray.sh"
         exit 1
@@ -64,18 +65,18 @@ fi
 
 echo "Succeeded to deploy Kubernetes cluster ============================================================================="
 echo "Running smoke tests.."
-ssh -oStrictHostKeyChecking=no centos@${IP_MASTER} "mkdir /home/centos/yaml"
-scp -oStrictHostKeyChecking=no kubespray/yaml/test-ingress-nginx.yaml centos@${IP_MASTER}:/home/centos/yaml/test-ingress-nginx.yaml
+ssh -oStrictHostKeyChecking=no ${VM_USER}@${IP_MASTER} "mkdir /home/${VM_USER}/yaml"
+scp -oStrictHostKeyChecking=no kubespray/yaml/test-ingress-nginx.yaml ${VM_USER}@${IP_MASTER}:/home/${VM_USER}/yaml/test-ingress-nginx.yaml
 if [ $? -ne 0 ]; then
 	echo "Failed to copy test-ingress-nginx.yaml to server(${IP_MASTER})"
 	exit 1
 fi
-scp -oStrictHostKeyChecking=no kubespray/run-smoketests.sh centos@${IP_MASTER}:/home/centos/run-smoketests.sh
+scp -oStrictHostKeyChecking=no kubespray/run-smoketests.sh ${VM_USER}@${IP_MASTER}:/home/${VM_USER}/run-smoketests.sh
 if [ $? -ne 0 ]; then
 	echo "Failed to copy run-smoketests.sh to server(${IP_MASTER})"
 	exit 1
 fi
-ssh -oStrictHostKeyChecking=no centos@${IP_MASTER} "K8S_NODES=\"${IP_MASTER} ${IP_WORKER}\" /home/centos/run-smoketests.sh"
+ssh -oStrictHostKeyChecking=no ${VM_USER}@${IP_MASTER} "K8S_NODES=\"${IP_MASTER} ${IP_WORKER}\" /home/${VM_USER}/run-smoketests.sh"
 if [ $? -ne 0 ]; then
 	echo "Failed to operate run-smoketests.sh"
 	exit 1
