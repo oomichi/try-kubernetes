@@ -70,7 +70,7 @@ if [ $? -ne 0 ]; then
 	echo "Failed to copy test-ingress-nginx.yaml to server(${IP_MASTER})"
 	exit 1
 fi
-scp -oStrictHostKeyChecking=no kubespray/yaml/run-smoketests.sh centos@${IP_MASTER}:/home/centos/run-smoketests.sh
+scp -oStrictHostKeyChecking=no kubespray/run-smoketests.sh centos@${IP_MASTER}:/home/centos/run-smoketests.sh
 if [ $? -ne 0 ]; then
 	echo "Failed to copy run-smoketests.sh to server(${IP_MASTER})"
 	exit 1
