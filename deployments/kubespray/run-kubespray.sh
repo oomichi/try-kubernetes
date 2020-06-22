@@ -1,5 +1,6 @@
 #!/bin/bash
 
+KUBESPRAY_VERSION=${KUBESPRAY_VERSION:-"release-2.13"}
 K8S_VERSION=${K8S_VERSION:-"v1.17.5"}
 
 if [ "${K8S_NODES}" = "" ]; then
@@ -21,7 +22,11 @@ sudo yum -y install libselinux-python3
 cd ~/
 git clone https://github.com/kubernetes-sigs/kubespray
 cd kubespray/
-git checkout remotes/origin/release-2.13
+
+if [ "${KUBESPRAY_VERSION}" != "" ]; then
+	git checkout remotes/origin/${KUBESPRAY_VERSION}
+fi
+
 sudo pip3 install -r requirements.txt
 CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
 
