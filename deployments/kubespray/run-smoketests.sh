@@ -1,5 +1,7 @@
 #!/bin/bash
 
+RETRY_CHECK=60
+
 function check_pod_status() {
 	pod_name="${1}"
 	namespace="${2}"
@@ -7,8 +9,6 @@ function check_pod_status() {
 	if [ -z "${namespace}" ]; then
 		namespace="default"
 	fi
-
-	RETRY_CHECK=60
 
 	# Multiple sequential successes are necessary to verify the status
 	SEQUENTIAL_SUCCESSES=3
@@ -78,11 +78,17 @@ kubectl create -f yaml/test-ingress-nginx.yaml
 if [ $? -ne 0 ]; then
 	exit 1
 fi
-INGRESS_ENDPOINTS=`kubectl get ingress example-ingress  --template={{.status.loadBalancer.ingress}} | sed s/"\map\[ip:"/""/g | sed s/"\]"//g | sed s/"\["/""/g`
-if [ "${INGRESS_ENDPOINTS}" = "" ]; then
-	echo "Failed to get endpoints of ingress example-ingress"
-	exit 1
-fi
+
+for step in `seq 1 ${RETRY_CHECK}`; do
+	FLAG_FAILURE=0
+	INGRESS_ENDPOINTS=`kubectl get ingress example-ingress  --template={{.status.loadBalancer.ingress}}`
+	if [ "${INGRESS_ENDPOINTS}" = "<no value>" ]; then
+		echo "Failed to get endpoints of ingress example-ingress in step ${step}"
+		continue
+	fi
+	INGRESS_ENDPOINTS=`echo $INGRESS_ENDPOINTS | sed s/"\map\[ip:"/""/g | sed s/"\]"//g | sed s/"\["/""/g`
+done
+
 for endpoint in ${INGRESS_ENDPOINTS}; do
 	for path in `echo "foo bar"`; do
 		response=`curl http://${endpoint}/${path} 2>/dev/null`
