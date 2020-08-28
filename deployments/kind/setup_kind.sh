@@ -1,9 +1,8 @@
 #!/bin/bash
 
-set -e
-
 go version
 if [ $? -ne 0 ]; then
+	set -e
 	echo "Installing golang.."
 	wget https://golang.org/dl/go1.14.7.linux-amd64.tar.gz
 	sudo tar -C /usr/local/ -xzf go1.14.7.linux-amd64.tar.gz
@@ -19,6 +18,7 @@ if [ $? -ne 0 ]; then
 	sudo apt-get install -y docker.io gcc make
 fi
 
+set -e
 GO111MODULE="on" go get sigs.k8s.io/kind@v0.8.1
 
 #kind create cluster
