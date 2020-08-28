@@ -47,3 +47,19 @@ Facing an issue::
  Thu Aug 20 23:46:21 2020: Unable to load the driver. Exiting.
  Thu Aug 20 23:46:21 2020: Runtime error: error opening device /host/dev/falco0. Make sure you have root credentials and that the falco module is loaded.. Exiting.
  $
+
+Trying to use eBPF::
+ $ helm install falco falcosecurity/falco --set ebpf.enabled=true
+ $ kubectl get pods
+ NAME          READY   STATUS   RESTARTS   AGE
+ falco-mrs26   0/1     Error    1          15s
+ $
+ $ kubectl logs falco-mrs26
+ [..]
+ * Mounting debugfs
+ Cannot find kernel config
+ Fri Aug 21 00:53:00 2020: Falco initialized with configuration file /etc/falco/falco.yaml
+ Fri Aug 21 00:53:00 2020: Loading rules from file /etc/falco/falco_rules.yaml:
+ Fri Aug 21 00:53:03 2020: Loading rules from file /etc/falco/falco_rules.local.yaml:
+ Fri Aug 21 00:53:05 2020: Unable to load the driver. Exiting.
+ Fri Aug 21 00:53:05 2020: Runtime error: can't open BPF probe '/root/.falco/falco-bpf.o': Errno 2. Exiting.
