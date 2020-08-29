@@ -1,5 +1,10 @@
 #!/bin/bash
 
+CLUSTER_NAME=$1
+if [ "${CLUSTER_NAME}" = "" ]; then
+	CLUSTER_NAME="cluster"
+fi
+
 egrep "CentOS|RHEL" /etc/os-release
 if [ $? -eq 0 ]; then
 	CENTOS=TRUE
@@ -27,6 +32,7 @@ if [ $? -ne 0 ]; then
 		sudo yum install -y docker docker-client gcc make
 		sudo systemctl start docker
 	fi
+	sudo chmod 666 /var/run/docker.sock
 fi
 
 set -e
@@ -40,4 +46,4 @@ if [ $? -eq 127 ]; then
 	sudo mv kubectl /usr/local/bin/
 fi
 
-# sudo ${HOME}/go/bin/kind create cluster
+kind create ${CLUSTER_NAME}
