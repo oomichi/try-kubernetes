@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 egrep "CentOS|RHEL" /etc/os-release
 if [ $? -eq 0 ]; then
 	CENTOS=TRUE
@@ -32,5 +31,13 @@ fi
 
 set -e
 GO111MODULE="on" go get sigs.k8s.io/kind@v0.8.1
+set +e
+
+kubectl version
+if [ $? -eq 127 ]; then
+	curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+	chmod +x kubectl
+	sudo mv kubectl /usr/local/bin/
+fi
 
 # sudo ${HOME}/go/bin/kind create cluster
