@@ -2,7 +2,7 @@
 
 CLUSTER_NAME=$1
 if [ "${CLUSTER_NAME}" = "" ]; then
-	CLUSTER_NAME="cluster"
+	CLUSTER_NAME="kind"
 fi
 
 egrep "CentOS|RHEL" /etc/os-release
@@ -46,4 +46,4 @@ if [ $? -eq 127 ]; then
 	sudo mv kubectl /usr/local/bin/
 fi
 
-kind create ${CLUSTER_NAME}
+kind create cluster --name ${CLUSTER_NAME}
