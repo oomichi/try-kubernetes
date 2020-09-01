@@ -46,4 +46,7 @@ if [ $? -eq 127 ]; then
 	sudo mv kubectl /usr/local/bin/
 fi
 
+# Cleanup the previous one
+kind create delete --name ${CLUSTER_NAME}
+
 kind create cluster --name ${CLUSTER_NAME}
