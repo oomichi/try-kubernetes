@@ -25,3 +25,12 @@ fi
 kind delete cluster --name ${CLUSTER_NAME}
 
 kind create cluster --name ${CLUSTER_NAME}
+
+for step in `seq 1 24`; do
+	STATUS=$(kubectl get nodes | grep control-plane | awk '{print $2}')
+	echo "control-plane node is ${STATUS}"
+	if [ "${STATUS}" = "Ready" ]; then
+		break
+	fi
+	sleep 10
+done
