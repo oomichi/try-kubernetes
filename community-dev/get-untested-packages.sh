@@ -1,6 +1,8 @@
 #!/bin/bash
 
-PKGS=$(find ./pkg -name "*.go" | grep -v "_test.go")
+SEARCH_PATH=${1:-"./pkg"}
+
+PKGS=$(find ${SEARCH_PATH} -name "*.go" | grep -v "_test.go")
 
 for pkg in ${PKGS}
 do
