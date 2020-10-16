@@ -2,7 +2,7 @@
 
 SEARCH_PATH=${1:-"./pkg"}
 
-PKGS=$(find ${SEARCH_PATH} -name "*.go" | grep -v "_test.go" | grep -v "doc.go" | grep -v "testing" | grep -v "fake")
+PKGS=$(find ${SEARCH_PATH} -name "*.go" | grep -v "_test.go" | grep -v "doc.go" | grep -v "test" | grep -v "fake")
 
 for pkg in ${PKGS}
 do
