@@ -7,13 +7,16 @@ if [ "${CLUSTER_NAME}" = "" ]; then
 fi
 
 sudo chmod 666 /var/run/docker.sock
+set +e
 
 # Get kind command
-curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-linux-amd64
-chmod +x ./kind
-sudo mv ./kind /usr/local/bin/
+kind version
+if [ $? -eq 127 ]; then
+	curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64
+	chmod +x ./kind
+	sudo mv ./kind /usr/local/bin/
+fi
 
-set +e
 kubectl version
 if [ $? -eq 127 ]; then
 	curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
