@@ -22,44 +22,11 @@ Use kind for Kubernetes Development
 -----------------------------------
 
 The main purpose of kind is for testing Kubernetes in the community for CI system, but we can use it for Kubernetes development also.
-Here tries to use kind for Falco as an example.
 
-If you don't have helm, install it::
- $ curl -LO https://get.helm.sh/helm-v3.3.0-linux-amd64.tar.gz
- $ tar -zxvf helm-v3.3.0-linux-amd64.tar.gz 
- $ chmod +x linux-amd64/helm 
- $ sudo mv linux-amd64/helm /usr/local/bin/
+Build a node image from k8s.io/kubernetes repository::
 
-Install Falco::
- $ helm repo add falcosecurity https://falcosecurity.github.io/charts
- $ helm repo update
- $ helm install falco falcosecurity/falco
+ $ kind build node-image --kube-root ~/go/src/k8s.io/kubernetes --image kindest/node:test
 
-Facing an issue::
- $ kubectl get pods
- NAME          READY   STATUS             RESTARTS   AGE
- falco-6hhnd   0/1     CrashLoopBackOff   13         56m
- $
- $ kubectl logs pod/falco-6hhnd 
- [..]
- Thu Aug 20 23:46:18 2020: Loading rules from file /etc/falco/falco_rules.yaml:
- Thu Aug 20 23:46:20 2020: Loading rules from file /etc/falco/falco_rules.local.yaml:
- Thu Aug 20 23:46:21 2020: Unable to load the driver. Exiting.
- Thu Aug 20 23:46:21 2020: Runtime error: error opening device /host/dev/falco0. Make sure you have root credentials and that the falco module is loaded.. Exiting.
- $
+Then deploy kind from the built node image::
 
-Trying to use eBPF::
- $ helm install falco falcosecurity/falco --set ebpf.enabled=true
- $ kubectl get pods
- NAME          READY   STATUS   RESTARTS   AGE
- falco-mrs26   0/1     Error    1          15s
- $
- $ kubectl logs falco-mrs26
- [..]
- * Mounting debugfs
- Cannot find kernel config
- Fri Aug 21 00:53:00 2020: Falco initialized with configuration file /etc/falco/falco.yaml
- Fri Aug 21 00:53:00 2020: Loading rules from file /etc/falco/falco_rules.yaml:
- Fri Aug 21 00:53:03 2020: Loading rules from file /etc/falco/falco_rules.local.yaml:
- Fri Aug 21 00:53:05 2020: Unable to load the driver. Exiting.
- Fri Aug 21 00:53:05 2020: Runtime error: can't open BPF probe '/root/.falco/falco-bpf.o': Errno 2. Exiting.
+ $ kind create cluster --image kindest/node:test --name test
