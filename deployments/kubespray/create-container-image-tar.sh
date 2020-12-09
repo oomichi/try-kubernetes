@@ -14,6 +14,7 @@ do
 	FILE_NAME="$(echo ${image} | awk -F"/" '{print $2}' | sed s/":"/"-"/g)".tar
 	sudo docker pull ${image}
 	sudo docker save -o ${FILE_NAME}  ${image}
+	sudo chown ${USER}  ${FILE_NAME}
 done
 
 cd ..
