@@ -1,1 +1,2 @@
 ci/03_ansible/hosts
+deployments/kubespray/container-images/
