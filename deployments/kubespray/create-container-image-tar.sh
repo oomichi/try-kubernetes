@@ -16,4 +16,5 @@ do
 	sudo docker save -o ${FILE_NAME}  ${image}
 done
 
+cd ..
 tar -zcvf container-images.tar.gz container-images/
