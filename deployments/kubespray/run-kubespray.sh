@@ -1,7 +1,38 @@
 #!/bin/bash
 
-KUBESPRAY_VERSION=${KUBESPRAY_VERSION:-"release-2.13"}
-K8S_VERSION=${K8S_VERSION:-"v1.17.7"}
+CURRENT_DIR=$(cd $(dirname $0); pwd)
+OPTION=$1
+
+KUBESPRAY_VERSION=${KUBESPRAY_VERSION:-"v2.14.2"}
+K8S_VERSION=${K8S_VERSION:-"v1.18.10"}
+
+KUBESPRAY_DOWNLOADED_FILE="kubespray-${KUBESPRAY_VERSION}.tar.gz"
+PIP_REQIUREMENT_DIR="pip3-downloaded"
+
+if [ "${OPTION}" == "create-downloaded-files" ]; then
+	cd ${CURRENT_DIR}
+	if [ ! -d kubespray/ ]; then
+		set -e
+		git clone https://github.com/kubernetes-sigs/kubespray
+		set +e
+	fi
+	cd kubespray/
+
+	if [ "${KUBESPRAY_VERSION}" != "" ]; then
+		set -e
+		git checkout ${KUBESPRAY_VERSION}
+	fi
+
+	set -e
+	mkdir ${PIP_REQIUREMENT_DIR}
+	cd ${PIP_REQIUREMENT_DIR}
+	pip3 download -r ../requirements.txt
+	cd ${CURRENT_DIR}
+	tar -zcvf ${CURRENT_DIR}/${KUBESPRAY_DOWNLOADED_FILE} kubespray/
+
+	echo "${KUBESPRAY_DOWNLOADED_FILE} is created, please keep this file as the same as this script directory."
+	exit 0
+fi
 
 if [ "${K8S_NODES}" = "" ]; then
 	echo 'Need to specify IP addresses of target nodes like:'
@@ -13,21 +44,27 @@ declare -a IPS=(${K8S_NODES})
 
 # Enable error handling
 set -e
-
 sudo yum -y install git python3-pip
-
 # libselinux-python3 is for getting kubeconfig
 sudo yum -y install libselinux-python3
+set +e
 
 cd ~/
-git clone https://github.com/kubernetes-sigs/kubespray
-cd kubespray/
-
-if [ "${KUBESPRAY_VERSION}" != "" ]; then
-	git checkout remotes/origin/${KUBESPRAY_VERSION}
+if [ -f ${CURRENT_DIR}/${KUBESPRAY_DOWNLOADED_FILE} ]; then
+	set -e
+	tar -zxvf ${CURRENT_DIR}/${KUBESPRAY_DOWNLOADED_FILE}
+	cd kubespray/
+	sudo pip3 install -r requirements.txt --find-links ${PIP_REQIUREMENT_DIR}
+else
+	set -e
+	git clone https://github.com/kubernetes-sigs/kubespray
+	cd kubespray/
+	if [ "${KUBESPRAY_VERSION}" != "" ]; then
+		git checkout ${KUBESPRAY_VERSION}
+	fi
+	sudo pip3 install -r requirements.txt
 fi
 
-sudo pip3 install -r requirements.txt
 CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
 
 # Replace node1, node2, ... with actual hostnames for avoiding overwriting the result of "kubectl get nodes"
@@ -43,7 +80,7 @@ sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   invent
 sed -i s/"^kube_version: v.*"/"kube_version: ${K8S_VERSION}"/             inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 sed -i s/"^kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
-sed -i s/"^override_system_hostname: true"/"override_system_hostname: false"/ roles/bootstrap-os/defaults/main.yml
+echo "override_system_hostname: false"                                 >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 
 if [ "${CEPH_MON_NODES}" != "" ]; then
 	MONITORS=""
