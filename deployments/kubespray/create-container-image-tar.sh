@@ -19,3 +19,4 @@ done
 
 cd ..
 tar -zcvf container-images.tar.gz container-images/
+rm -rf container-images/
