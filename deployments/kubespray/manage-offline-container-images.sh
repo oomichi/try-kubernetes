@@ -7,6 +7,7 @@ TEMP_DIR="${CURRENT_DIR}/temp"
 IMAGE_TAR_FILE="${CURRENT_DIR}/container-images.tar.gz"
 IMAGE_DIR="${CURRENT_DIR}/container-images"
 IMAGE_LIST="${IMAGE_DIR}/container-images.txt"
+RETRY_COUNT=5
 
 function create_container_image_tar() {
 	set -e
@@ -24,15 +25,31 @@ function create_container_image_tar() {
 	for image in ${IMAGES}
 	do
 		FILE_NAME="$(echo ${image} | sed s@"/"@"-"@g | sed s/":"/"-"/g)".tar
-		sudo docker pull ${image}
+		set +e
+		for step in $(seq 1 ${RETRY_COUNT})
+		do
+			sudo docker pull ${image}
+			if [ $? -eq 0 ]; then
+				break
+			fi
+			echo "Failed to pull ${image} at step ${step}"
+			if [ ${step} -eq ${RETRY_COUNT} ]; then
+				exit 1
+			fi
+		done
+		set -e
 		sudo docker save -o ${FILE_NAME}  ${image}
-		sudo chown ${USER}  ${FILE_NAME}
 		echo "${FILE_NAME}  ${image}" >> ${IMAGE_LIST}
 	done
 
 	cd ..
-	tar -zcvf ${IMAGE_TAR_FILE}  ${IMAGE_DIR}
+	sudo chown ${USER} ${IMAGE_DIR}/*
+	tar -zcvf ${IMAGE_TAR_FILE}  ./container-images
 	rm -rf ${IMAGE_DIR}
+
+	echo ""
+	echo "${IMAGE_TAR_FILE} is created to contain your container images."
+	echo "Please keep this file and bring it to your offline environment."
 }
 
 function register_container_images() {
@@ -97,7 +114,7 @@ else
 	echo "the gotten images to the target offline environment."
 	echo "Then we will run step(2) for registering the images to local registry."
 	echo ""
-	echo "The container images are tar-ed into ${IMAGE_TAR_FILE}."
+	echo "${IMAGE_TAR_FILE} is created to contain your container images."
 	echo "Please keep this file and bring it to your offline environment."
 	echo ""
 	echo "Step(1) can be operated with:"
