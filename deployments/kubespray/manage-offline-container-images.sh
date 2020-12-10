@@ -35,7 +35,7 @@ function create_container_image_tar() {
 	rm -rf ${IMAGE_DIR}
 }
 
-function upload_container_images() {
+function register_container_images() {
 	if [ ! -f ${IMAGE_TAR_FILE} ]; then
 		echo "${IMAGE_TAR_FILE} should exist."
 		exit 1
@@ -84,9 +84,29 @@ function upload_container_images() {
 	done <<< "$(cat ${IMAGE_LIST})"
 }
 
-cd ${CURRENT_DIR}
 if [ "${OPTION}" == "create" ]; then
 	create_container_image_tar
-elif [ "${OPTION}" == "upload" ]; then
-	upload_container_images
+elif [ "${OPTION}" == "register" ]; then
+	register_container_images
+else
+	echo "This script has two features:"
+	echo "(1) Get container images from an environment which is deployed online."
+	echo "(2) Deploy local container registry and register the container images to the registry."
+	echo ""
+	echo "Step(1) should be done online site as a preparation, then we bring"
+	echo "the gotten images to the target offline environment."
+	echo "Then we will run step(2) for registering the images to local registry."
+	echo ""
+	echo "The container images are tar-ed into ${IMAGE_TAR_FILE}."
+	echo "Please keep this file and bring it to your offline environment."
+	echo ""
+	echo "Step(1) can be operated with:"
+	echo " $ ./manage-offline-container-images.sh   create"
+	echo ""
+	echo "Step(2) can be operated with:"
+	echo " $ ./manage-offline-container-images.sh   register"
+	echo ""
+	echo "Please specify 'create' or 'register'."
+	echo ""
+	exit 1
 fi
