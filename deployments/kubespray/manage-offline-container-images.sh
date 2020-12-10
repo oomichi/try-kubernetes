@@ -50,7 +50,7 @@ function register_container_images() {
 	LOCALHOST_NAME=$(hostname)
 	ping -c 1 ${LOCALHOST_NAME}
 	if [ $? -ne 0 ]; then
-		echo "${LOCALHOST_NAME} should be resolve."
+		echo "${LOCALHOST_NAME} should be resolved."
 		exit 1
 	fi
 
