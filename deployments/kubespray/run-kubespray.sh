@@ -65,15 +65,7 @@ else
 	sudo pip3 install -r requirements.txt
 fi
 
-CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
-
-# Replace node1, node2, ... with actual hostnames for avoiding overwriting the result of "kubectl get nodes"
-INDEX_NODE=1
-for node in ${K8S_NODES}; do
-	nodename=`ssh -oStrictHostKeyChecking=no ${node} 'hostname -s'`
-	sed -i s/"node${INDEX_NODE}:"/"${nodename}:"/g inventory/sample/hosts.yaml
-	INDEX_NODE=`expr ${INDEX_NODE} + 1`
-done
+USE_REAL_HOSTNAME=True CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
 
 sed -i s/"^metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
 sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
