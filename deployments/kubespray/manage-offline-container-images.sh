@@ -74,6 +74,14 @@ function register_container_images() {
 	if [ ! -d ${TEMP_DIR} ]; then
 		mkdir ${TEMP_DIR}
 	fi
+
+	LOCALHOST_NAME=$(hostname)
+	ping -c 1 ${LOCALHOST_NAME}
+	if [ $? -ne 0 ]; then
+		echo "${LOCALHOST_NAME} should be resolved."
+		exit 1
+	fi
+
 	# To avoid "http: server gave http response to https client" error.
 	if [ -d /etc/docker/ ]; then
 		set -e
@@ -96,13 +104,6 @@ function register_container_images() {
 	sudo docker load -i ${IMAGE_DIR}/registry-latest.tar
 	sudo docker run -d -p 5000:5000 --name registry registry:latest
 	set +e
-
-	LOCALHOST_NAME=$(hostname)
-	ping -c 1 ${LOCALHOST_NAME}
-	if [ $? -ne 0 ]; then
-		echo "${LOCALHOST_NAME} should be resolved."
-		exit 1
-	fi
 
 	set -e
 	while read -r line; do
