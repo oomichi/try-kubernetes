@@ -39,6 +39,20 @@ function create_container_image_tar() {
 		done
 		set -e
 		sudo docker save -o ${FILE_NAME}  ${image}
+
+		# NOTE: Here removes the following repo parts from each image
+		# so that these parts will be replaced with Kubespray.
+		# - kube_image_repo: "k8s.gcr.io"
+		# - gcr_image_repo: "gcr.io"
+		# - docker_image_repo: "docker.io"
+		# - quay_image_repo: "quay.io"
+		FIRST_PART=$(echo ${image} | awk -F"/" '{print $1}')
+		if [ "${FIRST_PART}" = "k8s.gcr.io" ] ||
+		   [ "${FIRST_PART}" = "gcr.io" ] ||
+		   [ "${FIRST_PART}" = "docker.io" ] ||
+		   [ "${FIRST_PART}" = "quay.io" ]; then
+			image=$(echo ${image} | sed s@"${FIRST_PART}/"@@)
+		fi
 		echo "${FILE_NAME}  ${image}" >> ${IMAGE_LIST}
 	done
 
@@ -93,7 +107,7 @@ function register_container_images() {
 	while read -r line; do
 		file_name=$(echo ${line} | awk '{print $1}')
 		org_image=$(echo ${line} | awk '{print $2}')
-		new_image=$(echo ${org_image} | sed s@"[^\/]*\/"@"${LOCALHOST_NAME}:5000\/"@)
+		new_image="${LOCALHOST_NAME}:5000/${org_image}"
 		image_id=$(tar -tf ${IMAGE_DIR}/${file_name} | grep "\.json" | grep -v manifest.json)
 		sudo docker load -i ${IMAGE_DIR}/${file_name}
 		sudo docker tag  ${image_id} ${new_image}
