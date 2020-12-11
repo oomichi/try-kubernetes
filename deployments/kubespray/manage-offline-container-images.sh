@@ -92,11 +92,12 @@ function register_container_images() {
 
 	set -e
 	while read -r line; do
-		file_name=$(echo $line | awk '{print $1}')
-		org_image=$(echo $line | awk '{print $2}')
-		new_image=$(echo $org_image | sed s@"[^\/]*\/"@"${LOCALHOST_NAME}:5000\/"@)
-		sudo docker load -i ${file_name}
-		sudo docker tag  ${org_image} ${new_image}
+		file_name=$(echo ${line} | awk '{print $1}')
+		org_image=$(echo ${line} | awk '{print $2}')
+		new_image=$(echo ${org_image} | sed s@"[^\/]*\/"@"${LOCALHOST_NAME}:5000\/"@)
+		image_id=$(tar -tf ${IMAGE_DIR}/${file_name} | grep "\.json" | grep -v manifest.json)
+		sudo docker load -i ${IMAGE_DIR}/${file_name}
+		sudo docker tag  ${image_id} ${new_image}
 		sudo docker push ${new_image}
 	done <<< "$(cat ${IMAGE_LIST})"
 }
