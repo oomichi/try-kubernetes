@@ -57,20 +57,6 @@ function register_container_images() {
 		echo "${IMAGE_TAR_FILE} should exist."
 		exit 1
 	fi
-	tar -zxvf ${IMAGE_TAR_FILE}
-
-	set -e
-	sudo docker load -i ${IMAGE_DIR}/registry-latest.tar
-	sudo docker run -d -p 5000:5000 --name registry registry:latest
-	set +e
-
-	LOCALHOST_NAME=$(hostname)
-	ping -c 1 ${LOCALHOST_NAME}
-	if [ $? -ne 0 ]; then
-		echo "${LOCALHOST_NAME} should be resolved."
-		exit 1
-	fi
-
 	if [ !-d ${TEMP_DIR} ]; then
 		mkdir ${TEMP_DIR}
 	fi
@@ -87,6 +73,19 @@ function register_container_images() {
 		sudo cp ${TEMP_DIR}/docker-daemon.json           /etc/docker/daemon.json
 	else
 		echo "docker package should be installed"
+		exit 1
+	fi
+
+	set -e
+	tar -zxvf ${IMAGE_TAR_FILE}
+	sudo docker load -i ${IMAGE_DIR}/registry-latest.tar
+	sudo docker run -d -p 5000:5000 --name registry registry:latest
+	set +e
+
+	LOCALHOST_NAME=$(hostname)
+	ping -c 1 ${LOCALHOST_NAME}
+	if [ $? -ne 0 ]; then
+		echo "${LOCALHOST_NAME} should be resolved."
 		exit 1
 	fi
 
