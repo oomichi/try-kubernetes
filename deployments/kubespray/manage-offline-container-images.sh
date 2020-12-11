@@ -79,14 +79,8 @@ function register_container_images() {
 		mkdir ${TEMP_DIR}
 	fi
 
-	LOCALHOST_NAME=$(hostname)
-	ping -c 1 ${LOCALHOST_NAME}
-	if [ $? -ne 0 ]; then
-		echo "${LOCALHOST_NAME} should be resolved."
-		exit 1
-	fi
-
 	# To avoid "http: server gave http response to https client" error.
+	LOCALHOST_NAME=$(hostname)
 	if [ -d /etc/docker/ ]; then
 		set -e
 		# Ubuntu18.04, RHEL7/CentOS7
