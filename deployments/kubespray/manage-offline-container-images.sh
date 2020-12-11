@@ -114,6 +114,13 @@ function register_container_images() {
 		sudo docker tag  ${image_id} ${new_image}
 		sudo docker push ${new_image}
 	done <<< "$(cat ${IMAGE_LIST})"
+
+	echo "Succeeded to register container images to local registry."
+	echo "Please specify ${LOCALHOST_NAME}:5000 for the following options in your inventry:"
+	echo "- kube_image_repo"
+	echo "- gcr_image_repo"
+	echo "- docker_image_repo"
+	echo "- quay_image_repo"
 }
 
 if [ "${OPTION}" == "create" ]; then
