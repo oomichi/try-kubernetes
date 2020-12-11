@@ -82,6 +82,13 @@ sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   invent
 sed -i s/"^kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 echo "override_system_hostname: false"                                 >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 
+if [ "${USE_LOCAL_IMAGE_REGISTRY}" != "" ]; then
+	LOCALHOST_NAME=$(hostname)
+	echo "kube_image_repo: ${LOCALHOST_NAME}:5000"                 >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+	echo "gcr_image_repo: ${LOCALHOST_NAME}:5000"                  >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+	echo "docker_image_repo: ${LOCALHOST_NAME}:5000"               >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+	echo "quay_image_repo: ${LOCALHOST_NAME}:5000"                 >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+fi
 if [ "${CEPH_MON_NODES}" != "" ]; then
 	MONITORS=""
 	for node in ${CEPH_MON_NODES}; do
