@@ -102,7 +102,7 @@ function register_container_images() {
 
 	tar -zxvf ${IMAGE_TAR_FILE}
 	sudo docker load -i ${IMAGE_DIR}/registry-latest.tar
-	sudo docker run -d -p 5000:5000 --name registry registry:latest
+	sudo docker run --restart=always -d -p 5000:5000 --name registry registry:latest
 	set +e
 
 	set -e
