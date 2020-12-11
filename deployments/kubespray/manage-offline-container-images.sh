@@ -109,7 +109,7 @@ function register_container_images() {
 		file_name=$(echo ${line} | awk '{print $1}')
 		org_image=$(echo ${line} | awk '{print $2}')
 		new_image="${LOCALHOST_NAME}:5000/${org_image}"
-		image_id=$(tar -tf ${IMAGE_DIR}/${file_name} | grep "\.json" | grep -v manifest.json)
+		image_id=$(tar -tf ${IMAGE_DIR}/${file_name} | grep "\.json" | grep -v manifest.json | sed s/"\.json"//)
 		sudo docker load -i ${IMAGE_DIR}/${file_name}
 		sudo docker tag  ${image_id} ${new_image}
 		sudo docker push ${new_image}
