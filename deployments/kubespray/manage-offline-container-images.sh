@@ -71,7 +71,7 @@ function register_container_images() {
 		echo "${IMAGE_TAR_FILE} should exist."
 		exit 1
 	fi
-	if [ !-d ${TEMP_DIR} ]; then
+	if [ ! -d ${TEMP_DIR} ]; then
 		mkdir ${TEMP_DIR}
 	fi
 	# To avoid "http: server gave http response to https client" error.
