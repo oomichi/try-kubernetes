@@ -94,7 +94,7 @@ function register_container_images() {
 		sed -i s@"HOSTNAME"@"${LOCALHOST_NAME}"@  ${TEMP_DIR}/registries.conf
 		sudo cp ${TEMP_DIR}/registries.conf   /etc/containers/registries.conf
 	else
-		echo "docker package should be installed"
+		echo "docker package(docker-ce, etc.) should be installed"
 		exit 1
 	fi
 
