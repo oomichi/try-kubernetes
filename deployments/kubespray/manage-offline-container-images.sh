@@ -75,18 +75,18 @@ function register_container_images() {
 		mkdir ${TEMP_DIR}
 	fi
 	# To avoid "http: server gave http response to https client" error.
-	if [ -d /etc/containers/ ]; then
-		set -e
-		# RHEL8/CentOS8
-		cp ${CURRENT_DIR}/registries.conf         ${TEMP_DIR}/registries.conf
-		sed -i s@"HOSTNAME"@"${LOCALHOST_NAME}"@  ${TEMP_DIR}/registries.conf
-		sudo cp ${TEMP_DIR}/registries.conf   /etc/containers/registries.conf
-	elif [ -d /etc/docker/ ]; then
+	if [ -d /etc/docker/ ]; then
 		set -e
 		# Ubuntu18.04, RHEL7/CentOS7
 		cp ${CURRENT_DIR}/docker-daemon.json      ${TEMP_DIR}/docker-daemon.json
 		sed -i s@"HOSTNAME"@"${LOCALHOST_NAME}"@  ${TEMP_DIR}/docker-daemon.json
 		sudo cp ${TEMP_DIR}/docker-daemon.json           /etc/docker/daemon.json
+	elif [ -d /etc/containers/ ]; then
+		set -e
+		# RHEL8/CentOS8
+		cp ${CURRENT_DIR}/registries.conf         ${TEMP_DIR}/registries.conf
+		sed -i s@"HOSTNAME"@"${LOCALHOST_NAME}"@  ${TEMP_DIR}/registries.conf
+		sudo cp ${TEMP_DIR}/registries.conf   /etc/containers/registries.conf
 	else
 		echo "docker package should be installed"
 		exit 1
