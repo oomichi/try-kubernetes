@@ -65,6 +65,17 @@ else
 	sudo pip3 install -r requirements.txt
 fi
 
+if [ ! -d ~/.ssh ]; then
+	mkdir ~/.ssh
+	chmod 700 ~/.ssh
+fi
+if [ ! -f ~/.ssh/id_rsa ]; then
+	ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+	for node in ${K8S_NODES}; do
+		ssh-copy-id ${node}
+	done
+fi
+
 USE_REAL_HOSTNAME=True CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
 
 sed -i s/"^metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
