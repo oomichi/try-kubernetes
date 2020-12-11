@@ -13,9 +13,10 @@ function create_container_image_tar() {
 	set -e
 
 	IMAGES=$(kubectl describe pods --all-namespaces | grep " Image:" | awk '{print $2}' | sort | uniq)
-	# NOTE: etcd cannot be seen as a pod.
-	ETCD_IMAGE=$(kubectl cluster-info dump | grep "coreos/etcd:" | sed s@\"@@g)
-	IMAGES="${IMAGES} ${ETCD_IMAGE}"
+	# NOTE: etcd and pause cannot be seen as pods.
+	# The pause image is used for --pod-infra-container-image option of kubelet.
+	EXT_IMAGES=$(kubectl cluster-info dump | egrep "quay.io/coreos/etcd:|k8s.gcr.io/pause:" | sed s@\"@@g)
+	IMAGES="${IMAGES} ${EXT_IMAGES}"
 
 	rm -f  ${IMAGE_TAR_FILE}
 	rm -rf ${IMAGE_DIR}
