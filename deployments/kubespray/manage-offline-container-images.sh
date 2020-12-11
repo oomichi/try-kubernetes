@@ -15,7 +15,7 @@ function create_container_image_tar() {
 	IMAGES=$(kubectl describe pods --all-namespaces | grep " Image:" | awk '{print $2}' | sort | uniq)
 	# NOTE: etcd cannot be seen as a pod.
 	ETCD_IMAGE=$(kubectl cluster-info dump | grep "coreos/etcd:" | sed s@\"@@g)
-	IMAGES="${IMAGES}\n${ETCD_IMAGE}"
+	IMAGES="${IMAGES} ${ETCD_IMAGE}"
 
 	rm -f  ${IMAGE_TAR_FILE}
 	rm -rf ${IMAGE_DIR}
