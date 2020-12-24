@@ -7,8 +7,8 @@ Minimum OpenStack
 Overview
 --------
 
-This doc explains how to install minimum OpenStack on ubuntu 18.04.
-The release of OpenStack is Stein which is the latest at this time.
+This doc explains how to install minimum OpenStack on Ubuntu 20.04LTS.
+The release of OpenStack is Victoria which is the latest at this time.
 The minimum services are Keystone, Glance, Nova, Cinder and Neutron only.
 
 All nodes
@@ -28,10 +28,9 @@ NOTE: Necessary to change /etc/hosts of iaas-ctrl like the following because mys
  - 127.0.1.1 iaas-ctrl
  + 127.0.0.1 localhost iaas-ctrl
 
-Operate the following commands on all OpenStack nodes to enable the Stein version::
+Operate the following commands on all OpenStack nodes to enable the Victoria version::
 
- $ sudo apt-get -y install software-properties-common
- $ sudo add-apt-repository cloud-archive:stein
+ $ sudo add-apt-repository cloud-archive:victoria
  $ sudo apt-get update
  $ sudo apt-get -y dist-upgrade
 
