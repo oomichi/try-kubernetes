@@ -2,6 +2,7 @@
 
 SEARCH_PATH=${1:-"./pkg"}
 VERBOSITY=${VERBOSITY:-""}
+EASY_MODE=${EASY_MODE:-""}
 
 DIRS=$(find ${SEARCH_PATH} -maxdepth 1 -mindepth 1 -type d)
 for dir in ${DIRS}
@@ -19,6 +20,22 @@ do
 		fi
 		grep "^func " $pkg > /dev/null
 		if [ $? -ne 0 ]; then
+			continue
+		fi
+		SKIP=0
+		if [ -n "${EASY_MODE}" ]; then
+			FUNCS=$(grep "^func " $pkg | wc -l)
+			for index in $(seq ${FUNCS})
+			do
+				FUNC_WORDS=$(grep "^func " $pkg | head -n ${index} | tail -n 1 | wc -w)
+				if [ ${FUNC_WORDS} -gt 6 ]; then
+					# Functions which contain many arguments tend to be complex
+					SKIP=1
+					break
+				fi
+			done
+		fi
+		if [ ${SKIP} -eq 1 ]; then
 			continue
 		fi
 		if [ -n "${VERBOSITY}" ]; then
