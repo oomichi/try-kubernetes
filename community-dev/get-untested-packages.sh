@@ -14,8 +14,12 @@ do
 		if [ -f ${UNIT_TEST} ]; then
 			continue
 		fi
+		grep "^func " $pkg > /dev/null
+		if [ $? -ne 0 ]; then
+			continue
+		fi
 		if [ -n "${VERBOSITY}" ]; then
-			echo "$UNIT_TEST doesn't exist"
+			echo "$pkg doesn't have unit test file"
 		fi
 		COUNT=$(expr ${COUNT} + 1)
 	done
