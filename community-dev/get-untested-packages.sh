@@ -8,6 +8,9 @@ for dir in ${DIRS}
 do
 	PKGS=$(find ${dir} -name "*.go" | grep -v "_test.go" | grep -v "doc.go" | grep -v "test" | grep -v "fake" | grep -v "sample" | grep -v "stub")
 	COUNT=0
+	if [ -n "${VERBOSITY}" ]; then
+		echo "The following files don't have unit test files under ${dir}"
+	fi
 	for pkg in ${PKGS}
 	do
 		UNIT_TEST=$(echo $pkg | sed s@\.go@_test.go@)
@@ -19,7 +22,7 @@ do
 			continue
 		fi
 		if [ -n "${VERBOSITY}" ]; then
-			echo "$pkg doesn't have unit test file"
+			echo "$pkg"
 		fi
 		COUNT=$(expr ${COUNT} + 1)
 	done
