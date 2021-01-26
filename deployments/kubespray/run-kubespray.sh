@@ -88,7 +88,7 @@ USE_REAL_HOSTNAME=True CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/i
 
 sed -i s/"^metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
 sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
-if [ -n "${K8S_VERSION}"]; then
+if [ -n "${K8S_VERSION}" ]; then
 	sed -i s/"^kube_version: v.*"/"kube_version: ${K8S_VERSION}"/     inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 fi
 sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
