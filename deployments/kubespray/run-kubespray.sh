@@ -9,6 +9,8 @@ K8S_VERSION=${K8S_VERSION:-"v1.18.10"}
 KUBESPRAY_DOWNLOADED_FILE="kubespray-${KUBESPRAY_VERSION}.tar.gz"
 PIP_REQIUREMENT_DIR="pip3-downloaded"
 
+IS_UBUNTU=$(grep '^NAME="Ubuntu"' /etc/os-release)
+
 if [ "${OPTION}" == "create-downloaded-files" ]; then
 	cd ${CURRENT_DIR}
 	if [ ! -d kubespray/ ]; then
@@ -42,12 +44,18 @@ fi
 
 declare -a IPS=(${K8S_NODES})
 
-# Enable error handling
-set -e
-sudo yum -y install git python3-pip
-# libselinux-python3 is for getting kubeconfig
-sudo yum -y install libselinux-python3
-set +e
+if [ -n "${IS_UBUNTU}" ]; then
+	set -e
+	sudo apt -y install python3-pip
+	set +e
+else
+	# Enable error handling
+	set -e
+	sudo yum -y install git python3-pip
+	# libselinux-python3 is for getting kubeconfig
+	sudo yum -y install libselinux-python3
+	set +e
+fi
 
 cd ~/
 if [ -f ${CURRENT_DIR}/${KUBESPRAY_DOWNLOADED_FILE} ]; then
