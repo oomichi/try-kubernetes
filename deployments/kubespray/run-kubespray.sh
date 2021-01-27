@@ -44,6 +44,11 @@ fi
 
 declare -a IPS=(${K8S_NODES})
 
+SINGLE_K8S=""
+if [ ${#IPS[*]} -eq 1 ]; then
+	SINGLE_K8S="True"
+fi
+
 if [ -n "${IS_UBUNTU}" ]; then
 	set -e
 	sudo apt -y install python3-pip
@@ -94,6 +99,11 @@ fi
 sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 sed -i s/"^kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 echo "override_system_hostname: false"                                 >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+
+if [ "${SINGLE_K8S}" != "" ]; then
+	# To avoid pending coredns pod on a single node of k8s, set 1 here.
+	echo "dns_min_replicas: 1"                                     >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+fi
 
 if [ "${USE_LOCAL_IMAGE_REGISTRY}" != "" ]; then
 	LOCALHOST_NAME=$(hostname)
