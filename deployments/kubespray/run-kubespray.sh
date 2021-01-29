@@ -94,6 +94,18 @@ USE_REAL_HOSTNAME=True CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/i
 sed -i s/"^metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
 sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
 sed -i s/"^helm_enabled: false"/"helm_enabled: true"/                     inventory/sample/group_vars/k8s-cluster/addons.yml
+
+if [ "${SINGLE_K8S}" != "" ]; then
+	# NOTE: This local_volume_provisioner is only for single-k8s deployment to create persistent voluemes always on the same node.
+	echo "local_volume_provisioner_enabled: true"                  >> inventory/sample/group_vars/k8s-cluster/addons.yml
+	echo "local_volume_provisioner_storage_classes:"               >> inventory/sample/group_vars/k8s-cluster/addons.yml
+	echo "  default:"                                              >> inventory/sample/group_vars/k8s-cluster/addons.yml
+	echo "    host_dir: /mnt/disks"                                >> inventory/sample/group_vars/k8s-cluster/addons.yml
+	echo "    mount_dir: /mnt/disks"                               >> inventory/sample/group_vars/k8s-cluster/addons.yml
+	echo "    volume_mode: Filesystem"                             >> inventory/sample/group_vars/k8s-cluster/addons.yml
+	echo "    fs_type: ext4"                                       >> inventory/sample/group_vars/k8s-cluster/addons.yml
+fi
+
 if [ -n "${K8S_VERSION}" ]; then
 	sed -i s/"^kube_version: v.*"/"kube_version: ${K8S_VERSION}"/     inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
 fi
@@ -145,5 +157,10 @@ set -e
 mkdir ~/.kube
 cp ./inventory/sample/artifacts/admin.conf ~/.kube/config
 chmod 600 ~/.kube/config
+
+if [ "${SINGLE_K8S}" != "" ]; then
+	# Make the storageclass "default" as default storageclass
+	kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+fi
 
 echo "Succeeded to deploy Kubernetes cluster"
