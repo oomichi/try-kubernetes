@@ -143,5 +143,6 @@ set -e
 
 mkdir ~/.kube
 cp ./inventory/sample/artifacts/admin.conf ~/.kube/config
+chmod 600 ~/.kube/config
 
 echo "Succeeded to deploy Kubernetes cluster"
