@@ -11,7 +11,11 @@ fi
 
 # Ignore error of mkdir here because of the existing directory case.
 sudo mkdir /var/disks
-sudo truncate /var/disks/${PV_NAME} --size ${PV_SIZE_GB}G
+
+# local-pv-provisoner creates PersistentVolume based on mnt size which is less than the specified size.
+# Then here specifies additional 10% for the size.
+ACTUAL_SIZE_MB=$(expr ${PV_SIZE_GB} "*" 1150)
+sudo truncate /var/disks/${PV_NAME} --size ${ACTUAL_SIZE_MB}M
 if [ $? -ne 0 ]; then
 	echo "Failed to create a file of /var/disks/${PV_NAME}"
 	exit 1
