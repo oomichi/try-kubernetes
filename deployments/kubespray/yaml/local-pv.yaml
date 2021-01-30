@@ -1,0 +1,15 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: PV_NAME
+  labels:
+    type: local
+spec:
+  storageClassName: default
+  capacity:
+    storage: PV_SIZE_GBGi
+  local:
+    path: /mnt/disks/PV_NAME
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteOnce
