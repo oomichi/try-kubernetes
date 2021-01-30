@@ -40,12 +40,3 @@ if [ $? -ne 0 ]; then
 	echo "Failed to write /etc/fstab for ${PV_NAME}"
 	exit 1
 fi
-
-cp ./yaml/local-pv.yaml            /tmp/local-pv.yaml
-sed -i s/PV_NAME/${PV_NAME}/g      /tmp/local-pv.yaml
-sed -i s/PV_SIZE_GB/${PV_SIZE_GB}/ /tmp/local-pv.yaml
-kubectl create -f                  /tmp/local-pv.yaml
-if [ $? -ne 0 ]; then
-	echo "Failed to create a persistent volume"
-	exit 1
-fi
