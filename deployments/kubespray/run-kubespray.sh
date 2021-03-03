@@ -154,7 +154,9 @@ done
 # Enable error handling
 set -e
 
-mkdir ~/.kube
+if [ ! -d ~/.kube ]; then
+	mkdir ~/.kube
+fi
 cp ./inventory/sample/artifacts/admin.conf ~/.kube/config
 chmod 600 ~/.kube/config
 
