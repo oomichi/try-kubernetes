@@ -21,3 +21,9 @@
 
   when:
   - disable_service_firewall
+
+- name: Set vm.swappiness to 0
+  sysctl:
+    name: vm.swappiness
+    value: '0'
+    state: present
