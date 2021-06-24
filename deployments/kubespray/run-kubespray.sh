@@ -91,47 +91,47 @@ fi
 
 USE_REAL_HOSTNAME=True CONFIG_FILE=inventory/sample/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
 
-sed -i s/"^metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
-sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s-cluster/addons.yml
-sed -i s/"^helm_enabled: false"/"helm_enabled: true"/                     inventory/sample/group_vars/k8s-cluster/addons.yml
+sed -i s/"^metrics_server_enabled: false"/"metrics_server_enabled: true"/ inventory/sample/group_vars/k8s_cluster/addons.yml
+sed -i s/"^ingress_nginx_enabled: false"/"ingress_nginx_enabled: true"/   inventory/sample/group_vars/k8s_cluster/addons.yml
+sed -i s/"^helm_enabled: false"/"helm_enabled: true"/                     inventory/sample/group_vars/k8s_cluster/addons.yml
 
 if [ "${SINGLE_K8S}" != "" ]; then
 	# NOTE: This local_volume_provisioner is only for single-k8s deployment to create persistent voluemes always on the same node.
-	echo "local_volume_provisioner_enabled: true"                  >> inventory/sample/group_vars/k8s-cluster/addons.yml
-	echo "local_volume_provisioner_storage_classes:"               >> inventory/sample/group_vars/k8s-cluster/addons.yml
-	echo "  default:"                                              >> inventory/sample/group_vars/k8s-cluster/addons.yml
-	echo "    host_dir: /mnt/disks"                                >> inventory/sample/group_vars/k8s-cluster/addons.yml
-	echo "    mount_dir: /mnt/disks"                               >> inventory/sample/group_vars/k8s-cluster/addons.yml
-	echo "    volume_mode: Filesystem"                             >> inventory/sample/group_vars/k8s-cluster/addons.yml
-	echo "    fs_type: ext4"                                       >> inventory/sample/group_vars/k8s-cluster/addons.yml
+	echo "local_volume_provisioner_enabled: true"                  >> inventory/sample/group_vars/k8s_cluster/addons.yml
+	echo "local_volume_provisioner_storage_classes:"               >> inventory/sample/group_vars/k8s_cluster/addons.yml
+	echo "  default:"                                              >> inventory/sample/group_vars/k8s_cluster/addons.yml
+	echo "    host_dir: /mnt/disks"                                >> inventory/sample/group_vars/k8s_cluster/addons.yml
+	echo "    mount_dir: /mnt/disks"                               >> inventory/sample/group_vars/k8s_cluster/addons.yml
+	echo "    volume_mode: Filesystem"                             >> inventory/sample/group_vars/k8s_cluster/addons.yml
+	echo "    fs_type: ext4"                                       >> inventory/sample/group_vars/k8s_cluster/addons.yml
 fi
 
 if [ -n "${K8S_VERSION}" ]; then
-	sed -i s/"^kube_version: v.*"/"kube_version: ${K8S_VERSION}"/     inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+	sed -i s/"^kube_version: v.*"/"kube_version: ${K8S_VERSION}"/     inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
 fi
-sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
-sed -i s/"^kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
-echo "override_system_hostname: false"                                 >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+sed -i s/"^# kubeconfig_localhost: false"/"kubeconfig_localhost: true"/   inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
+sed -i s/"^kube_network_plugin: calico"/"kube_network_plugin: flannel"/   inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
+echo "override_system_hostname: false"                                 >> inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
 
 if [ "${SINGLE_K8S}" != "" ]; then
 	# To avoid pending coredns pod on a single node of k8s, set 1 here.
-	echo "dns_min_replicas: 1"                                     >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+	echo "dns_min_replicas: 1"                                     >> inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
 fi
 
 if [ "${USE_LOCAL_IMAGE_REGISTRY}" != "" ]; then
 	LOCALHOST_NAME=$(hostname)
-	echo "kube_image_repo: ${LOCALHOST_NAME}:5000"                 >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
-	echo "gcr_image_repo: ${LOCALHOST_NAME}:5000"                  >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
-	echo "docker_image_repo: ${LOCALHOST_NAME}:5000"               >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
-	echo "quay_image_repo: ${LOCALHOST_NAME}:5000"                 >> inventory/sample/group_vars/k8s-cluster/k8s-cluster.yml
+	echo "kube_image_repo: ${LOCALHOST_NAME}:5000"                 >> inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
+	echo "gcr_image_repo: ${LOCALHOST_NAME}:5000"                  >> inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
+	echo "docker_image_repo: ${LOCALHOST_NAME}:5000"               >> inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
+	echo "quay_image_repo: ${LOCALHOST_NAME}:5000"                 >> inventory/sample/group_vars/k8s_cluster/k8s-cluster.yml
 fi
 if [ "${CEPH_MON_NODES}" != "" ]; then
 	MONITORS=""
 	for node in ${CEPH_MON_NODES}; do
 		MONITORS="${MONITORS} ${node}:6789"
 	done
-	sed -i s/"^cephfs_provisioner_enabled: false"/"cephfs_provisioner_enabled: true"/ inventory/sample/group_vars/k8s-cluster/addons.yml
-	sed -i s/'^# cephfs_provisioner_monitors: "172.24.0.1:6789,172.24.0.2:6789,172.24.0.3:6789"'/"cephfs_provisioner_monitors: \"${MONITORS}\""/ inventory/sample/group_vars/k8s-cluster/addons.yml
+	sed -i s/"^cephfs_provisioner_enabled: false"/"cephfs_provisioner_enabled: true"/ inventory/sample/group_vars/k8s_cluster/addons.yml
+	sed -i s/'^# cephfs_provisioner_monitors: "172.24.0.1:6789,172.24.0.2:6789,172.24.0.3:6789"'/"cephfs_provisioner_monitors: \"${MONITORS}\""/ inventory/sample/group_vars/k8s_cluster/addons.yml
 fi
 
 ansible-playbook -e "{disable_service_firewall: true}" -i inventory/sample/hosts.yaml --become --become-user=root os-services/os-services.yml
