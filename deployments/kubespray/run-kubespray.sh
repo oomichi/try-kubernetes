@@ -71,10 +71,14 @@ if [ -f ${CURRENT_DIR}/${KUBESPRAY_DOWNLOADED_FILE} ]; then
 	sudo pip3 install -r requirements.txt --find-links ${PIP_REQIUREMENT_DIR}
 else
 	set -e
-	git clone https://github.com/kubernetes-sigs/kubespray
+	if [ ! -d ./kubespray ]; then
+		git clone https://github.com/kubernetes-sigs/kubespray
+	fi
 	cd kubespray/
 	if [ "${KUBESPRAY_VERSION}" != "" ]; then
 		git checkout ${KUBESPRAY_VERSION}
+	else
+		git pull origin master
 	fi
 	sudo pip3 install -r requirements.txt
 fi
