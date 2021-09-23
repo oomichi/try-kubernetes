@@ -134,7 +134,7 @@ if [ "${CEPH_MON_NODES}" != "" ]; then
 	sed -i s/'^# cephfs_provisioner_monitors: "172.24.0.1:6789,172.24.0.2:6789,172.24.0.3:6789"'/"cephfs_provisioner_monitors: \"${MONITORS}\""/ inventory/sample/group_vars/k8s_cluster/addons.yml
 fi
 
-ansible-playbook -e "{disable_service_firewall: true}" -i inventory/sample/hosts.yaml --become --become-user=root os-services/os-services.yml
+ansible-playbook -e "{disable_service_firewall: true}" -i inventory/sample/hosts.yaml --become --become-user=root ${CURRENT_DIR}/os-services/os-services.yml
 
 # The following ansible-playbook is failed sometimes due to some different reasons.
 # So here retries multiple times
