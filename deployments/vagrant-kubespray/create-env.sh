@@ -9,7 +9,7 @@ sudo apt update
 sudo apt -y install vagrant
 
 # Install vagrant-libvirt
-sudo apt -y install libvirt-dev build-essential
+sudo apt -y install libvirt-dev build-essential python3-venv
 vagrant plugin install vagrant-libvirt
 
 cd
