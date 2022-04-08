@@ -8,6 +8,9 @@ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(l
 sudo apt update
 sudo apt -y install vagrant
 
+sudo apt -y install libvirt-daemon virt-manager
+sudo systemctl restart libvirtd
+
 # Install vagrant-libvirt
 sudo apt -y install libvirt-dev build-essential python3-venv
 vagrant plugin install vagrant-libvirt
