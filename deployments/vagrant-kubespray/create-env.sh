@@ -11,15 +11,9 @@ sudo apt -y install vagrant
 sudo apt -y install libvirt-daemon virt-manager
 sudo systemctl restart libvirtd
 
+sudo adduser ${USER} libvirt
+sudo adduser ${USER} kvm
+
 # Install vagrant-libvirt
 sudo apt -y install libvirt-dev build-essential python3-venv
 vagrant plugin install vagrant-libvirt
-
-cd
-python3 -m venv ./venv-kubespray
-source venv-kubespray/bin/activate
-
-git clone https://github.com/kubernetes-sigs/kubespray
-cd kubespray
-pip3 install -r requirements.txt
-vagrant up
