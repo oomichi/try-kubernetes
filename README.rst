@@ -337,8 +337,8 @@ Prepare
 Need to install golang 1.13.7 which is not provided from ubuntu 18.04 as the
 default. So we need to do the following process for that::
 
- $ wget https://dl.google.com/go/go1.13.7.linux-amd64.tar.gz
- $ sudo tar -C /usr/local/ -xzf go1.13.7.linux-amd64.tar.gz
+ $ wget https://go.dev/dl/go1.18.2.linux-amd64.tar.gz
+ $ sudo tar -C /usr/local/ -xzf go1.18.2.linux-amd64.tar.gz
  $ export PATH=$PATH:/usr/local/go/bin
  $ echo "export PATH=$PATH:/usr/local/go/bin" >> $HOME/.bashrc
  $ sudo ln -s /usr/local/go/bin/go /usr/local/bin/go
