@@ -63,9 +63,11 @@ else
 	set +e
 fi
 
+set -e
 VENVDIR=${HOME}/kubespray-venv
 virtualenv  --python=$(which python3) ${VENVDIR}
 source ${VENVDIR}/bin/activate
+set +e
 
 cd ~/
 if [ -f ${CURRENT_DIR}/${KUBESPRAY_DOWNLOADED_FILE} ]; then
