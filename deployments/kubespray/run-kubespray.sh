@@ -65,7 +65,7 @@ fi
 
 set -e
 VENVDIR=${HOME}/kubespray-venv
-virtualenv  --python=$(which python3) ${VENVDIR}
+python3 -m venv ${VENVDIR}
 source ${VENVDIR}/bin/activate
 set +e
 
