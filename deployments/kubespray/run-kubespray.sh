@@ -63,12 +63,16 @@ else
 	set +e
 fi
 
+VENVDIR=${HOME}/kubespray-venv
+virtualenv  --python=$(which python3) ${VENVDIR}
+source ${VENVDIR}/bin/activate
+
 cd ~/
 if [ -f ${CURRENT_DIR}/${KUBESPRAY_DOWNLOADED_FILE} ]; then
 	set -e
 	tar -zxvf ${CURRENT_DIR}/${KUBESPRAY_DOWNLOADED_FILE}
 	cd kubespray/
-	sudo pip3 install -r requirements.txt --find-links ${PIP_REQIUREMENT_DIR}
+	pip install -r requirements.txt --find-links ${PIP_REQIUREMENT_DIR}
 else
 	set -e
 	if [ ! -d ./kubespray ]; then
@@ -80,7 +84,7 @@ else
 	else
 		git pull origin master
 	fi
-	sudo pip3 install -r requirements.txt
+	pip install -r requirements.txt
 fi
 
 if [ ! -d ~/.ssh ]; then
