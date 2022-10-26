@@ -1,0 +1,17 @@
+name: Typo Check
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-typo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check typo
+        run: |
+          ./test/check_typo.sh
