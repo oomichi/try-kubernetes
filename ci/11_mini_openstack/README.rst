@@ -37,7 +37,7 @@ Operate the following commands on all OpenStack nodes to enable the Victoria ver
 Controller node
 ---------------
 
-We can use ansible playbooks for the follwoing operations::
+We can use ansible playbooks for the following operations::
 
  $ cd controller
  $ ansible-playbook 01_ctrl_network_config.yaml -i ../hosts --ask-become-pass
@@ -537,7 +537,7 @@ Restart and verify installation::
 Nova and Neutron installation on compute node
 ---------------------------------------------
 
-We can use ansible playbook for the follwoing operations::
+We can use ansible playbook for the following operations::
 
  $ cd cpu
  $ ansible-playbook 01_node.yaml -i ../hosts --ask-become-pass

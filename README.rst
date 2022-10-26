@@ -45,7 +45,7 @@ To install the latest packages of Kubernetes::
 
  # apt-get install -y kubelet kubeadm kubectl
 
-If you want to install previous release of Kubernetes, check avaiable releases with::
+If you want to install previous release of Kubernetes, check available releases with::
 
  # apt-cache policy kubelet
  kubelet:
