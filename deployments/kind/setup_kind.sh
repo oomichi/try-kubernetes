@@ -12,14 +12,14 @@ set +e
 # Get kind command
 kind version
 if [ $? -eq 127 ]; then
-	curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64
+	curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64
 	chmod +x ./kind
 	sudo mv ./kind /usr/local/bin/
 fi
 
 kubectl version
 if [ $? -eq 127 ]; then
-	curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+	curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.26.0/bin/linux/amd64/kubectl
 	chmod +x kubectl
 	sudo mv kubectl /usr/local/bin/
 fi
