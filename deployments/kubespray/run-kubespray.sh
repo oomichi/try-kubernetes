@@ -51,7 +51,7 @@ fi
 
 if [ -n "${IS_UBUNTU}" ]; then
 	set -e
-	sudo apt -y install python3-pip
+	sudo apt -y install python3-pip python3-venv
 	set +e
 else
 	# Enable error handling
