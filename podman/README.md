@@ -10,10 +10,10 @@ $ podman play kube ./test-svc.yaml
 ```
 NOTE: Necessary to specify dockerhub registry cleary with `registry.hub.docker.com/library/` for nginx image.
 
-Know avaiable options
+Know available options
 ---------------------
 
-`podman pod` seems like `kubectl` for pod operation and the avaiable options are:
+`podman pod` seems like `kubectl` for pod operation and the available options are:
 
 ```
 $ podman pod --help
