@@ -112,3 +112,51 @@ Commercial support is available at
 </body>
 </html>
 root@test-svc:/#
+```
+
+Network communication between pods
+----------------------------------
+
+Need to specify the same network when deploying pods:
+```
+$ podman play kube --network podman ./shell.yaml
+$ podman play kube --network podman ./pods-and-svc.yaml
+```
+Check IP address of nginx pod:
+```
+$ podman ps | grep nginx
+4675e132974a  registry.hub.docker.com/library/nginx:latest  nginx -g daemon o...  39 minutes ago  Up 39 minutes ago              test-svc-nginx
+$ podman inspect test-svc-nginx | jq -r ".[0].NetworkSettings.Networks.podman.IPAddress"
+10.88.0.3
+$
+```
+Access to nginx from a different container:
+```
+$ podman ps | grep bash
+3c1758a60d3b  docker.io/library/ubuntu:22.04                                      41 minutes ago  Up 41 minutes ago              test-shell-bash
+$
+$ podman exec -it 3c1758a60d3b curl 10.88.0.3
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+```
