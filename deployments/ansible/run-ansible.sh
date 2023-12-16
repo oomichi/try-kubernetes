@@ -35,6 +35,9 @@ fi
 
 set -e
 
+curl -LO https://dl.k8s.io/release/v1.27.0/bin/linux/amd64/kubectl
+chmod 755 ./kubectl
 envsubst < ./aks.yaml.template > ./aks.yaml
 ansible-playbook ./aks.yaml
 az aks get-credentials --resource-group ${AKS_RESOURCE_GROUP} --name ${AKS_NAME} --admin
+./kubectl get nodes
