@@ -2,3 +2,4 @@ ci/03_ansible/hosts
 deployments/kubespray/container-images/
 deployments/ansible/venv-ansible
 deployments/ansible/aks.yaml
+deployments/ansible/kubectl
