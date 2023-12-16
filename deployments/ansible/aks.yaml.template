@@ -1,0 +1,20 @@
+- name: Create Azure Kubernetes Service
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create resource group
+    azure.azcollection.azure_rm_resourcegroup:
+      name: ${AKS_RESOURCE_GROUP}
+      location: japaneast
+  - name: Create AKS Cluster
+    azure.azcollection.azure_rm_aks:
+      name: ${AKS_NAME}
+      kubernetes_version: 1.27.7
+      location: japaneast
+      resource_group: ${AKS_RESOURCE_GROUP}
+      dns_prefix: akstest
+      agent_pool_profiles:
+        - name: agentpool1
+          mode: System
+          count: 1
+          vm_size: Standard_D2_v2
