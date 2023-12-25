@@ -1,0 +1,122 @@
+- name: Create Elastic Kubernetes Service
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create a VPC(Virtual Private Cloud)
+    amazon.aws.ec2_vpc_net:
+      name: "{{ eks_name }}"
+      region: "{{ region }}"
+      cidr_block: 172.16.16.0/20
+    register: created_vpc
+  - name: Create controle plane subnet
+    amazon.aws.ec2_vpc_subnet:
+      state: present
+      region: "{{ region }}"
+      # If using the same az subnets for EKS, "Subnets specified must be in at least two different AZs" error happens.
+      az: "{{ region }}b"
+      vpc_id: "{{ created_vpc.vpc.id }}"
+      cidr: 172.16.16.0/24
+      tags:
+        Name: EKS CP Subnet
+    register: eks_subnet_cp
+  - name: Create node subnet
+    amazon.aws.ec2_vpc_subnet:
+      state: present
+      region: "{{ region }}"
+      az: "{{ region }}c"
+      vpc_id: "{{ created_vpc.vpc.id }}"
+      cidr: 172.16.17.0/24
+      tags:
+        Name: EKS Node Subnet
+    register: eks_subnet_node
+  - name: Create a security group
+    amazon.aws.ec2_security_group:
+      name: "{{ eks_name }}"
+      description: eks security group
+      region: "{{ region }}"
+      vpc_id: "{{ created_vpc.vpc.id }}"
+      rules:
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 4321
+          to_port: 4321
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 9017
+          to_port: 9017
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 8000
+          to_port: 8000
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 7890
+          to_port: 7890
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 8765
+          to_port: 8765
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 3389
+          to_port: 3389
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 5432
+          to_port: 5432
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 1230
+          to_port: 1240
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 5005
+          to_port: 5005
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 8080
+          to_port: 8080
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 37939
+          to_port: 37939
+          cidr_ip: 0.0.0.0/0
+    register: created_security_group
+  - name: Create an EKS cluster
+    community.aws.eks_cluster:
+      name: "{{ eks_name }}"
+      region: "{{ region }}"
+      version: 1.28
+      role_arn: "{{ eks_role_arn }}"
+      subnets:
+        - "{{ eks_subnet_cp.subnet.id }}"
+        - "{{ eks_subnet_node.subnet.id }}"
+      security_groups:
+        - "{{ created_security_group.group_id }}"
+    register: caller_facts
+  - name: create nodegroup
+    community.aws.eks_nodegroup:
+      name: eks_nodegroup
+      region: "{{ region }}"
+      state: present
+      cluster_name: "{{ eks_name }}"
+      node_role: "{{ eks_worker_arn }}"
+      subnets:
+        - "{{ eks_subnet_node.subnet.id }}"
+      scaling_config:
+        min_size: 1
+        max_size: 2
+        desired_size: 1
+      disk_size: 80
+      instance_types: 't3.micro'
+      ami_type: 'AL2_x86_64'
+      labels:
+        'teste': 'test'
+      taints:
+        - key: 'test'
+          value: 'test'
+          effect: 'NO_SCHEDULE'
+      capacity_type: 'ON_DEMAND'
