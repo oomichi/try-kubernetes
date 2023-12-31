@@ -4,14 +4,14 @@
   tasks:
   - name: Create resource group
     azure.azcollection.azure_rm_resourcegroup:
-      name: ${AKS_RESOURCE_GROUP}
+      name: "{{ aks_resource_group }}"
       location: japaneast
   - name: Create AKS Cluster
     azure.azcollection.azure_rm_aks:
-      name: ${AKS_NAME}
+      name: "{{ aks_name }}"
       kubernetes_version: 1.27.7
       location: japaneast
-      resource_group: ${AKS_RESOURCE_GROUP}
+      resource_group: "{{ aks_resource_group }}"
       dns_prefix: akstest
       agent_pool_profiles:
         - name: agentpool1
