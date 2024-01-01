@@ -34,7 +34,7 @@ else
 fi
 
 aws --version 2> /dev/null
-if [ $? -ne 0 ]; then
+if [ $? -eq 127 ]; then
 	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 	unzip awscliv2.zip
 	sudo ./aws/install
@@ -42,7 +42,7 @@ if [ $? -ne 0 ]; then
 fi
 
 kubectl version 2> /dev/null
-if [ $? -ne 0 ]; then
+if [ $? -eq 127 ]; then
 	curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.3/2023-11-14/bin/linux/amd64/kubectl
 	chmod 755 ./kubectl
 	mkdir -p $HOME/bin
