@@ -17,6 +17,11 @@ fi
 EKS_REGION=${EKS_REGION:-"us-west-1"}
 EKS_NAME=${EKS_NAME:-"test-cluster"}
 
+PLAYBOOK=./eks.yaml
+if [ "$1" == "destroy" ]; then
+	PLAYBOOK=./destroy.yaml
+fi
+
 if [ ! -d ./venv-ansible ]; then
 	set -e
 	sudo apt update
@@ -52,9 +57,14 @@ if [ $? -eq 127 ]; then
 fi
 
 set -e
+ansible-playbook ${PLAYBOOK} --extra-vars "eks_name=${EKS_NAME} region=${EKS_REGION} eks_role_arn=${EKS_ROLE_ARN} eks_worker_arn=${EKS_WORKER_ROLE_ARN}"
+set +e
+if [ "${PLAYBOOK}" == "./destroy.yaml" ]; then
+	echo "Succeeded to delete EKS cluster and the resources."
+	exit 0
+fi
 
-ansible-playbook ./eks.yaml --extra-vars "eks_name=${EKS_NAME} region=${EKS_REGION} eks_role_arn=${EKS_ROLE_ARN} eks_worker_arn=${EKS_WORKER_ROLE_ARN}"
-
+set -e
 aws eks --region ${EKS_REGION} update-kubeconfig --name ${EKS_NAME}
 
 kubectl get nodes

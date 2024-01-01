@@ -30,12 +30,12 @@
         Name: EKS Node Subnet
     register: eks_subnet_node
   - name: Create igw
-    ec2_vpc_igw:
+    amazon.aws.ec2_vpc_igw:
       region: "{{ region }}"
       vpc_id: "{{ created_vpc.vpc.id }}"
     register: igw
   - name: Create public route table
-    ec2_vpc_route_table:
+    amazon.aws.ec2_vpc_route_table:
       region: "{{ region }}"
       vpc_id: "{{ created_vpc.vpc.id }}"
       subnets:
@@ -113,11 +113,12 @@
         - "{{ created_security_group.group_id }}"
       wait: true
     register: caller_facts
-  - name: create nodegroup
+  - name: Create nodegroup
     community.aws.eks_nodegroup:
       name: eks_nodegroup
       region: "{{ region }}"
       state: present
+      wait: true
       cluster_name: "{{ eks_name }}"
       node_role: "{{ eks_worker_arn }}"
       subnets:

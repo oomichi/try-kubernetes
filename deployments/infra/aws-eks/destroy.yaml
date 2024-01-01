@@ -1,0 +1,89 @@
+- name: Delete Elastic Kubernetes Service
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Delete nodegroup
+    community.aws.eks_nodegroup:
+      name: eks_nodegroup
+      region: "{{ region }}"
+      state: absent
+      wait: true
+      cluster_name: "{{ eks_name }}"
+      node_role: "{{ eks_worker_arn }}"
+      scaling_config:
+        min_size: 1
+        max_size: 2
+        desired_size: 1
+      disk_size: 80
+      instance_types: 't3.micro'
+      ami_type: 'AL2_x86_64'
+      labels:
+        'teste': 'test'
+      taints:
+        - key: 'test'
+          value: 'test'
+          effect: 'NO_SCHEDULE'
+      capacity_type: 'ON_DEMAND'
+  - name: Delete an EKS cluster
+    community.aws.eks_cluster:
+      name: "{{ eks_name }}"
+      region: "{{ region }}"
+      state: absent
+      version: 1.28
+      role_arn: "{{ eks_role_arn }}"
+      wait: true
+  - name: Delete a security group
+    amazon.aws.ec2_security_group:
+      name: "{{ eks_name }}"
+      description: eks security group
+      region: "{{ region }}"
+      state: absent
+      rules:
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 4321
+          to_port: 4321
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 9017
+          to_port: 9017
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 8000
+          to_port: 8000
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 7890
+          to_port: 7890
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 8765
+          to_port: 8765
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 3389
+          to_port: 3389
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 5432
+          to_port: 5432
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 1230
+          to_port: 1240
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 5005
+          to_port: 5005
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 8080
+          to_port: 8080
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 37939
+          to_port: 37939
+          cidr_ip: 0.0.0.0/0
