@@ -29,6 +29,21 @@
       tags:
         Name: EKS Node Subnet
     register: eks_subnet_node
+  - name: Create igw
+    ec2_vpc_igw:
+      region: "{{ region }}"
+      vpc_id: "{{ created_vpc.vpc.id }}"
+    register: igw
+  - name: Create public route table
+    ec2_vpc_route_table:
+      region: "{{ region }}"
+      vpc_id: "{{ created_vpc.vpc.id }}"
+      subnets:
+        - "{{ eks_subnet_cp.subnet.id }}"
+        - "{{ eks_subnet_node.subnet.id }}"
+      routes:
+        - dest: 0.0.0.0/0
+          gateway_id: "{{ igw.gateway_id }}"
   - name: Create a security group
     amazon.aws.ec2_security_group:
       name: "{{ eks_name }}"
@@ -96,6 +111,7 @@
         - "{{ eks_subnet_node.subnet.id }}"
       security_groups:
         - "{{ created_security_group.group_id }}"
+      wait: true
     register: caller_facts
   - name: create nodegroup
     community.aws.eks_nodegroup:
