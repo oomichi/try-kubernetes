@@ -113,11 +113,12 @@
         - "{{ created_security_group.group_id }}"
       wait: true
     register: caller_facts
-  - name: create nodegroup
+  - name: Create nodegroup
     community.aws.eks_nodegroup:
       name: eks_nodegroup
       region: "{{ region }}"
       state: present
+      wait: true
       cluster_name: "{{ eks_name }}"
       node_role: "{{ eks_worker_arn }}"
       subnets:
