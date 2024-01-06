@@ -16,6 +16,7 @@
       az: "{{ region }}b"
       vpc_id: "{{ created_vpc.vpc.id }}"
       cidr: 172.16.16.0/24
+      map_public: true
       tags:
         Name: EKS CP Subnet
     register: eks_subnet_cp
@@ -26,14 +27,16 @@
       az: "{{ region }}c"
       vpc_id: "{{ created_vpc.vpc.id }}"
       cidr: 172.16.17.0/24
+      map_public: true
       tags:
         Name: EKS Node Subnet
     register: eks_subnet_node
-  - name: Create igw
+  - name: Create internet gateway
     amazon.aws.ec2_vpc_igw:
       region: "{{ region }}"
       vpc_id: "{{ created_vpc.vpc.id }}"
-    register: igw
+      state: present
+    register: created_igw
   - name: Create public route table
     amazon.aws.ec2_vpc_route_table:
       region: "{{ region }}"
@@ -43,7 +46,7 @@
         - "{{ eks_subnet_node.subnet.id }}"
       routes:
         - dest: 0.0.0.0/0
-          gateway_id: "{{ igw.gateway_id }}"
+          gateway_id: "{{ created_igw.gateway_id }}"
   - name: Create a security group
     amazon.aws.ec2_security_group:
       name: "{{ eks_name }}"
