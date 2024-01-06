@@ -16,6 +16,7 @@
       az: "{{ region }}b"
       vpc_id: "{{ created_vpc.vpc.id }}"
       cidr: 172.16.16.0/24
+      map_public: true
       tags:
         Name: EKS CP Subnet
     register: eks_subnet_cp
@@ -26,6 +27,7 @@
       az: "{{ region }}c"
       vpc_id: "{{ created_vpc.vpc.id }}"
       cidr: 172.16.17.0/24
+      map_public: true
       tags:
         Name: EKS Node Subnet
     register: eks_subnet_node
