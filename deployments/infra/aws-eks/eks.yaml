@@ -131,12 +131,6 @@
         max_size: 2
         desired_size: 1
       disk_size: 80
-      instance_types: 't3.micro'
+      instance_types: "{{ eks_instance_type }}"
       ami_type: 'AL2_x86_64'
-      labels:
-        'teste': 'test'
-      taints:
-        - key: 'test'
-          value: 'test'
-          effect: 'NO_SCHEDULE'
       capacity_type: 'ON_DEMAND'

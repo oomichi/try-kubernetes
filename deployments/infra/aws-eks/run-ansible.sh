@@ -16,6 +16,7 @@ fi
 
 EKS_REGION=${EKS_REGION:-"us-west-1"}
 EKS_NAME=${EKS_NAME:-"test-cluster"}
+EKS_INSTANCE_TYPE=${EKS_INSTANCE_TYPE:-"t3.large"}
 
 PLAYBOOK=./eks.yaml
 if [ "$1" == "destroy" ]; then
@@ -57,7 +58,7 @@ if [ $? -eq 127 ]; then
 fi
 
 set -e
-ansible-playbook ${PLAYBOOK} --extra-vars "eks_name=${EKS_NAME} region=${EKS_REGION} eks_role_arn=${EKS_ROLE_ARN} eks_worker_arn=${EKS_WORKER_ROLE_ARN}"
+ansible-playbook ${PLAYBOOK} --extra-vars "eks_name=${EKS_NAME} region=${EKS_REGION} eks_role_arn=${EKS_ROLE_ARN} eks_worker_arn=${EKS_WORKER_ROLE_ARN} eks_instance_type=${EKS_INSTANCE_TYPE}"
 set +e
 if [ "${PLAYBOOK}" == "./destroy.yaml" ]; then
 	echo "Succeeded to delete EKS cluster and the resources."
