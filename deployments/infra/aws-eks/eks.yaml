@@ -133,10 +133,4 @@
       disk_size: 80
       instance_types: 't3.micro'
       ami_type: 'AL2_x86_64'
-      labels:
-        'teste': 'test'
-      taints:
-        - key: 'test'
-          value: 'test'
-          effect: 'NO_SCHEDULE'
       capacity_type: 'ON_DEMAND'
