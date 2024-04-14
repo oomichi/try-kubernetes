@@ -13,8 +13,6 @@ class MyHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         self.wfile.write(b"# HELP deployment_status The status of deployments.\n")
         self.wfile.write(b"# TYPE deployment_status gauge\n")
-        #v = str(metrics["tmp_files"]).encode()
-        #self.wfile.write(b'tmp_files ' + v + b"\n")
         self.wfile.write(b'deployment_status{namespace="namespace-app-1"} 1' + b"\n")
 
 
