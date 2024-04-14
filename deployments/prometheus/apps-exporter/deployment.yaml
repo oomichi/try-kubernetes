@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apps-exporter
+  labels:
+    app: apps-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apps-exporter
+  template:
+    metadata:
+      labels:
+        app: apps-exporter
+    spec:
+      containers:
+      - name: main
+        image: docker.io/library/python:3.10-slim
+        imagePullPolicy: IfNotPresent
+        command: ["python3"]
+        args: ["/mount/main.py"]
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - mountPath: /mount
+          name: config
+      volumes:
+      - name: config
+        configMap:
+          name: python-main
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apps-exporter
+  labels:
+    app: apps-exporter-svc
+spec:
+  selector:
+    app: apps-exporter
+  ports:
+    - name: web
+      protocol: TCP
+      port: 8000
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: apps-exporter
+  labels:
+    release: oomichi-test  # Change here for the release name of the prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app: apps-exporter-svc
+  endpoints:
+  - port: web
