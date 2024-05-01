@@ -9,7 +9,7 @@
   - name: Create AKS Cluster
     azure.azcollection.azure_rm_aks:
       name: "{{ aks_name }}"
-      kubernetes_version: 1.27.7
+      kubernetes_version: 1.28.5
       location: japaneast
       resource_group: "{{ aks_resource_group }}"
       dns_prefix: akstest
