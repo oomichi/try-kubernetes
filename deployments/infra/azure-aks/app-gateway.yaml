@@ -11,7 +11,7 @@
     - name: Create a public IP address
       azure.azcollection.azure_rm_publicipaddress:
         resource_group: "{{ aks_resource_group }}"
-        allocation_method: Dynamic
+        allocation_method: Static
         name: "{{ publicip_name }}"
         state: "present"
 
