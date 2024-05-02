@@ -1,0 +1,45 @@
+- hosts: localhost
+  vars:
+    resource_group: "{{ aks_resource_group }}"
+    location: "{{ aks_location }}"
+    publicip_name: app-gw-public-ip
+    appgw_name: app-gw
+  tasks:
+    - name: Create a public IP address
+      azure_rm_publicipaddress:
+        resource_group: "{{ resource_group }}"
+        allocation_method: Dynamic
+        name: "{{ publicip_name }}"
+
+    - name: Create instance of Application Gateway
+      azure_rm_appgateway:
+        resource_group: "{{ resource_group }}"
+        name: "{{ appgw_name }}"
+        sku:
+          name: standard_v2
+          tier: standard_v2
+          capacity: 2
+        frontend_ip_configurations:
+          - public_ip_address: "{{ publicip_name }}"
+            name: appGatewayFrontendIP
+        frontend_ports:
+          - port: 80
+            name: appGatewayFrontendPort
+        backend_address_pools:
+          - backend_addresses: []
+            name: appGatewayBackendPool
+        backend_http_settings_collection:
+          - port: 80
+            protocol: http
+            cookie_based_affinity: enabled
+            name: appGatewayBackendHttpSettings
+        http_listeners:
+          - frontend_ip_configuration: appGatewayFrontendIP
+            frontend_port: appGatewayFrontendPort
+            name: appGatewayHttpListener
+        request_routing_rules:
+          - rule_type: basic
+            backend_address_pool: appGatewayBackendPool
+            backend_http_settings: appGatewayBackendHttpSettings
+            http_listener: appGatewayHttpListener
+            name: rule1
