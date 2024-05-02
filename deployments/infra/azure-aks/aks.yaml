@@ -5,7 +5,7 @@
   - name: Create resource group
     azure.azcollection.azure_rm_resourcegroup:
       name: "{{ aks_resource_group }}"
-      location: japaneast
+      location: "{{ aks_location }}"
   - name: Create AKS Cluster
     azure.azcollection.azure_rm_aks:
       name: "{{ aks_name }}"

@@ -4,6 +4,7 @@ cd $(dirname $0)
 
 export AKS_RESOURCE_GROUP=${AKS_RESOURCE_GROUP:-"aks_rg"}
 export AKS_NAME=${AKS_NAME:-"akstest"}
+export AKS_LOCATION=${AKS_LOCATION:-"japaneast"}
 
 if [ "${AZURE_SUBSCRIPTION_ID}" == "" ] || [ "${AZURE_CLIENT_ID}" == "" ] || [ "${AZURE_SECRET}" == "" ] || [ "${AZURE_TENANT}" == "" ]; then
 	echo "Environment variables AZURE_SUBSCRIPTION_ID, AZURE_CLIENT_ID, AZURE_SECRET and AZURE_TENANT should be specified."
@@ -37,6 +38,6 @@ set -e
 
 curl -LO https://dl.k8s.io/release/v1.27.0/bin/linux/amd64/kubectl
 chmod 755 ./kubectl
-ansible-playbook ./aks.yaml --extra-vars "aks_resource_group=${AKS_RESOURCE_GROUP} aks_name=${AKS_NAME}"
+ansible-playbook ./aks.yaml --extra-vars "aks_resource_group=${AKS_RESOURCE_GROUP} aks_name=${AKS_NAME} aks_location=${AKS_LOCATION}"
 az aks get-credentials --resource-group ${AKS_RESOURCE_GROUP} --name ${AKS_NAME} --admin
 ./kubectl get nodes
