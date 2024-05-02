@@ -36,8 +36,10 @@ fi
 
 set -e
 
-curl -LO https://dl.k8s.io/release/v1.27.0/bin/linux/amd64/kubectl
-chmod 755 ./kubectl
+if [ ! -f ./kubectl ]; then
+	curl -LO https://dl.k8s.io/release/v1.27.0/bin/linux/amd64/kubectl
+	chmod 755 ./kubectl
+fi
 ansible-playbook ./app-gateway.yaml --extra-vars "aks_resource_group=${AKS_RESOURCE_GROUP} aks_name=${AKS_NAME} aks_location=${AKS_LOCATION}"
 ansible-playbook ./aks.yaml --extra-vars "aks_resource_group=${AKS_RESOURCE_GROUP} aks_name=${AKS_NAME} aks_location=${AKS_LOCATION}"
 az aks get-credentials --resource-group ${AKS_RESOURCE_GROUP} --name ${AKS_NAME} --admin
