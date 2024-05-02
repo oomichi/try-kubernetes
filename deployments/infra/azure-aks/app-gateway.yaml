@@ -1,19 +1,23 @@
 - hosts: localhost
   vars:
-    resource_group: "{{ aks_resource_group }}"
-    location: "{{ aks_location }}"
     publicip_name: app-gw-public-ip
     appgw_name: app-gw
   tasks:
+    - name: Create resource group
+      azure.azcollection.azure_rm_resourcegroup:
+        name: "{{ aks_resource_group }}"
+        location: "{{ aks_location }}"
+
     - name: Create a public IP address
-      azure_rm_publicipaddress:
-        resource_group: "{{ resource_group }}"
+      azure.azcollection.azure_rm_publicipaddress:
+        resource_group: "{{ aks_resource_group }}"
         allocation_method: Dynamic
         name: "{{ publicip_name }}"
+        state: "present"
 
     - name: Create instance of Application Gateway
       azure_rm_appgateway:
-        resource_group: "{{ resource_group }}"
+        resource_group: "{{ aks_resource_group }}"
         name: "{{ appgw_name }}"
         sku:
           name: standard_v2

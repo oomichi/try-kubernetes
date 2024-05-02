@@ -2,10 +2,6 @@
   hosts: localhost
   connection: local
   tasks:
-  - name: Create resource group
-    azure.azcollection.azure_rm_resourcegroup:
-      name: "{{ aks_resource_group }}"
-      location: "{{ aks_location }}"
   - name: Create AKS Cluster
     azure.azcollection.azure_rm_aks:
       name: "{{ aks_name }}"
