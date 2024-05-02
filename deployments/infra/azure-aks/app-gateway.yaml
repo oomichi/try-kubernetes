@@ -1,6 +1,7 @@
 - hosts: localhost
   vars:
     publicip_name: app-gw-public-ip
+    vnet_name: app-gw-vnet
     appgw_name: app-gw
   tasks:
     - name: Create resource group
@@ -11,9 +12,24 @@
     - name: Create a public IP address
       azure.azcollection.azure_rm_publicipaddress:
         resource_group: "{{ aks_resource_group }}"
-        allocation_method: Static
         name: "{{ publicip_name }}"
+        location: "{{ aks_location }}"
+        allocation_method: "Static"
         state: "present"
+        sku: "standard"
+        version: "ipv4"
+        idle_timeout: 4
+
+    - name: Create a virtual network
+      azure_rm_virtualnetwork:
+        name: "{{ vnet_name }}"
+        resource_group: "{{ aks_resource_group }}"
+        address_prefixes_cidr:
+            - 10.1.0.0/16
+            - 172.100.0.0/16
+        dns_servers:
+            - 127.0.0.1
+            - 127.0.0.2
 
     - name: Create instance of Application Gateway
       azure_rm_appgateway:
