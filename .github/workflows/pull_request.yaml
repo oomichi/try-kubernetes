@@ -19,3 +19,7 @@ jobs:
       - name: Run install-k3s.sh
         run: |
           ./deployments/k3s/intall-k3s.sh
+
+      - name: Deploy keycloak
+        run: |
+          ./deployments/keycloak/deploy-keycloak.sh
