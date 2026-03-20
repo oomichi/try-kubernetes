@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  check-typo:
+  pullrequest-ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,3 +16,6 @@ jobs:
         run: |
           ./tests/check_typo.sh
 
+      - name: Run install-k3s.sh
+        run: |
+          ./deployments/k3s/intall-k3s.sh
