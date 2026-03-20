@@ -13,4 +13,9 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+k3s kubectl -n kube-system get pods | grep local-path-provisioner
+if [ $? -ne 0 ]; then
+	k3s kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.35/deploy/local-path-storage.yaml
+fi
+
 echo "Succeeded to install k3s."
