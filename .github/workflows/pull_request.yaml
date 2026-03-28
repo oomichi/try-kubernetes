@@ -23,3 +23,7 @@ jobs:
       - name: Deploy keycloak
         run: |
           ./deployments/keycloak/deploy-keycloak.sh
+
+      - name: Test keycloak
+        run: |
+          ./deployments/keycloak/test-keycloak.sh
