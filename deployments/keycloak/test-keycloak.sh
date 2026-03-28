@@ -42,6 +42,11 @@ if [ -z "${ACCESS_TOKEN}" ] || [ "${ACCESS_TOKEN}" == "null" ]; then
 	exit 1
 fi
 
-echo ${ACCESS_TOKEN} | jq -R 'split(".") | .[0], .[1] | @base64d | fromjson'
+ORGANIZATION=$(echo ${ACCESS_TOKEN} | jq -R 'split(".") | .[0], .[1] | @base64d | fromjson' | jq -r '.organization | keys[0]')
+if [ "${ORGANIZATION}" != "${KEYCLOAK_ORGANIZATION_01}" ]; then
+	echo "ORGANIZATION: ${ORGANIZATION}"
+	echo "KEYCLOAK_ORGANIZATION_01: ${KEYCLOAK_ORGANIZATION_01}"
+	exit 1
+fi
 
 echo "Succeeded to test keycloak."
