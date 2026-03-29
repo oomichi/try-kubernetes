@@ -55,6 +55,7 @@ if [ -z "${ACCESS_TOKEN}" ] || [ "${ACCESS_TOKEN}" == "null" ]; then
 	exit 1
 fi
 
+echo "Checking the expected organization name(${KEYCLOAK_ORGANIZATION_01}) could be gotten from access_token.."
 ORGANIZATION=$(echo ${ACCESS_TOKEN} | jq -R 'split(".") | .[1] | @base64d | fromjson' | jq -r '.organization[0]')
 if [ "${ORGANIZATION}" != "${KEYCLOAK_ORGANIZATION_01}" ]; then
 	echo "ORGANIZATION: ${ORGANIZATION}"
